@@ -1,0 +1,55 @@
+apiVersion: v1
+data:
+    api-token: ENC[AES256_GCM,data:qUQPbsF6gvkjym6F3AeJwh+Llnau8Uikdi2kAvIUnv92ljCelEZxg4IS3hM/bfqfBh4TkaTHa/s=,iv:bIOERqxjGNQY+dOKSUq/YVuBoOU4VzyRk8L8uJkBxYI=,tag:YkbUgzCrGsQHRylN1XfKIw==,type:str]
+kind: Secret
+metadata:
+    name: cloudflare-api-token-secret
+    namespace: cert-m
+type: Opaque
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByR0Fmay9leDBuRHY2Vk1k
+            SDZGRlluakZveExscUVUVzZZMk1mL0dqclU4CmgxSnVGT04vZFYyUUFHVk43bmF1
+            QUxyNDFKb1pOWmtYK1BQY2E3VzZ3S1EKLS0tIGI3SmM0cStZNzBseWJhUlpydUFB
+            QVMrLzRISkd3cm11Qi9zUEYyTHpNMDgK8Hf5T1XJADuJfuFhj/O1WoKdopJvpnfq
+            qEztLjmC25DYOrmDKZHua1wZM3K1kgmaoMygbCZVitOeCJc9aLMVLg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-22T13:26:32Z"
+    mac: ENC[AES256_GCM,data:qDC+soL8akl8cQeZ/bx36ozMJevlALy93GkdTuy74f9dQkRD1VAseS7QlJbF3YvPs6EJhiBzvAyK1JF+ASiuwvteqLMXK4H1DUJ325hcjVfWqAn4aL80sKsnM2k5MUkvASN+S/gPqP4e0za8sJinT+gd31baCMQOurVQTUP18oY=,iv:1sw7AcQFKNck0jrQLjXlCAsKzg97kybxwvzswP+E47w=,tag:YZGf1FPeSpAIfw15/MJxyQ==,type:str]
+    encrypted_regex: ^(api-token)$
+    version: 3.10.2
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+    name: letsencrypt-cloudflare
+spec:
+    acme:
+        email: adm220297@proton.me
+        privateKeySecretRef:
+            name: letsencrypt-prod
+        server: https://acme-v02.api.letsencrypt.org/directory
+        solvers:
+            - dns01:
+                cloudflare:
+                    apiTokenSecretRef:
+                        key: api-token
+                        name: cloudflare-api-token-secret
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSByR0Fmay9leDBuRHY2Vk1k
+            SDZGRlluakZveExscUVUVzZZMk1mL0dqclU4CmgxSnVGT04vZFYyUUFHVk43bmF1
+            QUxyNDFKb1pOWmtYK1BQY2E3VzZ3S1EKLS0tIGI3SmM0cStZNzBseWJhUlpydUFB
+            QVMrLzRISkd3cm11Qi9zUEYyTHpNMDgK8Hf5T1XJADuJfuFhj/O1WoKdopJvpnfq
+            qEztLjmC25DYOrmDKZHua1wZM3K1kgmaoMygbCZVitOeCJc9aLMVLg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-22T13:26:32Z"
+    mac: ENC[AES256_GCM,data:qDC+soL8akl8cQeZ/bx36ozMJevlALy93GkdTuy74f9dQkRD1VAseS7QlJbF3YvPs6EJhiBzvAyK1JF+ASiuwvteqLMXK4H1DUJ325hcjVfWqAn4aL80sKsnM2k5MUkvASN+S/gPqP4e0za8sJinT+gd31baCMQOurVQTUP18oY=,iv:1sw7AcQFKNck0jrQLjXlCAsKzg97kybxwvzswP+E47w=,tag:YZGf1FPeSpAIfw15/MJxyQ==,type:str]
+    encrypted_regex: ^(api-token)$
+    version: 3.10.2

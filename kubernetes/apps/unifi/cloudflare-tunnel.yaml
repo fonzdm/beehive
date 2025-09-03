@@ -1,0 +1,18 @@
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: unifi-tcp-tunnel
+  namespace: unifi
+subjects:
+  - kind: Service
+    name: unifi-controller-tcp
+    spec:
+      http2Origin: false
+      noTlsVerify: true
+      proxyAddress: 127.0.0.1
+      proxyPort: 0
+      proxyType: ""
+      target: https://unifi-controller-tcp.unifi.svc:443
+tunnelRef:
+  kind: ClusterTunnel
+  name: main-tunnel

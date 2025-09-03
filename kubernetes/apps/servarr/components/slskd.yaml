@@ -1,0 +1,105 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: slskd
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: slskd
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        enabled: true
+        operator:
+            register: false
+            verify:
+                enabled: true
+                additionalsystem: []
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                SLSKD_USERNAME: fonzdm
+                                SLSKD_PASSWORD: ENC[AES256_GCM,data:DS4z22FWeIQ=,iv:64LocdrWMAX69NdCGloY0Y6yDgkwWF9V9/fUuAo8M88=,tag:rxgguSB2asTMwfJlDtSxSg==,type:str]
+                                SLSKD_SHARED_DIR: /var/tmp/shared
+                                SLSKD_DOWNLOADS_DIR: /mnt/media/Downloads
+                                SLSKD_INCOMPLETE_DIR: /mnt/media/Downloads
+                                SLSKD_REMOTE_CONFIGURATION: true
+                                SLSKD_SLSK_LISTEN_PORT: 59303
+                                SLSKD_SLSK_USERNAME: fonzdm
+                                SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:vHmQ+IV3vRU=,iv:vz+/MxfUB86PZNun52RBhTld1eTs6vXKeXrGTXEz29c=,tag:QFMqItp88MLgSnLVZGz8zQ==,type:str]
+                                SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:M7NMUJyK6NCesCtPAAT1SRB3kBoUhW4YkJ0Fz6xMDmQ=,iv:xqQ/ljrw+HeZoCKfX6QI6apPddL09KIb8OROucp4Ofw=,tag:TWrBIJBe/Vh5sp/Sctkl1w==,type:str]
+        ingress:
+            slskd-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                ingressClassName: tailscale
+                hosts:
+                    - host: slskd
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - slskd
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+            media:
+                enabled: true
+                type: pvc
+                existingClaim: talos-media-volume
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /mnt/media
+            data:
+                enabled: false
+                mountPath: /app
+            share:
+                enabled: false
+                mountPath: /share
+            incomplete:
+                enabled: false
+                mountPath: /downloads/incomplete
+            complete:
+                enabled: false
+                mountPath: /downloads/complete
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAyT0cyb2luT1dLbllVbWM3
+            MEpYeVcvNFhPRS8zd0ZkeC9oWjNyckpxdWxFClZxN0lqN2NtclNyOTRHb2x4dHVh
+            NUhMdmZCOHBiYURDWDVNOGZlbERRaUUKLS0tIDNnUTQvL3RsOUVrbzlFUlV0Vk9Y
+            NUFudi83VVRFRzZJK0pMVStSYmRWaU0KLU9GgioHCgGh+6xj0IhqkyvqT/JSJL6r
+            GAwHPITpqJ3EIU+FztlyOqz0wfIsxbBnCDn0+EH1hdiRfoRX34c73Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-09-03T14:52:04Z"
+    mac: ENC[AES256_GCM,data:ffPV45rbVUJTncRpZVDRPgWQc2t5W2AxBWnwGTimOMn+6gP2osIHUcAlvSW9RTIpTSGhfz4H7HoGkzoLW1NiHNeyUVQ5XzMyL4jcFqoUlpJWUDZwatVCqKzXpAvWZLlzXhfOnWa7lxyGTUZTYcosJBsEtq99vJ4E+h7NZYeQvsc=,iv:W69ZhS/LlEVfXE5Tfbp2R9sUGXPJbivra+BRcx6/QUI=,tag:auSHuD0g4R1AZiCns3+0Yg==,type:str]
+    encrypted_regex: ^(?:SLSKD(?:_SLSK)?_PASSWORD|SLSKD_CONTROLLER_API_KEY)$
+    version: 3.10.2

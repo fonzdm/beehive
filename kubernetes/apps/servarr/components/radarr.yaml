@@ -1,0 +1,76 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: radarr
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: radarr
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                RADARR__API_KEY: ENC[AES256_GCM,data:nBROr5g3uj/2eQT7ozldrkrhvA2lvzm0xJbDxHqt3BU=,iv:Z0XE0n1DxZthgoeEdNsDTttikQwQYeghICo2FBg9Dkw=,tag:xicAyRLy3M1ISsIrmagEag==,type:str]
+        ingress:
+            radarr-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                annotations: {}
+                #cert-manager.io/cluster-issuer: *issuer
+                ingressClassName: tailscale
+                hosts:
+                    - host: radarr
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - radarr
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+            media:
+                enabled: true
+                existingClaim: talos-media-volume
+                mountPath: /mnt/media
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtaC9EYU4vN3NPY0QzbXJ4
+            dVh0aGlHR1dXUDZNTytmR2NMWGxPT2xOWUZ3CkZZZFBFRGpxY0pLU0pxOVJuVnJ6
+            QjZ6TzViN3JZYUJEdThYdnZwNEJ2N3cKLS0tIEpzM2hpRVF2RDhSTUpPbHlDYWx2
+            TEo2dlhFN2J3dkNvK3pyc3RsN29RbGMK2b7K1hsDls/1uw+plR+f+Gevzuz4ql2j
+            R4Q/aTWwlstqj/ZV5TOJNHWforRlQepJW0HOwSoGRaCtipvPpXgs6w==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-08-25T12:38:26Z"
+    mac: ENC[AES256_GCM,data:LDVb6zJM76cQVzOzpy0+xRSJG5U19wNcCWBVpCBC1g+qtpTX//tNTkYRYHXX7B62iPd9xHgmw1vLS0R6qa8MnhymI1H+cgw+BKQEO/QhnJYzw39eLP1/MasGMf3/nhfRmGiV8RogpDuQg9vFNpoiHitIS3lEA9gO/c5qY/6JuhA=,iv:4+YoM92JkRJ3OWh0GHJlAK7PO/chbrOGd0d7pE+tl24=,tag:YNWnWCkD+P65qDKscZDQsA==,type:str]
+    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    version: 3.10.2

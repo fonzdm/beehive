@@ -1,0 +1,18 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: unifi-controller-mongoless
+  namespace: unifi
+spec:
+  interval: 1h0m0s
+  chart:
+    spec:
+      chart: unifi
+      sourceRef:
+        kind: HelmRepository
+        name: unifi-controller-mongoless
+  valuesFrom:
+    - kind: ConfigMap
+      name: release-main-values
+      valuesKey: values.yaml
+

@@ -1,0 +1,80 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: unifi-controller
+  namespace: unifi
+spec:
+  interval: 1h0m0s
+  chart:
+    spec:
+      chart: unifi-controller
+      sourceRef:
+        kind: HelmRepository
+        name: unifi-controller
+  values:
+    image:
+      repository: linuxserver/unifi-controller
+      pullPolicy: IfNotPresent
+    replicaCount: 1
+    imagePullSecrets: []
+    nameOverride: ""
+    fullnameOverride: ""
+    serviceAccount:
+      create: true
+      annotations: {}
+      name: ""
+    environment:
+      timezone: "Europe/Rome"
+      uid: 1000
+      gid: 1000
+      memLimit: 4000    # Keep this a little below the resource limits
+      memStartup: 1024  # Set this rougly to the resource requests
+    service:
+      type: "LoadBalancer"
+      annotations:
+        metallb.universe.tf/address-pool: external-pool
+        metallb.universe.tf/allow-shared-ip: external-pool
+      ports:
+        devicecom: 8080
+        webapi: 443
+      appDiscovery: true
+      syslogCapture: false
+      tcpLoadBalancerIP: "192.168.100.4"
+      udpLoadBalancerIP: "192.168.100.3"
+    ingress:
+      enabled: true
+      className: tailscale
+      annotations: {}
+      hosts:
+        - host: unifi
+          paths:
+            - path: /
+              pathType: ImplementationSpecific
+      tls:
+        - hosts:
+            - unifi
+    persistence:
+      enabled: true
+      accessMode: ReadWriteMany
+      size: 4Gi
+      storageClass: nas
+      annotations: {}
+      backup:
+        enabled: true
+        accessMode: ReadWriteMany
+        size: 4Gi
+        storageClass: nas
+        annotations: {}
+    podSecurityContext: {}
+    securityContext: {}
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 4Gi
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+

@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+spec:
+  interval: 8h0m0s
+  chart:
+    spec:
+      chart: ingress-nginx
+      sourceRef:
+        kind: HelmRepository
+        name: ingress-nginx
+      version: 4.12.4 
+  values:
+    controller:
+      config:
+        proxy-busy-buffers-size: "16k"
+        proxy-buffer-size: "16k"
+        annotations-risk-level: Critical
+      allowSnippetAnnotations: true
+      kind: DaemonSet
+      service:
+        externalTrafficPolicy: Local
+        annotations:
+          metallb.io/ip-allocated-from-pool: external-pool
+          metallb.io/allow-shared-ip: external-pool
+          metallb.io/loadBalancerIPs: 192.168.100.5

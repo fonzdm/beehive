@@ -1,0 +1,97 @@
+captivePortalService:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    path: /
+    hosts:
+      - unifi-captive.service.fonzdm.xyz
+    tls:
+     - secretName: captive-tls
+       hosts:
+         - unifi-captive.service.fonzdm.xyz
+
+controllerService:
+  enabled: true
+  type: LoadBalancer
+  port: 8080
+  annotations:
+    metallb.io/ip-allocated-from-pool: external-pool
+    metallb.io/allow-shared-ip: external-pool
+    metallb.io/loadBalancerIPs: 192.168.100.100
+  externalTrafficPolicy: "Cluster"
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    path: /
+    hosts:
+      - unifi-controller.service.fonzdm.xyz
+    tls:
+      - secretName: controller-tls
+        hosts:
+        - unifi-controller.service.fonzdm.xyz
+
+stunService:
+  enabled: true
+  type: LoadBalancer
+  port: 3478
+  annotations:
+    metallb.io/ip-allocated-from-pool: external-pool
+    metallb.io/allow-shared-ip: external-pool
+    metallb.io/loadBalancerIPs: 192.168.100.100
+  externalTrafficPolicy: "Cluster"
+
+discoveryService:
+  enabled: true
+  type: LoadBalancer
+  port: 10001
+  annotations:
+    metallb.io/ip-allocated-from-pool: external-pool
+    metallb.io/allow-shared-ip: external-pool
+    metallb.io/loadBalancerIPs: 192.168.100.100
+  externalTrafficPolicy: "Cluster"
+
+syslogService:
+  enabled: true
+  type: LoadBalancer
+  port: 5514
+  annotations:
+    metallb.io/ip-allocated-from-pool: external-pool
+    metallb.io/allow-shared-ip: external-pool
+    metallb.io/loadBalancerIPs: 192.168.100.100
+  externalTrafficPolicy: "Cluster"
+
+speedtestService:
+  enabled: true
+  type: LoadBalancer
+  port: 6789
+  annotations: 
+    metallb.io/ip-allocated-from-pool: external-pool
+    metallb.io/allow-shared-ip: external-pool
+    metallb.io/loadBalancerIPs: 192.168.100.100
+  externalTrafficPolicy: "Cluster"
+
+ingress:
+  enabled: true
+  ingressClassName: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+  path: /
+  hosts:
+    - self-unifi.service.fonzdm.xyz
+  tls:
+    - secretName: unifi-ingress-tls
+      hosts:
+       - self-unifi.service.fonzdm.xyz
+persistence:
+  enabled: true
+  storageClass: "nas"
+  accessMode: ReadWriteMany
+  size: 5Gi
+  skipuninstall: true
+timezone: 'Europe/Rome'

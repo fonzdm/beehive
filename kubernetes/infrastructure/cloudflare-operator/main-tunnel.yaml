@@ -1,0 +1,27 @@
+apiVersion: networking.cfargotunnel.com/v1alpha2
+kind: ClusterTunnel
+metadata:
+    name: main-tunnel
+spec:
+    cloudflare:
+        accountId: ENC[AES256_GCM,data:eYLNT3vIeNRX7Z3CDa07bB2ZtReZ9b1gqbYZVBkCAZY=,iv:FCMGNarS+anQ/4K6jrbQc61ePINPFlFwtMVEbGyoWn4=,tag:zQsv0mmI08kN1I91fzrruw==,type:str]
+        domain: fonzdm.xyz
+        email: adm220297@proton.me
+        secret: cloudflare-secrets
+    newTunnel:
+        name: main-tunnel
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBMRXg2ck5UK3Njc3J4dENB
+            a2NJWWNwQU1JekpFOCt1eEVlQlRWb1g3YndzCkxqaHhmb0JnMnlKUzZ1ckFCOVlu
+            ZTVQM0V5WFd4aGthTmVGK0RCZ1VOc0EKLS0tIDZuOS85Z1hSYnNwMC9kYU54am1P
+            SENNTVo3Vm9TdWh1Z1VqVGFXYStIQk0KiqSgoN2+0EuhT1obyb5+U6KYTt+3C5Wz
+            Kz8QbupFNTn5Ur5t74gp84hEQieBNEnzeo/lKsS+XahRwcVA6J6IGg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-09-03T14:55:24Z"
+    mac: ENC[AES256_GCM,data:uiWWy9GozIk18pWBryE6911TZ+ra+Sos4CqIdWdsxRAXRJX5hPpTT4Dqwn0r1dHHuyvbWIOTS0wduwaGbA5eALy8W4c9xP4ccFGc0KdzY8mHOb+x0r63Qrhx5Fqbt9FXK3VkvKqok8LJwW/T69+FEpiSYV0wFJBbKinfGwxqBq0=,iv:wISPZjj8TXMbu2sYzYgfhTbaP4s1MO8KM359UAFkNUg=,tag:CL6jLEWtEsBW7kS/G8SeDA==,type:str]
+    encrypted_regex: ^(CLOUDFLARE_API_TOKEN|accountId)$
+    version: 3.10.2

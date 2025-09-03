@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cloud-storage
+  namespace: cloud
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1000Gi
+  storageClassName: nas-main
+  volumeName: pvc-0ea50c04-1b80-4727-8e32-2cc3988b2721

@@ -1,0 +1,79 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: readarr
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: readarr
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                READARR__API_KEY: ENC[AES256_GCM,data:d8eG3XAFvEztWP9N3TOPJUPXUmqb0p7LUeWGlwACf2w=,iv:KvCUT39HiD3F0l5yGfxhW19WdyOOGKxDsDXGLj3Fgf8=,tag:pmJj5FJEbxvAAYUic92UMw==,type:str]
+        ingress:
+            readarr-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                annotations: {}
+                #cert-manager.io/cluster-issuer: *issuer
+                ingressClassName: tailscale
+                hosts:
+                    - host: readarr
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - readarr
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+                    exportarr:
+                        exportarr:
+                            mountPath: /config
+            media:
+                enabled: true
+                existingClaim: talos-media-volume
+                mountPath: /mnt/media
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0TVZydkhmQ1grc3Zsci93
+            MCt5V0ZrNVFqZ01YSitpbWx2b3Fya09wT204CnRDemJkUTcwa2VlTmVxVk5DcDZX
+            Ry9mdFI0RlhIVTBNSHh6QzlDVENSbE0KLS0tIHBIL1JMdDRZZFdQYlVZTVJ2enov
+            WEQ0cWNpNmdBLzBvc2xFWExxZW8wTEUKvPLOOEVrJK8BqLImmVeIlK9grUT0Sm30
+            JInTwBXHvSMDJig3aic42ub/s7QdiqcFSmVVDKQ55y/YQ4W21WbWmQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-09-03T14:48:30Z"
+    mac: ENC[AES256_GCM,data:XBFuDKMPg/EAOM7TesTljswT+tBBH3p+Amd1zPkGj8FDG+cCo4+82YnbXYNXounQZ0YHqet1aAPJj6dEAImw0viYTmOHBxGrcsgyk0drjY3MKuB5pHQIr6rWYsC0q8W/C8epqMWaPDUo+fgxz+bedPtVlzswVujF4lQWGStx2pw=,iv:8Vi44FpH8NJ8Dr3qYxVzigQKFeW/gH4vF62HytMiO20=,tag:Us9DY4HA2W9I0r5vPPskMg==,type:str]
+    encrypted_regex: ^([A-Z0-9_]+_API_KEY)$
+    version: 3.10.2

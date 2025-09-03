@@ -1,0 +1,21 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: podinfo
+spec:
+  interval: 10m
+  releaseName: podinfo
+  driftDetection:
+    mode: enabled
+  chartRef:
+    kind: OCIRepository
+    name: podinfo
+  values:
+    ingress:
+      enabled: true
+      className: traefik
+      hosts:
+        - host: podinfo.homelab.local
+          paths:
+            - path: /
+              pathType: ImplementationSpecific

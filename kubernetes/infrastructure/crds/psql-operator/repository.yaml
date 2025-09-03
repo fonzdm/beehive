@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: psql-operator
+  namespace: crd-ns
+spec:
+  interval: 1h0m0s
+  url: https://cloudnative-pg.github.io/charts
+  type: default
+

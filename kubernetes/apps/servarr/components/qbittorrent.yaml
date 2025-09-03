@@ -1,0 +1,95 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: torrent
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: qbittorrent
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        addons:
+            gluetun:
+                enabled: true
+                killSwitch: false
+                container:
+                    env:
+                        FIREWALL_OUTBOUND_SUBNETS: 192.168.0.0/16,10.244.0.0/16,10.96.0.0/12
+                        UPDATER_PERIOD: 2h
+                        HEALTH_VPN_DURATION_INITIAL: 30s
+                        DOT: "off"
+                        DNS_KEEP_NAMESERVER: "off"
+                        VPN_SERVICE_PROVIDER: protonvpn
+                        OPENVPN_USER: ENC[AES256_GCM,data:Iup/4MnQp3g74fpg8obt4NmOg2ETfEJA,iv:DBYMmb/mAaWGULAGUJSTIZIPi0ZevRd+pyrfT7CI9PY=,tag:kKj58ED8DCN2UYnRw1q7cA==,type:str]
+                        OPENVPN_PASSWORD: ENC[AES256_GCM,data:KO/9Adjo0upjbsdkU7natXvzHPTeqnWY,iv:r55GoDtXaqpCxiruKvWhROaBDq05f+6n38NGAaCqvYA=,tag:ZDrlEkNyy32y9161jw+tGw==,type:str]
+                        SERVER_COUNTRIES: Switzerland
+                        FREE_ONLY: false
+        csrf_protection: false
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                QBITTORRENT__USE_PROFILE: true
+        ingress:
+            qbittorrent-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                ingressClassName: tailscale
+                hosts:
+                    - host: torrent
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - torrent
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+            downloads:
+                enabled: true
+                type: pvc
+                existingClaim: talos-media-volume
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /downloads
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0SVQrK2UwbFBMQnJBOGM1
+            TjlqZWJJQXNoRUJFS3NSVzRaVStOSG1uZDBVCitJWGRFdWFpSUhVL1RBVlM1MEZO
+            RzZvSTZWb1krVC96dGY5cmhPdklWSjgKLS0tIGhQTklPMCtaaXN4cy9IR0hjdnYx
+            Y1ZZSTRNZVhMTHJCRmZTQ3ZhM0EycncKewBwEhyKzzdZXHB7L42IMskmy7dVldWs
+            KDwOjz5GysW8MBpxh3o7t9I094QXL1HGiUPkmuLFbZABwgLedsIXWg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-21T15:27:58Z"
+    mac: ENC[AES256_GCM,data:8bz5+MSnYteiJqi8EsCW+aCORAHgSJqpxcvzRrMD3BJmmB0RDbLpCgFQuyb8bTmLbtvBNt2NETc+EW4IZwd1tqnBBnRPcjD9WMtvSddXgaI7sHQGiZhwQOoh+vmWX2g9PDU8xpKQTiPBRkNysMfdODdnGbG4srWj4X7ktnuRVmI=,iv:ix8N7ppP5nficK9afgSvdhN6jVyMoIxArJumnFUIEFA=,tag:Gk/apmzlNS/zWtxgIssreg==,type:str]
+    encrypted_regex: ^(OPENVPN_USER|OPENVPN_PASSWORD)$
+    version: 3.10.2

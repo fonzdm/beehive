@@ -1,0 +1,11 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: cloudflare-operator
+  namespace: cloudflare-operator-system 
+spec:
+  interval: 1m0s
+  url: https://github.com/adyanth/cloudflare-operator.git
+  ref:
+    tag: v0.13.1
+

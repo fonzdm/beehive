@@ -1,0 +1,64 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: audiobookshelf
+  namespace: servarr 
+spec:
+  interval: 1h0m0s
+  chart:
+    spec:
+      chart: audiobookshelf 
+      sourceRef:
+        kind: HelmRepository
+        name: truecharts 
+  values:
+      enabled: true
+      operator:
+        register: false
+        verify:
+          enabled: true
+          additionalsystem: []
+      metrics:
+        main:
+          enabled: false
+      ingress:
+        audiobookshelf-ing:
+          enabled: true
+          primary: true
+          required: true
+          expandObjectName: false
+          ingressClassName: tailscale
+          hosts:
+            - host: audiobookshelf
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - audiobookshelf
+          integrations:
+            certManager:
+              enabled: false
+            traefik:
+              enabled: false
+      persistence:
+        config:
+          enabled: true
+          type: pvc
+          size: 500Mi
+          accessModes: ReadWriteMany
+          storageClass: nas
+          targetSelector:
+            main:
+              main:
+                mountPath: /config
+        metadata:
+          enabled: false
+        audiobooks:
+          enabled: true
+          type: pvc
+          existingClaim: talos-media-volume
+          targetSelector:
+            main:
+              main:
+                mountPath: /mnt/media

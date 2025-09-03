@@ -1,0 +1,130 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+    ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16 
+    nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16 
+  name: servarr-ing-external
+  namespace: servarr
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: jellyfin.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: jellyfin
+            port:
+              number: 8096
+        path: /
+        pathType: Prefix
+  - host: torrent.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: torrent-qbittorrent 
+            port:
+              number: 10095
+        path: /
+        pathType: Prefix
+  - host: sonarr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: sonarr
+            port:
+              number: 8989
+        path: /
+        pathType: Prefix
+  - host: radarr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: radarr 
+            port:
+              number: 7878
+        path: /
+        pathType: Prefix
+  - host: lidarr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: lidarr
+            port:
+              number: 8686
+        path: /
+        pathType: Prefix
+  - host: bazarr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: bazarr
+            port:
+              number: 6767
+        path: /
+        pathType: Prefix
+  - host: jellyseerr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: jellyseerr
+            port:
+              number: 10241
+        path: /
+        pathType: Prefix
+  - host: prowlarr.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: prowlarr
+            port:
+              number: 9696
+        path: /
+        pathType: Prefix
+  - host: abs.media.fonzdm.xyz
+    http:
+      paths:
+      - backend:
+          service:
+            name: audiobookshelf 
+            port:
+              number: 10223
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - jellyfin.media.fonzdm.xyz
+    secretName: jellyfin-ing-external-secret
+  - hosts:
+    - jellyseerr.media.fonzdm.xyz
+    secretName: jellyseerr-ing-external-secret
+  - hosts:
+    - torrent.media.fonzdm.xyz
+    secretName: torrent-ing-external-secret
+  - hosts:
+    - prowlarr.media.fonzdm.xyz
+    secretName: prowlarr-ing-external-secret
+  - hosts:
+    - bazarr.media.fonzdm.xyz
+    secretName: bazarr-ing-external-secret
+  - hosts:
+    - sonarr.media.fonzdm.xyz
+    secretName: sonarr-ing-external-secret
+  - hosts:
+    - radarr.media.fonzdm.xyz
+    secretName: radarr-ing-external-secret
+  - hosts:
+    - lidarr.media.fonzdm.xyz
+    secretName: lidarr-ing-external-secret
+  - hosts:
+    - abs.media.fonzdm.xyz
+    secretName: abs-ing-external-secret

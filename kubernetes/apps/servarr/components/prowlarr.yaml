@@ -1,0 +1,86 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: prowlarr
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: prowlarr
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        addons:
+            gluetun:
+                enabled: true
+                killSwitch: false
+                container:
+                    env:
+                        FIREWALL_OUTBOUND_SUBNETS: 192.168.0.0/16,10.244.0.0/16,10.96.0.0/12
+                        UPDATER_PERIOD: 2h
+                        HEALTH_VPN_DURATION_INITIAL: 30s
+                        DOT: "off"
+                        DNS_KEEP_NAMESERVER: "on"
+                        VPN_SERVICE_PROVIDER: protonvpn
+                        OPENVPN_PASSWORD: ENC[AES256_GCM,data:pn+C9Rp8dgWNNjb11y2wvNfuQqsYopNx,iv:6K1Z17pZKNHPcvZ3tAPUbPboSfar/o3HKO4gNsE9Is0=,tag:EyMl6HjZaBuFl1NqSwpiWQ==,type:str]
+                        OPENVPN_USER: ENC[AES256_GCM,data:MqDb0gLQ+vwICA4ZUjh5fv0ANnZpmTuM,iv:ybrLyb2YtIiJfeMWTMg6zdZZVYQlgzPhDeURYuJG77s=,tag:OhzXuIloit1D6F/FtUeI2g==,type:str]
+                        SERVER_COUNTRIES: Switzerland
+                        FREE_ONLY: false
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                PROWLARR__API_KEY: ENC[AES256_GCM,data:0Zb2O7tPx7GTQyRossQDY8TEHoo2NZF/sX7OBMSqHWI=,iv:S4vcnKqrAbJotrW/UKHpu3z8ZVndjO+ARrmtVtPLsVM=,tag:ozVx6MJMKppaoB5ObxTAOw==,type:str]
+        ingress:
+            prowlarr-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                ingressClassName: tailscale
+                hosts:
+                    - host: prowlarr
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - prowlarr
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmaEFXU0lhcW5nTXBlb09o
+            cmVnYXVMSkpldG0xQU5YMDBncmVGYk9vTWhjCllrbWUzSnQyVXY3c3h4RHRDVkU0
+            QzFTNDFLNnhGb05lODkzZ2xucThSalUKLS0tIGNRZ3VtUzZ2ekFNSHJkQmgwM0pl
+            dHJibVQ3NStuWWsyZm9sSEM4dm9vQjQK3XSXARMQJikUCki5cRQ+pialDqxl119i
+            TKjZi0UwgJ56SxE9MfGtg1dQVlqaKwwWzE4DO09f6vGX92hXrAyHkg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-08-25T13:39:23Z"
+    mac: ENC[AES256_GCM,data:yQtpyUk0PdYxYtMW3tZJxOMfgOvvS8QbiMfSAHiTSWYQgJj/KIPCT+HXojOHyGBqaNSHTclbPoeoJg955kAEilGjdutO8r4Ze8cXwoeEQY200CQIBDsmf27ZqTjH4ze6g7rf8V6yUiYx5W9RgoMQemuQF6PSPc7XmhH7/V1zgrQ=,iv:OV/hcWxxuzDhtTEFbXmKXy18kaiMSxtI04GsKjNag9k=,tag:Z4ca1QndUZrXVSXzTV5v1A==,type:str]
+    encrypted_regex: ^([A-Z0-9_]+__API_KEY|OPENVPN_USER|OPENVPN_PASSWORD)$
+    version: 3.10.2

@@ -1,0 +1,27 @@
+apiVersion: cert-manager.io/v1 
+kind: Certificate
+metadata:
+ name: selfhosted-ca 
+ namespace: cert-m 
+spec:
+  secretName: selfhosted-ca-secret 
+  isCA: true
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    # issuer created in step 1
+    name: selfhosted-ca
+    kind: ClusterIssuer
+  commonName: "selfhosted.fonzdm.xyz"
+  dnsNames:
+    - selfhosted.fonzdm.xyz
+  emailAddresses:
+    - adm220297@proton.me
+  subject:
+    organizations:
+      - fonzdm.xyz
+  usages:
+    - server auth
+    - client auth
+ 

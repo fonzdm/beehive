@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: tailscale-operator
+    namespace: tailscale
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: tailscale-operator
+            sourceRef:
+                kind: HelmRepository
+                name: tailscale-operator
+    values:
+        oauth:
+            clientId: ENC[AES256_GCM,data:kQ99j6sL5R89GNfk90U2lbw=,iv:Ba/amthbq1/IS0rR3XEcxrgjKB5E1JhFbCcgywjxWts=,tag:HOIfI5iq9kSCXGa/8CTsNg==,type:str]
+            clientSecret: ENC[AES256_GCM,data:YH6NlPydYdsWDNiDlLKwq/A6MIQSpBtS9PuMAKMG2wb62REbtXybghWWypx47VWDpf7FRYFJJtmt2pGG8nP6,iv:fjVt+TMfz1bSuZwwDxJcBhvTTBwhITcAQXEwPpGE68A=,tag:o2uYg3okX1/4fk9iCnLKgg==,type:str]
+        apiServerProxyConfig:
+            mode: "true"
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBFUzBuWmljRGdmcHpkc0VJ
+            OHhzeHlSU2wreDV3S2JHMHhEeGhBbzk5Vnh3CjNGYzZhTkVUZGdxcXdFNlpTb1pB
+            NTZodHFOMC82dXo0RmhyRUhBMlhad3MKLS0tIHVkd2lBd2orQVUrcllRc3NLQkxL
+            M3p3M3h2VDBqbC8za09GL25kcjhNeXMKtr2DAW08Z4Ym93stFCF3V3/lsoPlfB9F
+            q1w/gJvQYh/Upgjjw/yGKX5G2g+htIKgywsGAt8t+/MVq2PLr2y3yw==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-18T15:17:42Z"
+    mac: ENC[AES256_GCM,data:LFE37XDt7OjMNZhJOpvzt4/fL94GK4Gv8fOS0tfcIvRzvp0rsbRgIgId1JkN86PC82rlU8+ppyh46VR/F7u6OjGrminEmqX13G0yQ3kbLF1cVv1UOK+AViTKit5CB2LxDThwKu3paBcCXJPQ/teIjHjtV65pD6abz34LnD+YYs4=,iv:gY7uoXVIq19Iltk/xixXDaF8ZlWCXUzEUIBiQ/cBMpE=,tag:gq1emiIz/1kYmh8kKJsC8Q==,type:str]
+    encrypted_regex: ^(clientId|clientSecret)$
+    version: 3.10.2

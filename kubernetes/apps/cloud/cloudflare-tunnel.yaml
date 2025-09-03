@@ -1,0 +1,10 @@
+apiVersion: networking.cfargotunnel.com/v1alpha1
+kind: TunnelBinding
+metadata:
+  name: immich-server-tunnel
+  namespace: cloud
+subjects:
+  - name: immich-server
+tunnelRef:
+  kind: ClusterTunnel
+  name: main-tunnel

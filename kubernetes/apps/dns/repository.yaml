@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: pihole
+  namespace: dns
+spec:
+  interval: 1h0m0s
+  url: https://mojo2600.github.io/pihole-kubernetes/
+  type: default
+

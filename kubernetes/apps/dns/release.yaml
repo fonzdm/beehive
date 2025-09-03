@@ -1,0 +1,83 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: pihole
+    namespace: dns
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: pihole
+            sourceRef:
+                kind: HelmRepository
+                name: pihole
+    values:
+        DNS1: 1.1.1.1
+        DNS2: 1.0.0.1
+        adlists:
+            - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/ultimate.txt
+            - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/pro.txt
+            - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/popupads.txt
+            - https://raw.githubusercontent.com/hagezi/dns-blocklists/main/adblock/tif.mini.txt
+            - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+        adminPassword: ENC[AES256_GCM,data:ycAMtigCC6PF,iv:gFwZ8m+jzfCPCz6UOY6jllcH6k2bdf22lVde7VhV+1M=,tag:4dc9H5hwveek87Nts32v1A==,type:str]
+        ftl:
+            dns_listeningMode: all
+        dnsmasq:
+            customSettings:
+                - except-interface=nonexisting
+            customDnsEntries:
+                - address=/service.fonzdm.xyz/192.168.100.5
+                - address=/media.fonzdm.xyz/192.168.100.5
+                - address=/theia.fonzdm.xyz/192.168.100.5
+                - address=/infra.fonzdm.xyz/192.168.100.5
+                - address=/nas.fonzdm.xyz/192.168.1.215
+                - address=/fonzdm.xyz/192.168.100.5
+        ingress:
+            enabled: true
+            hosts:
+                - pihole
+            ingressClassName: tailscale
+            path: /
+            tls:
+                - hosts:
+                    - pihole
+        persistentVolumeClaim:
+            enabled: false
+            storageClass: nas
+        podDnsConfig:
+            enabled: true
+            nameservers:
+                - 127.0.0.1
+                - 1.0.0.1
+                - 1.1.1.1
+            policy: None
+        serviceDns:
+            externalTrafficPolicy: Cluster
+            annotations:
+                metallb.universe.tf/address-pool: external-pool
+                metallb.universe.tf/allow-shared-ip: external-pool
+            loadBalancerIP: 192.168.100.2
+            type: LoadBalancer
+        serviceWeb:
+            annotations:
+                metallb.universe.tf/address-pool: external-pool
+                metallb.universe.tf/allow-shared-ip: external-pool
+            loadBalancerIP: 192.168.100.2
+            type: LoadBalancer
+            externalTrafficPolicy: Cluster
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0ZnFuWHRmb3h2Qkx2UXoz
+            dkNzcUlXNjliZXpVcDVqVVFOank2ZHFwWnhRCjVIU3VYQnBZVzBCalBiVVYwd1FB
+            cTJxazNsUkJpNHFhZTZqR1NLdk1wMUUKLS0tIEM1Y250VlRpaldEQ1V4aTU2Z091
+            czlSSExUaXJWWGdqUG1hMkljaHVuUFUK46OkW+m2GeYK1aaKnjaKIN0/zrAYbSsV
+            EF4j/bWTLy8NDfEFbapHT4GOlalhiWHhePeXMljwFr6J10++AlcLDQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-07-21T09:38:56Z"
+    mac: ENC[AES256_GCM,data:pZuBsBZNNRFKV9ChurGGeMaHrIp+JPotr7Ou1O79xx770DV7o0hn8+emy/oqS9jruzhOnhP0qXE8jenxCipuj54MuOalkkQgwGIEYpWmL40AXuVDIOWjwbYi12rGnBPDpLfvz3jNb7Z4ZpJocUKmN/W8p3v+3phbVAfodN9SP2o=,iv:aRFAZty36j8JBmnaw9LFPBmyB6eSjsRVaLHCVk+ryn8=,tag:F8OJY+OWxY4WQKCThzZKWg==,type:str]
+    encrypted_regex: ^(adminPassword)$
+    version: 3.10.2

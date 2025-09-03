@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: gradiantcharts
+  namespace: pm
+spec:
+  interval: 1h0m0s
+  url: oci://registry-1.docker.io/gradiantcharts/
+  type: oci
+

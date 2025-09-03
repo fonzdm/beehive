@@ -1,0 +1,10 @@
+certmanager:
+  namespace: cert-m
+issuerca:
+  enable: true
+  name: theia-cloud-ca-certificate-signer
+issuerprod:
+  enable: false
+  name: letsencrypt-cloudflare
+issuer:
+  email: adm220297@proton.me

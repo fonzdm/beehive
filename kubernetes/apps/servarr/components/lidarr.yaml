@@ -1,0 +1,84 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+    name: lidarr
+    namespace: servarr
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: lidarr
+            sourceRef:
+                kind: HelmRepository
+                name: truecharts
+    values:
+        enabled: true
+        operator:
+            register: false
+            verify:
+                enabled: true
+                additionalsystem: []
+        metrics:
+            main:
+                enabled: false
+        workload:
+            main:
+                podSpec:
+                    containers:
+                        main:
+                            env:
+                                LIDARR__API_KEY: ENC[AES256_GCM,data:tssLVz2xUVrrsqGlvC6jRVZMuAjmV+hEK1dzuVmVxGA=,iv:pp5h/b3JGnxYSqnfHrweYw2PuSlj359R0yP8NtNuc2g=,tag:UTxwbFS/KaLrNG+v/Z4lzA==,type:str]
+        ingress:
+            lidarr-ing:
+                enabled: true
+                primary: true
+                required: true
+                expandObjectName: false
+                ingressClassName: tailscale
+                hosts:
+                    - host: lidarr
+                      paths:
+                        - path: /
+                          pathType: Prefix
+                tls:
+                    - hosts:
+                        - lidarr
+                integrations:
+                    certManager:
+                        enabled: false
+                    traefik:
+                        enabled: false
+        persistence:
+            config:
+                enabled: true
+                type: pvc
+                size: 2500Mi
+                accessModes: ReadWriteMany
+                storageClass: nas
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /config
+            media:
+                enabled: true
+                type: pvc
+                existingClaim: talos-media-volume
+                targetSelector:
+                    main:
+                        main:
+                            mountPath: /mnt/media
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqeitzVnJmb0ZnQzl2M0R6
+            SUxWM213VlNWTFNjQzFDMDBua2dSTTVWZ2k0CkdPczlBUFR3ZlJaNzNrODU5a0tn
+            WGVRZkt3eDFZdU0vcjFMd3NKT1JRVTgKLS0tIFdVZUpKc0JtWHQxR2pYMVF6V2hT
+            b2xDbmNvc0Jhek05R3lMRG5EM3p1TW8K11P+tDfWKwKUQJa4uuSSbcOSwZ7HIXn6
+            fQI6RkBJX2eiKOfjg/AEH0R666IeHHN2dF4dJoUhOje9W8xopHPAxQ==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-08-25T12:39:58Z"
+    mac: ENC[AES256_GCM,data:hraShkE4q9C1kL2+o2s67IMeBUXBTRhNMVNtQ3nsrDQy98FZtNaBROz+zqgyzHII1DysPMguytG3+COXF9+FyEfVnfp/nfasbeGAizPD/e4ZowdvRoqq6m6FV4K3dLCGOOOHgOvnD2xtz7cxXDHF2tTf9NNmtCRb2Biu3doFFao=,iv:riXRArg2fYxEZ9sAbXxIBzPc0stYOLuhJI/zAK+I7uc=,tag:uo3TES+u0OCXBliAwhM5CQ==,type:str]
+    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    version: 3.10.2
