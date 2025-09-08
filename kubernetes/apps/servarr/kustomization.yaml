@@ -13,6 +13,7 @@ resources:
   - components/radarr.yaml
   - components/sonarr.yaml
   - components/jellyfin.yaml
+  - components/audiobookshelf.yaml
   - components/prowlarr.yaml
   - components/flaresolverr.yaml
   - components/jellyseerr.yaml
