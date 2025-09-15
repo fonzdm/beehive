@@ -5,10 +5,15 @@ resources:
   - namespace.yaml
   - repository.yaml
   - pvc.yaml
+  - icloud-volume.yaml
   - secret.yaml
   - db.yaml
   - release.yaml
   - cloudflare-tunnel.yaml
+patches:
+  - target:
+      kind: Deployment
+      name: immich-server
+      namespace: cloud
+    path: immich-server-patch.yaml
 
-patchesStrategicMerge:
-  - immich-server-patch.yaml

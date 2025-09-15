@@ -1,18 +1,13 @@
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: immich-server
-  namespace: cloud
-spec:
-  template:
-    spec:
-      volumes:
-        - name: icloudpd-volume
-          persistentVolumeClaim:
-            claimName: icloudpd-volume
-      containers:
-        - name: immich-server
-          volumeMounts:
-            - name: icloudpd-volume
-              mountPath: /mnt/icloudpd 
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: icloudpd-volume
+    persistentVolumeClaim:
+      claimName: icloudpd-volume
+
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: icloudpd-volume
+    mountPath: /mnt/icloudpd
 

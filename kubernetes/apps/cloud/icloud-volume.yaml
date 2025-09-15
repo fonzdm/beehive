@@ -1,13 +1,15 @@
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: cloud-storage
+  name: icloudpd-volume
   namespace: cloud
 spec:
   accessModes:
     - ReadWriteMany
   resources:
     requests:
-      storage: 1000Gi
+      storage: 500Gi
   storageClassName: nfs-client
+
 
