@@ -12,5 +12,5 @@ resources:
   - namespace.yaml
   - repository.yaml
   - release.yaml
-
+  - test-pvc.yaml
 
