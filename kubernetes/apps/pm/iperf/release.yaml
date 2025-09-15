@@ -13,7 +13,7 @@ spec:
         name: gradiantcharts
   values:
     global:
-      storageClass: nas
+      storageClass: nfs-client
     commonAnnotations:
       metallb.universe.tf/address-pool: external-pool
       metallb.universe.tf/allow-shared-ip: external-pool

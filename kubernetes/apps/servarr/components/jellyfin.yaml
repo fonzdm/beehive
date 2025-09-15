@@ -55,7 +55,7 @@ spec:
         type: pvc
         size: 20Gi
         accessModes: ReadWriteMany
-        storageClass: nas
+        storageClass: nfs-client
         targetSelector:
           main:
             main:

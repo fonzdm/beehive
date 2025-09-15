@@ -57,13 +57,13 @@ spec:
       enabled: true
       accessMode: ReadWriteMany
       size: 4Gi
-      storageClass: nas
+      storageClass: nfs-client
       annotations: {}
       backup:
         enabled: true
         accessMode: ReadWriteMany
         size: 4Gi
-        storageClass: nas
+        storageClass: nfs-client
         annotations: {}
     podSecurityContext: {}
     securityContext: {}

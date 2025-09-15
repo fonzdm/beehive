@@ -9,3 +9,6 @@ resources:
   - db.yaml
   - release.yaml
   - cloudflare-tunnel.yaml
+
+patchesStrategicMerge:
+  - immich-server-patch.yaml

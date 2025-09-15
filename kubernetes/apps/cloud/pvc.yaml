@@ -9,5 +9,20 @@ spec:
   resources:
     requests:
       storage: 1000Gi
-  storageClassName: nas-main
-  volumeName: pvc-0ea50c04-1b80-4727-8e32-2cc3988b2721
+  storageClassName: nfs-client
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: icloudpd-volume
+  namespace: cloud
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 500Gi
+  storageClassName: nfs-client
+

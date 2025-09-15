@@ -25,7 +25,7 @@ spec:
   
   storage:
     size: 10Gi
-    storageClass: nas
+    storageClass: nfs-client
 
 ---
 

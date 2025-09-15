@@ -90,7 +90,7 @@ ingress:
        - self-unifi.service.fonzdm.xyz
 persistence:
   enabled: true
-  storageClass: "nas"
+  storageClass: "nfs-client"
   accessMode: ReadWriteMany
   size: 5Gi
   skipuninstall: true

@@ -5,8 +5,8 @@ metadata:
   namespace: monitoring
 spec:
   dependsOn:
-    - name: nas
-      namespace: nas
+    - name: driver-nfs
+      namespace: omv-nas
   interval: 30m
   releaseName: monitoring
   chart:
@@ -43,7 +43,7 @@ spec:
         storageSpec: 
           volumeClaimTemplate:
             spec:
-              storageClassName: nas
+              storageClassName: nfs-client 
               accessModes: ["ReadWriteMany"]
               resources:
                 requests:

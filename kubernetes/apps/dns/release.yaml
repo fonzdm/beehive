@@ -44,7 +44,7 @@ spec:
                     - pihole
         persistentVolumeClaim:
             enabled: false
-            storageClass: nas
+            storageClass: nfs-client 
         podDnsConfig:
             enabled: true
             nameservers:

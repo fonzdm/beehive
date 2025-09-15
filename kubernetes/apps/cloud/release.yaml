@@ -36,7 +36,7 @@ spec:
                 enabled: false
             master:
                 persistence:
-                    storageClass: nas
+                    storageClass: nfs-client
                     accessModes:
                         - ReadWriteMany
         server:
@@ -73,7 +73,7 @@ spec:
                     size: 30Gi
                     type: pvc
                     accessMode: ReadWriteMany
-                    storageClass: nas
+                    storageClass: nfs-client 
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru

@@ -43,7 +43,7 @@ spec:
         type: pvc
         size: 500Mi
         accessModes: ReadWriteMany
-        storageClass: nas
+        storageClass: nfs-client
         targetSelector:
           main:
             main:

@@ -68,7 +68,7 @@ spec:
             persistentVolumeClaim:
                 registry:
                     existingClaim: ""
-                    storageClass: nas
+                    storageClass: nfs-client
                     subPath: ""
                     accessMode: ReadWriteMany
                     size: 16Gi
@@ -76,28 +76,28 @@ spec:
                 jobservice:
                     jobLog:
                         existingClaim: ""
-                        storageClass: nas
+                        storageClass: nfs-client
                         subPath: ""
                         accessMode: ReadWriteMany
                         size: 1Gi
                         annotations: {}
                 database:
                     existingClaim: ""
-                    storageClass: nas
+                    storageClass: nfs-client
                     subPath: ""
                     accessMode: ReadWriteMany
                     size: 8Gi
                     annotations: {}
                 redis:
                     existingClaim: ""
-                    storageClass: nas
+                    storageClass: nfs-client
                     subPath: ""
                     accessMode: ReadWriteMany
                     size: 2Gi
                     annotations: {}
                 trivy:
                     existingClaim: ""
-                    storageClass: nas
+                    storageClass: nfs-client
                     subPath: ""
                     accessMode: ReadWriteMany
                     size: 5Gi
