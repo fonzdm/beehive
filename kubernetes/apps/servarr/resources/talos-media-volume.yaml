@@ -10,4 +10,3 @@ spec:
     requests:
       storage: 1500Gi
   storageClassName: nfs-client
-  volumeName: pvc-f8ab7f93-1020-49ac-a94c-947b76375781
