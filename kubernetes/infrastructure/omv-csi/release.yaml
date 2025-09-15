@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: driver-nfs 
-  namespace: nas 
+  namespace: omv-nas 
 spec:
   interval: 1h0m0s
   chart:
