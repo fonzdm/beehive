@@ -9,7 +9,6 @@ resources:
   - regcred.yaml 
   - components/qbittorrent.yaml
   - components/lidarr.yaml
-  - components/slskd.yaml
   - components/radarr.yaml
   - components/sonarr.yaml
   - components/jellyfin.yaml
