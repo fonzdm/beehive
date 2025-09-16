@@ -13,7 +13,19 @@ resources:
 patches:
   - target:
       kind: Deployment
-      name: immich-server
-      namespace: cloud
-    path: immich-server-patch.yaml
+      labelSelector: "app.kubernetes.io/name=server"
+    patch: |-
+      - op: add
+        path: /spec/template/spec/volumes/-
+        value:
+          name: icloudpd-volume
+          persistentVolumeClaim:
+            claimName: icloudpd-volume
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts/-
+        value:
+          name: icloudpd-volume
+          mountPath: /media/icloudpd
+
+
 
