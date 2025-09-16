@@ -9,5 +9,5 @@
   path: /spec/template/spec/containers/0/volumeMounts/-
   value:
     name: icloudpd-volume
-    mountPath: /mnt/icloudpd
+    mountPath: /media/icloudpd
 
