@@ -29,9 +29,9 @@ spec:
             customDnsEntries:
                 - address=/service.fonzdm.xyz/192.168.100.5
                 - address=/media.fonzdm.xyz/192.168.100.5
-                - address=/theia.fonzdm.xyz/192.168.100.5
-                - address=/infra.fonzdm.xyz/192.168.100.5
-                - address=/nas.fonzdm.xyz/192.168.1.215
+                - address=/minipc-0.infra.fonzdm.xyz/192.168.1.10
+                - address=/nas.infra.fonzdm.xyz/192.168.1.215
+                - address=/omv-0.infra.fonzdm.xyz/192.168.1.233
                 - address=/fonzdm.xyz/192.168.100.5
         ingress:
             enabled: true
