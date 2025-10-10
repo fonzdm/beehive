@@ -94,6 +94,8 @@ spec:
           enabled: true
           accessModes: [ReadWriteMany]
           storageClass: nfs-client
+        env:
+          NB_RELAY_EXPOSED_ADDRESS: "relay.netbird.service.fonzdm.xyz"
       
       metrics:
         serviceMonitor:
