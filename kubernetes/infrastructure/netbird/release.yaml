@@ -14,8 +14,18 @@ spec:
     values:
       global:
         namespace: netbird
-      
+
       management:
+        config: |
+          {
+            "listen": ":51821",
+            "signal": "https://192.168.100.1:51820",
+            "relay": "192.168.100.0:51820",
+            "storage": {
+              "type": "filesystem",
+              "path": "/var/lib/netbird"
+            }
+          }
         ingress:
           enabled: true
           className: nginx
@@ -30,16 +40,16 @@ spec:
             - secretName: management-netbird-tls
               hosts:
                 - management.netbird.service.fonzdm.xyz
-      
+
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
           size: 10Mi
           storageClass: nfs-client
-      
+
         metrics:
           enabled: true
-      
+
       dashboard:
         ingress:
           enabled: true
@@ -55,25 +65,25 @@ spec:
             - secretName: dashboard-netbird-tls
               hosts:
                 - dashboard.netbird.service.fonzdm.xyz
-      
+
         service:
           type: ClusterIP
-      
+
         metrics:
           enabled: true
-      
+
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
           storageClass: nfs-client
-      
+
       signal:
         service:
           type: LoadBalancer
           loadBalancerIP: 192.168.100.1
           annotations:
             metallb.io/ip-allocated-from-pool: external-pool
-      
+
         ingress:
           enabled: true
           className: nginx
@@ -88,25 +98,25 @@ spec:
             - secretName: signal-netbird-tls
               hosts:
                 - signal.netbird.service.fonzdm.xyz
-      
+
         metrics:
           enabled: true
-      
+
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
           storageClass: nfs-client
-      
+
       relay:
         service:
           type: LoadBalancer
           loadBalancerIP: 192.168.100.0
           annotations:
             metallb.io/ip-allocated-from-pool: external-pool
-      
+
         env:
-          NB_RELAY_EXPOSED_ADDRESS: "192.168.100.0:33080" 
-      
+          NB_RELAY_EXPOSED_ADDRESS: "192.168.100.0:33080"
+
         ingress:
           enabled: true
           className: nginx
@@ -121,17 +131,17 @@ spec:
             - secretName: relay-netbird-tls
               hosts:
                 - relay.netbird.service.fonzdm.xyz
-      
+
         metrics:
           enabled: true
-      
+
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
           storageClass: nfs-client
-      
+
       metrics:
         serviceMonitor:
           enabled: true
           namespace: netbird
-      
+
