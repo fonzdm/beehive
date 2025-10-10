@@ -105,7 +105,7 @@ spec:
             metallb.io/ip-allocated-from-pool: external-pool
       
         env:
-          NB_RELAY_EXPOSED_ADDRESS: "relay.netbird.service.fonzdm.xyz:33080"
+          NB_RELAY_EXPOSED_ADDRESS: "relay.netbird.service.fonzdm.xyz"
       
         ingress:
           enabled: true
