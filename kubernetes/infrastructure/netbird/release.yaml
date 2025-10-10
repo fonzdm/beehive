@@ -16,7 +16,7 @@ spec:
         namespace: netbird
 
       management:
-        config: |
+        configmap: |
           {
             "listen": ":51821",
             "signal": "https://192.168.100.1:51820",
@@ -26,6 +26,14 @@ spec:
               "path": "/var/lib/netbird"
             }
           }
+        podCommand:
+          args:
+          - --port=80
+          - --log-file=console
+          - --log-level=info
+          - --disable-anonymous-metrics=false
+          - --single-account-mode-domain=management.netbird.service.fonzdm.xyz
+          - --dns-domain=management.netbird.service.fonzdm.xyz
         ingress:
           enabled: true
           className: nginx
