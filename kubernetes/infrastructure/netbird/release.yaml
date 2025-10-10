@@ -25,13 +25,10 @@ spec:
             "Relay": {
                "Addresses": ["rels://relay.netbird.service.fonzdm.xyz:443"],
                "CredentialsTTL": "24h",
-               "Secret": "{{ .RELAY_PASSWORD }}"
              },
              "Signal": {
                "Proto": "https",
                "URI": "signal.netbird.service.fonzdm.xyz:443",
-               "Username": "",
-               "Password": ""
              },
              "Datadir": "/var/lib/netbird/"
           }
