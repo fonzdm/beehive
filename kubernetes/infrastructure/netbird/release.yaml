@@ -24,7 +24,7 @@ spec:
             }
             "Relay": {
                "Addresses": ["rels://relay.netbird.service.fonzdm.xyz:443"],
-               "CredentialsTTL": "24h",
+               "CredentialsTTL": "12h",
              },
              "Signal": {
                "Proto": "https",
