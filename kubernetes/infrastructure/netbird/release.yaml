@@ -18,13 +18,22 @@ spec:
       management:
         configmap: |
           {
-            "listen": ":51821",
-            "signal": "https://192.168.100.1:51820",
-            "relay": "192.168.100.0:51820",
             "storage": {
               "type": "filesystem",
               "path": "/var/lib/netbird"
             }
+            "Relay": {
+               "Addresses": ["rels://relay.netbird.service.fonzdm.xyz:443"],
+               "CredentialsTTL": "24h",
+               "Secret": "{{ .RELAY_PASSWORD }}"
+             },
+             "Signal": {
+               "Proto": "https",
+               "URI": "signal.netbird.service.fonzdm.xyz:443",
+               "Username": "",
+               "Password": ""
+             },
+             "Datadir": "/var/lib/netbird/"
           }
         podCommand:
           args:
