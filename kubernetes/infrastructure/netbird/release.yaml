@@ -1,0 +1,101 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: netbird-controller 
+    namespace: netbird
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: netbird
+            sourceRef:
+                kind: HelmRepository
+                name: netbird-helmrepo 
+    values:
+      global:
+        namespace: netbird
+      
+      management:
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            - host: management.netbird.service.fonzdm.xyz
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: management-netbird-tls
+              hosts:
+                - management.netbird.service.fonzdm.xyz
+      
+        persistentVolume:
+          enabled: true
+          accessModes: [ReadWriteMany]
+          size: 10Mi
+          storageClass: nfs-client
+      
+        metrics:
+          enabled: true
+      
+      dashboard:
+        ingress:
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            - host: dashboard.netbird.service.fonzdm.xyz
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: dashboard-netbird-tls
+              hosts:
+                - dashboard.netbird.service.fonzdm.xyz
+      
+        service:
+          type: ClusterIP
+      
+        metrics:
+          enabled: true
+      
+        persistentVolume:
+          enabled: true
+          accessModes: [ReadWriteMany]
+          storageClass: nfs-client
+      
+      signal:
+        service:
+          type: LoadBalancer
+          annotations:
+            metallb.io/ip-allocated-from-pool: external-pool
+        ingress:
+          enabled: false
+        metrics:
+          enabled: true
+        persistentVolume:
+          enabled: true
+          accessModes: [ReadWriteMany]
+          storageClass: nfs-client
+      
+      relay:
+        service:
+          type: LoadBalancer
+          annotations:
+            metallb.io/ip-allocated-from-pool: external-pool
+        ingress:
+          enabled: false
+        metrics:
+          enabled: true
+        persistentVolume:
+          enabled: true
+          accessModes: [ReadWriteMany]
+          storageClass: nfs-client
+      
+      metrics:
+        serviceMonitor:
+          enabled: true
+          namespace: netbird   

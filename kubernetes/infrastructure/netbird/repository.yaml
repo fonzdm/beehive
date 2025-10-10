@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: netbird-helmrepo 
+  namespace: netbird
+spec:
+  interval: 1h0m0s
+  url: https://netbirdio.github.io/helms 
+  type: default
+
