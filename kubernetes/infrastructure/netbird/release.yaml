@@ -70,12 +70,28 @@ spec:
       signal:
         service:
           type: LoadBalancer
+          loadBalancerIP: 192.168.100.1
           annotations:
             metallb.io/ip-allocated-from-pool: external-pool
+      
         ingress:
-          enabled: false
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            - host: signal.netbird.service.fonzdm.xyz
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: signal-netbird-tls
+              hosts:
+                - signal.netbird.service.fonzdm.xyz
+      
         metrics:
           enabled: true
+      
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
@@ -84,20 +100,38 @@ spec:
       relay:
         service:
           type: LoadBalancer
+          loadBalancerIP: 192.168.100.0
           annotations:
             metallb.io/ip-allocated-from-pool: external-pool
+      
+        env:
+          NB_RELAY_EXPOSED_ADDRESS: "relay.netbird.service.fonzdm.xyz:33080"
+      
         ingress:
-          enabled: false
+          enabled: true
+          className: nginx
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            - host: relay.netbird.service.fonzdm.xyz
+              paths:
+                - path: /
+                  pathType: ImplementationSpecific
+          tls:
+            - secretName: relay-netbird-tls
+              hosts:
+                - relay.netbird.service.fonzdm.xyz
+      
         metrics:
           enabled: true
+      
         persistentVolume:
           enabled: true
           accessModes: [ReadWriteMany]
           storageClass: nfs-client
-        env:
-          NB_RELAY_EXPOSED_ADDRESS: "relay.netbird.service.fonzdm.xyz"
       
       metrics:
         serviceMonitor:
           enabled: true
-          namespace: netbird   
+          namespace: netbird
+      
