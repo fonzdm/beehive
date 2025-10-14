@@ -17,21 +17,37 @@ spec:
 
       management:
         configmap: |
-          {
-            "storage": {
-              "type": "filesystem",
-              "path": "/var/lib/netbird"
+            {
+              "Management": {
+                "Endpoint": "https://management.netbird.service.fonzdm.xyz:443"
+              },
+              "Signal": {
+                "Endpoint": "https://signal.netbird.service.fonzdm.xyz:443"
+              },
+              "Relay": {
+                "Addresses": [
+                "192.168.100.1:33080",
+                "relay.netbird.service.fonzdm.xyz:443"
+                ]
+              },
+              "TURN": {
+                "URIs": [],
+                "Username": "",
+                "Password": ""
+              },
+              "STUN": {
+                "URIs": []
+              },
+              "Telemetry": {
+                "Endpoint": "",
+                "Enabled": false
+              },
+              "UseHttp": false,
+              "DisableRemotePeerAPI": false,
+              "LogLevel": "info",
+              "DataDir": "/var/lib/netbird"
             }
-            "Relay": {
-               "Addresses": ["rels://relay.netbird.service.fonzdm.xyz:443"],
-               "CredentialsTTL": "12h",
-             },
-             "Signal": {
-               "Proto": "https",
-               "URI": "signal.netbird.service.fonzdm.xyz:443",
-             },
-             "Datadir": "/var/lib/netbird/"
-          }
+
         podCommand:
           args:
           - --port=80
