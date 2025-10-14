@@ -64,9 +64,7 @@ spec:
             signal:
               host: signal.netbird.service.fonzdm.xyz
               tls:
-              - secretName: signal-netbird-tls
-                hosts:
-                - signal.netbird.service.fonzdm.xyz
+                secretName: signal-netbird-tls
       
         persistentVolume:
           enabled: true
