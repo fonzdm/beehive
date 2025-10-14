@@ -8,3 +8,16 @@ spec:
   url: https://netbirdio.github.io/helms 
   type: default
 
+
+---
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: jaconi-helmrepo
+  namespace: netbird
+spec:
+  interval: 1h0m0s
+  url: https://charts.jaconi.io
+  type: default
+

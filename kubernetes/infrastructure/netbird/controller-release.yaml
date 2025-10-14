@@ -1,0 +1,109 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: netbird-controller 
+    namespace: netbird
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: netbird
+            sourceRef:
+                kind: HelmRepository
+                name: jaconi-helmrepo 
+    values:
+      auth:
+        authority: ""
+        device:
+          provider: none
+      idp:
+        managerType: none
+      stun:
+        uri: stun:localhost:3478
+      turn:
+        uri: turn:localhost:3478
+      
+      
+      management:
+        ingress:
+          enabled: true
+          className: "nginx"
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            api:
+              host: management.netbird.service.fonzdm.xyz
+              tls:
+              - secretName: management-netbird-tls
+                hosts:
+                  - management.netbird.service.fonzdm.xyz
+      
+            grpc:
+              host: grpc.management.netbird.service.fonzdm.xyz
+      
+              tls:
+              - secretName: grpc-management-netbird-tls
+                hosts:
+                  - grpc.management.netbird.service.fonzdm.xyz
+        persistentVolume:
+          enabled: true
+          accessModes:
+            - ReadWriteMany
+          storageClass: nfs-client
+          size: 200Mi
+        dnsDomain: fonzdm.xyz
+      
+      
+      signal:
+        ingress:
+          enabled: true
+          className: "nginx"
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          hosts:
+            - host: signal.netbird.service.fonzdm.xyz
+              tls:
+              - secretName: signal-netbird-tls
+                hosts:
+                  - signal.netbird.service.fonzdm.xyz
+      
+        persistentVolume:
+          enabled: true
+          accessModes:
+            - ReadWriteMany
+          storageClass: nfs-client
+          size: 200Mi
+        dnsDomain: fonzdm.xyz
+      
+      ## @section NetBird Relay
+      
+      relay:
+        dnsDomain: fonzdm.xyz
+        auth:
+          secret:
+            name: netbird-relay-secret
+            key: netbird-relay-secret-key
+        replicaCount: 1
+        ingress:
+          enabled: true
+          className: "nginx"
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+            # kubernetes.io/ingress.class: nginx
+            # kubernetes.io/tls-acme: "true"
+            # nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+            # nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+          hosts:
+            - host: relay.netbird.service.fonzdm.xyz
+              tls:
+              - secretName: relay-netbird-tls
+                hosts:
+                  - relay.netbird.service.fonzdm.xyz
+              paths:
+                - path: /relay
+                  pathType: ImplementationSpecific
+      
+          tls:
+          - secretName: relay-netbird-tls
+            hosts:
+              - relay.netbird.service.fonzdm.xyz
