@@ -34,17 +34,11 @@ spec:
             api:
               host: management.netbird.service.fonzdm.xyz
               tls:
-              - secretName: management-netbird-tls
-                hosts:
-                  - management.netbird.service.fonzdm.xyz
-      
+                secretName: management-netbird-tls
             grpc:
               host: grpc.management.netbird.service.fonzdm.xyz
-      
               tls:
-              - secretName: grpc-management-netbird-tls
-                hosts:
-                  - grpc.management.netbird.service.fonzdm.xyz
+                secretName: grpc-management-netbird-tls
         persistentVolume:
           enabled: true
           accessModes:
