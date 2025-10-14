@@ -61,11 +61,12 @@ spec:
           annotations:
             cert-manager.io/cluster-issuer: letsencrypt-cloudflare
           hosts:
-            - host: signal.netbird.service.fonzdm.xyz
+            signal:
+              host: signal.netbird.service.fonzdm.xyz
               tls:
               - secretName: signal-netbird-tls
                 hosts:
-                  - signal.netbird.service.fonzdm.xyz
+                - signal.netbird.service.fonzdm.xyz
       
         persistentVolume:
           enabled: true
