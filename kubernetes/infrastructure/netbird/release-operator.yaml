@@ -13,6 +13,8 @@ spec:
                 name: netbird-helmrepo 
     values:
       managementURL: "https://netbird.gionsihome.duckdns.org:443"
+      cluster:
+        name: fonzdm-talos
       ingress:
         enabled: true
         router:
