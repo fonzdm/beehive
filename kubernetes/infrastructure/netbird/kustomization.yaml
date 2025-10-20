@@ -5,6 +5,6 @@ resources:
   - namespace.yaml
   - repository.yaml
   - secret.yaml
-  - release-operator.yaml
+#  - release-operator.yaml
 #  - controller-release.yaml
 #  - dashboard-release.yaml
