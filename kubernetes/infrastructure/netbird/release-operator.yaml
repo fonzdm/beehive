@@ -7,7 +7,7 @@ spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: netbird-operator
+            chart: kubernetes-operator
             sourceRef:
                 kind: HelmRepository
                 name: netbird-helmrepo 
