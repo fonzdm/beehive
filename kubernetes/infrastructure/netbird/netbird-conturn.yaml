@@ -34,12 +34,13 @@ spec:
             - ReadWriteMany
           storageClass: nfs-client
           size: 200Mi
-        dnsDomain: fonzdm.xyz
       
       ## @section NetBird Relay
       
       relay:
-        dnsDomain: fonzdm.xyz
+        domainName: relay.netbird.service.fonzdm.xyz
+        service:
+          port: 8888
         auth:
           secret:
             name: netbird-relay-secret
