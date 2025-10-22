@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: netbird-controller 
+    name: netbird-conturn
     namespace: netbird
 spec:
     interval: 1h0m0s
@@ -12,41 +12,9 @@ spec:
                 kind: HelmRepository
                 name: jaconi-helmrepo 
     values:
-      auth:
-        authority: ""
-        device:
-          provider: none
-      idp:
-        managerType: none
-      stun:
-        uri: stun:localhost:3478
-      turn:
-        uri: turn:localhost:3478
-      
       
       management:
-        ingress:
-          enabled: true
-          className: "nginx"
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-          hosts:
-            api:
-              host: management.netbird.service.fonzdm.xyz
-              tls:
-                secretName: management-netbird-tls
-            grpc:
-              host: grpc.management.netbird.service.fonzdm.xyz
-              tls:
-                secretName: grpc-management-netbird-tls
-        persistentVolume:
-          enabled: true
-          accessModes:
-            - ReadWriteMany
-          storageClass: nfs-client
-          size: 200Mi
-        dnsDomain: fonzdm.xyz
-      
+        enabled: false
       
       signal:
         ingress:
