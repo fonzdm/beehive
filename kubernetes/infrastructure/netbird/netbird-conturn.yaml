@@ -14,7 +14,7 @@ spec:
     values:
       
       management:
-        enabled: false
+        replicaCount: 0 
       
       signal:
         ingress:
