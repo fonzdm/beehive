@@ -81,7 +81,6 @@ spec:
         - name: relay-netbird-tls
           readOnly: true
           mountPath: /tmp/netbird-certs
-          #subPath: netbird-certs
         replicaCount: 1
         ingress:
           enabled: true
@@ -92,6 +91,7 @@ spec:
             # kubernetes.io/tls-acme: "true"
             # nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
             # nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+            nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
           hosts:
             - host: relay.netbird.service.fonzdm.xyz
               paths:
