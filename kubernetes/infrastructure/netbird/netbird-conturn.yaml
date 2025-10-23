@@ -64,7 +64,7 @@ spec:
             metallb.io/loadBalancerIPs: 192.168.100.20
         envFromSecret:
           NB_AUTH_SECRET: "netbird-relay-secret/relay-secret-key"
-        envRaw:
+        env:
           NB_LISTEN_ADDRESS: 0.0.0.0:9030
           NB_RELAY_PATH: "/relay"
           NB_RELAY_PORT: 9030
