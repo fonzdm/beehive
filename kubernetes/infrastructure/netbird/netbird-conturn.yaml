@@ -10,41 +10,69 @@ spec:
             chart: netbird
             sourceRef:
                 kind: HelmRepository
-                name: jaconi-helmrepo 
+                name: netbird-helmrepo 
+
+    postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Service
+              labelSelector: "app.kubernetes.io/name=netbird-relay"
+            patch: |-
+              - op: add
+                path: /spec/ports/-
+                value:
+                  port: 9030
+                  targetPort: quic
+                  protocol: UDP
+                  name: quic
+          - target:
+              kind: Deployment
+              labelSelector: "app.kubernetes.io/name=netbird-relay"
+            patch: |-
+              - op: add
+                path: /spec/template/spec/containers/0/ports/-
+                value:
+                  port: 9030
+                  protocol: UDP
+                  name: quic
+
     values:
       
       management:
-        replicaCount: 0 
+        enabled: false 
       
       signal:
-        ingress:
-          enabled: true
-          className: "nginx"
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-          hosts:
-            signal:
-              host: signal.netbird.service.fonzdm.xyz
-              tls:
-                secretName: signal-netbird-tls
-      
-        persistentVolume:
-          enabled: true
-          accessModes:
-            - ReadWriteMany
-          storageClass: nfs-client
-          size: 200Mi
-      
-      ## @section NetBird Relay
-      
+        enabled: false
+
+      dashboard:
+        enabled: false
+
       relay:
+        enabled: true
         domainName: relay.netbird.service.fonzdm.xyz
+        containerPort: 9030
+        labels:
+          app.kubernetes.io/name: netbird-relay
         service:
-          port: 8888
-        auth:
-          secret:
+          type: LoadBalancer
+          port: 9030
+          name: http
+          annotations: 
+            metallb.io/ip-allocated-from-pool: external-pool
+            metallb.io/allow-shared-ip: external-pool
+            metallb.io/loadBalancerIPs: 192.168.100.20
+        envFromSecret:
+          NB_AUTH_SECRET:
             name: netbird-relay-secret
             key: netbird-relay-secret-key
+        envRaw:
+          NB_LISTEN_ADDRESS: 0.0.0.0:9030
+          NB_RELAY_PATH: /relay
+          NB_RELAY_PORT: 9030
+          NB_EXPOSED_ADDRESS: rels://relay.netbird.service.fonzdm.xyz:9030/relay
+        volumes: []
+        volumeMounts: []
         replicaCount: 1
         ingress:
           enabled: true
@@ -57,14 +85,9 @@ spec:
             # nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
           hosts:
             - host: relay.netbird.service.fonzdm.xyz
-              tls:
-              - secretName: relay-netbird-tls
-                hosts:
-                  - relay.netbird.service.fonzdm.xyz
               paths:
                 - path: /relay
-                  pathType: ImplementationSpecific
-      
+                  pathType: ImplementationSpecific      
           tls:
           - secretName: relay-netbird-tls
             hosts:
