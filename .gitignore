@@ -1,3 +1,4 @@
 **/.sops.yaml
 .sops.pub.asc
 #meaningless test commit
+kubernetes/infrastructure/kube-prometheus-stack/.influx
