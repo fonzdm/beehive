@@ -26,6 +26,10 @@ spec:
                   targetPort: quic
                   protocol: UDP
                   name: quic
+              - op: add
+                path: /spec
+                value:
+                  externalTrafficPolicy: Local
           - target:
               kind: Deployment
               labelSelector: "app.kubernetes.io/name=netbird-relay"
