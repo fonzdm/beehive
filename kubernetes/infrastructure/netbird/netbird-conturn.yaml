@@ -33,7 +33,7 @@ spec:
               - op: add
                 path: /spec/template/spec/containers/0/ports/-
                 value:
-                  port: 9030
+                  containerPort: 9030
                   protocol: UDP
                   name: quic
 
