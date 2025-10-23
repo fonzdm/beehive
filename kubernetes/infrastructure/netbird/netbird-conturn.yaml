@@ -58,6 +58,18 @@ spec:
         containerPort: 9030
         labels:
           app.kubernetes.io/name: netbird-relay
+        affinity:
+
+          podAntiAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                - key: "app.kubernetes.io/name"
+                  operator: In
+                  values:
+                  - netbird-relay
+              topologyKey: "kubernetes.io/hostname"
+
         service:
           type: LoadBalancer
           port: 9030
@@ -85,7 +97,7 @@ spec:
         - name: relay-netbird-tls
           readOnly: true
           mountPath: /tmp/netbird-certs
-        replicaCount: 1
+        replicaCount: 4
         ingress:
           enabled: true
           className: "nginx"
