@@ -71,8 +71,17 @@ spec:
           NB_EXPOSED_ADDRESS: rels://relay.netbird.service.fonzdm.xyz:9030/relay
           NB_QUIC_LISTEN_ADDRESS: 0.0.0.0:9030
           NB_LOG_LEVEL: trace
-        volumes: []
-        volumeMounts: []
+          NB_TLS_CERT_FILE: /tmp/netbird-certs/tls.crt
+          NB_TLS_KEY_FILE: /tmp/netbird-certs/tls.key
+        volumes:
+        - name: relay-netbird-tls
+          secret:
+            secretName: relay-netbird-tls
+        volumeMounts:
+        - name: relay-netbird-tls
+          readOnly: true
+          mountPath: /tmp/netbird-certs
+          subPath: netbird-certs
         replicaCount: 1
         ingress:
           enabled: true
