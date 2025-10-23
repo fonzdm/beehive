@@ -81,7 +81,7 @@ spec:
         - name: relay-netbird-tls
           readOnly: true
           mountPath: /tmp/netbird-certs
-          subPath: netbird-certs
+          #subPath: netbird-certs
         replicaCount: 1
         ingress:
           enabled: true
