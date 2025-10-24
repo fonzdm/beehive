@@ -97,7 +97,7 @@ spec:
         - name: relay-netbird-tls
           readOnly: true
           mountPath: /tmp/netbird-certs
-        replicaCount: 4
+        replicaCount: 1
         ingress:
           enabled: true
           className: "nginx"
