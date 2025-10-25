@@ -5,4 +5,6 @@ resources:
   - namespace.yaml
   - repository.yaml
   - secret.yaml
+  - relay-secret.yaml
   - release-operator.yaml
+  - netbird-relay.yaml
