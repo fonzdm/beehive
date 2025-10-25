@@ -28,9 +28,7 @@ spec:
                 - except-interface=nonexisting
             customDnsEntries:
                 - address=/service.fonzdm.xyz/192.168.100.5
-                - address=/netbird.service.fonzdm.xyz/192.168.100.5
-                - address=/relay.netbird.service.fonzdm.xyz/185.220.49.13
-                - address=/signal.netbird.service.fonzdm.xyz/192.168.100.1
+                - address=/netbird.service.fonzdm.xyz/192.168.100.20
                 - address=/media.fonzdm.xyz/192.168.100.5
                 - address=/minipc-0.infra.fonzdm.xyz/192.168.1.10
                 - address=/nas.infra.fonzdm.xyz/192.168.1.215
