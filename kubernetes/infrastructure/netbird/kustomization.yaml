@@ -6,4 +6,3 @@ resources:
   - repository.yaml
   - secret.yaml
   - release-operator.yaml
-  - netbird-conturn.yaml 
