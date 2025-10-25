@@ -5,3 +5,5 @@ resources:
   - namespace.yaml
   - repository.yaml
   - secret.yaml
+  - release-operator.yaml
+  - netbird-conturn.yaml 
