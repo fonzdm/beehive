@@ -40,7 +40,7 @@ spec:
                   DB_HOSTNAME: immich-db-cluster-rw
                   DB_USERNAME: immich
                   DB_DATABASE_NAME: immich
-                  DB_PASSWORD: ENC[AES256_GCM,data:vAf83X25JtSrikcQ,iv:uUX+b8vdR6tgQWND+w8Pay9SOa/+VbkEoo2ugj/2ihg=,tag:eGb95grRq8gkADPYh/dWcw==,type:str] 
+                  DB_PASSWORD: iMMich01 
                   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
                   REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
         immich:
@@ -79,18 +79,3 @@ spec:
                     type: persistentVolumeClaim
                     accessMode: ReadWriteMany
                     storageClass: nfs-client 
-sops:
-    age:
-        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBYTU1LZURxMm02bkNLWW8z
-            cHNhbDg0ZThGb25SVDVaeW1zZVg1d0pKSFZBCitUT2JKbXZsd2JvU1YvdjhrMmFz
-            YWFzN25HSkFibU9mRlZRMjFzcitjcE0KLS0tICtjbVZWaXZVY3dnbmhNQzRGeUJr
-            WFQ5b1U1UitGdi9vWGhxNlBOUVF5WVUKb8TRuZzlyZD1CbHMWSt5K+wgZaI+Bwoe
-            J6/eyt2+6luQcq8j2p4N18xBt9RE6KiB9Ry4/+7RI0HgnmQ26CQMHg==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-07-21T10:20:33Z"
-    mac: ENC[AES256_GCM,data:i+R5DP+P2+9/oFh0NLc6KRCnmt1rPEqtXwkMj8tRRmbpaeGFrmA6LhPfMhhajX1/hcWWhX6i36/aKHNKtwTBwdOINvECmuxJSrNVLVKrtv3CfME+Y5CgzVbnqvhPHJ8tW7UPJ1fAa6NXnyuQ21MJpgc0SBAyCt7oVF6bLU7aQwk=,iv:pHvhTQbMmivuke1nhmA7J5CJoGGhhL18TXLl3LfCXyY=,tag:cEc1FR0RkoI+iq1aEZygRg==,type:str]
-    encrypted_regex: ^(DB_PASSWORD)$
-    version: 3.10.2
