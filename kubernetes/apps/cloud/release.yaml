@@ -40,7 +40,7 @@ spec:
                             DB_HOSTNAME: immich-db-cluster-rw
                             DB_USERNAME: immich
                             DB_DATABASE_NAME: immich
-                            DB_PASSWORD: ENC[AES256_GCM,data:BDO3x3uv69OCX9DKLgiDZdKCP4M=,iv:brqQLnke7l8AEYg7pMwwWIuNUmeZTlbdEklN4DDp8+Q=,tag:LRjZ0gyPxpmCaovDtECHCg==,type:str]
+                            DB_PASSWORD: ENC[AES256_GCM,data:YuaCome/0p+b2VNzfySJcIRCkO8=,iv:xKEMsvtyBfCh0GefWOuvDpiFPQohVldW0AT28xjKZxM=,tag:HmcQ+zj2unMlWBQhEiEH8A==,type:str]
                             IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
                             REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
         immich:
@@ -84,13 +84,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2a1QzN08zaHUwUDhUeFdQ
-            VmNiRm01MzF6NWhyb1JNMmVyN1pQaTlnd2xnCmlSNmlLN1gzcExUc1BhaVJNTzBh
-            a2ZuV1M3dGtTTzNtb2xZZlc1QjBGb1kKLS0tIFRCdjJCTnhmSkp6b0pSVUo5L1lr
-            NThlR3hIZXd1QTUxNXUyVGEwbXJaWTAKtLnmctPZlaVXMH3X9qx1VT3x/cvigjRG
-            ldySiwqEW+m/R5EWn5v6nd2zoZ/mhrxmI0uihKwNtBdr0FDJuwRbbQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBBdm4xZE1xZXM1T2Q5MXVu
+            UkZ1RlJ6RVNJcDJKSjVyM3Q2cmQySEl4d1FNCnhKb1dNNDVLWWozV2NKdXpDL3hV
+            N3VPdVMrZXlnQU90bnVRaktRWTBpOFUKLS0tIG9ub0RwMEt3clFtL3ZvQVhBTWpa
+            M0VHOTFiSHVyTUNmU1o4bHVkUTlseW8KPHvqhpbgliPbAbvaciiG5yCPipX/Yuog
+            C44ALeoCGY51BlgHNOTI12CjAa6l2A4GZEEihJkVJz5gqsR7mu0dKg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-28T16:00:45Z"
-    mac: ENC[AES256_GCM,data:mDhij900W3o08+NMq8/fp3VuiY4iommvgU1qqiJysVeCd/XR3hJkyYKPgpzDTDwj71w3a3IBNZPG8we4amJanGX+9wqgQLhlefLcyGmG9Ausr3xhIWkSMA9s1kI27IRvx9goNuYpzeYUmMuyeRKf8NOvqF6SEhFl+mVY/kBNU3Q=,iv:mu2w+Bh5BOi/WrmZn3zlGkZ/IrgLUB+PJfTHx+vx/EE=,tag:8GEu4OWgPiKLbrgunmFZmA==,type:str]
+    lastmodified: "2025-10-28T16:14:53Z"
+    mac: ENC[AES256_GCM,data:wy9JRZ+G5wIquhnpeAaFw0IIqmFrowRPmtQjZGbD3JSXawh42KcpIew9KAJJ+7Fm+4Ce4o8u4MUuNgtH/vRtem2p3eF3+EybpV7cp0NxOGG7Lsh5eqG6X9KsUShuWFpOuiJpsESJP7PaZ6W7k8ClaWK7Gbp2PuZxqccd+qwUKZE=,iv:Jp7LyGJFf7YaL3S1HYRCDvMGaOVv6RheaKJiHfvaJKM=,tag:Ew5KkO+8lcicTDsslk4gvQ==,type:str]
     encrypted_regex: ^(DB_PASSWORD)$
     version: 3.10.2
