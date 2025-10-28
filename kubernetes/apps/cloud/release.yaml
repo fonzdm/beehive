@@ -53,7 +53,7 @@ spec:
         valkey:
             enabled: true
         server:
-            enabled: true
+            enabled: false
             ingress:
                 main:
                     enabled: true
