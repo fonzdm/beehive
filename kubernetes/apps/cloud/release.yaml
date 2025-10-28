@@ -71,7 +71,7 @@ spec:
                             - photos.cloud.fonzdm.xyz
                           secretName: immich-ing-external-secret
         machine-learning:
-            enabled: true
+            enabled: false 
             persistence:
                 cache:
                     enabled: true
