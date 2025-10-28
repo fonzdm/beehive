@@ -40,7 +40,7 @@ spec:
                   DB_HOSTNAME: immich-db-cluster-rw
                   DB_USERNAME: immich
                   DB_DATABASE_NAME: immich
-                  DB_PASSWORD: ENC[AES256_GCM,data:3PYIRC5m6bc=,iv:BRiN0UANCX7tsaQZ6woIu92lX45r+p0D+hBtX0fJmsk=,tag:0X7x+2i8h1vuLfaap7rc2Q==,type:str]
+                  DB_PASSWORD: ENC[AES256_GCM,data:vAf83X25JtSrikcQ,iv:uUX+b8vdR6tgQWND+w8Pay9SOa/+VbkEoo2ugj/2ihg=,tag:eGb95grRq8gkADPYh/dWcw==,type:str] 
                   IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
                   REDIS_HOSTNAME: '{{ printf "%s-valkey" .Release.Name }}'
         immich:
