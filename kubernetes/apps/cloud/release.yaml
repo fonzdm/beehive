@@ -89,7 +89,7 @@ spec:
                 cache:
                     enabled: true
                     size: 30Gi
-                    type: pvc
+                    type: persistentVolumeClaim
                     accessMode: ReadWriteMany
                     storageClass: nfs-client 
 sops:
