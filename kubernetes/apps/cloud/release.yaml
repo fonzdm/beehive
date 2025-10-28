@@ -39,7 +39,7 @@ spec:
             DB_PASSWORD: ENC[AES256_GCM,data:3PYIRC5m6bc=,iv:BRiN0UANCX7tsaQZ6woIu92lX45r+p0D+hBtX0fJmsk=,tag:0X7x+2i8h1vuLfaap7rc2Q==,type:str]
             IMMICH_MACHINE_LEARNING_URL: '{{ printf "http://%s-machine-learning:3003" .Release.Name }}'
         image:
-            tag: v2.0.1
+            tag: v2.1.0
         immich:
             metrics:
                 enabled: false
