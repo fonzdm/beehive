@@ -53,7 +53,7 @@ spec:
         valkey:
             enabled: true
         server:
-            enabled: false
+            enabled: true 
             ingress:
                 main:
                     enabled: true
@@ -71,7 +71,7 @@ spec:
                             - photos.cloud.fonzdm.xyz
                           secretName: immich-ing-external-secret
         machine-learning:
-            enabled: false 
+            enabled: true 
             persistence:
                 cache:
                     enabled: true
