@@ -47,16 +47,8 @@ spec:
                 library:
                     existingClaim: cloud-storage
             configuration: {}
-        redis:
+        valkey:
             enabled: true
-            architecture: standalone
-            auth:
-                enabled: false
-            master:
-                persistence:
-                    storageClass: nfs-client
-                    accessModes:
-                        - ReadWriteMany
         server:
             enabled: true
             image:
