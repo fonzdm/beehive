@@ -32,7 +32,6 @@ spec:
     values:
         fake: "yes"
         env:
-            REDIS_HOSTNAME: '{{ printf "%s-redis-master" .Release.Name }}'
             DB_HOSTNAME: immich-db-cluster-rw
             DB_USERNAME: immich
             DB_DATABASE_NAME: immich
