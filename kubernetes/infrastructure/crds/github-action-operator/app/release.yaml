@@ -22,7 +22,7 @@ spec:
     authSecret:
       enabled: true
       create: false
-      name: "controller-manager"
+      name: "github-controller-manager"
     image:
       repository: "summerwind/actions-runner-controller"
       actionsRunnerRepositoryAndTag: "summerwind/actions-runner:ubuntu-20.04"
@@ -43,7 +43,7 @@ spec:
       secret:
         enabled: true
         create: false
-        name: controller-manager
+        name: github-controller-manager
       serviceAccount:
         create: true
       ingress:
