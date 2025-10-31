@@ -7,9 +7,12 @@ spec:
   releaseName: github-runner
   driftDetection:
     mode: enabled
-  chartRef:
-    kind: HelmRepository
-    name: actions-runner-controller
+  chart:
+    spec:
+      chart: actions-runner-controller
+      sourceRef:
+        kind: HelmRepository
+        name: actions-runner-controller
   values:
     replicaCount: 1
     webhookPort: 9443
