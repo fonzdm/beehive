@@ -8,7 +8,7 @@ spec:
   driftDetection:
     mode: enabled
   chartRef:
-    kind: actions-runner-controller
+    kind: HelmRepository
     name: actions-runner-controller
   values:
     replicaCount: 1
