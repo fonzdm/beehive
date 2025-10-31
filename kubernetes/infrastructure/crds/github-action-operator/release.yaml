@@ -1,0 +1,62 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: github-runner
+  namespace: github
+spec:
+  interval: 10m
+  releaseName: github-runner
+  driftDetection:
+    mode: enabled
+  chartRef:
+    kind: actions-runner-controller
+    name: actions-runner-controller
+  values:
+    replicaCount: 1
+    webhookPort: 9443
+    syncPeriod: 1m
+    defaultScaleDownDelay: 5m
+    enableLeaderElection: true
+    authSecret:
+      enabled: true
+      create: false
+      name: "controller-manager"
+    image:
+      repository: "summerwind/actions-runner-controller"
+      actionsRunnerRepositoryAndTag: "summerwind/actions-runner:ubuntu-20.04"
+      dindSidecarRepositoryAndTag: "docker:dind"
+      pullPolicy: IfNotPresent
+    serviceAccount:
+      create: true
+    service:
+      type: ClusterIP
+      port: 443
+    certManagerEnabled: true
+    logFormat: text
+    githubWebhookServer:
+      enabled: true
+      replicaCount: 1
+      useRunnerGroupsVisibility: false
+      logFormat: text
+      secret:
+        enabled: true
+        create: false
+        name: github-selfhosted-webhook-token
+      serviceAccount:
+        create: true
+      ingress:
+        enabled: true
+        annotations:
+          nginx.ingress.kubernetes.io/backend-protocol: "HTTP"      
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+          ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
+          nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16   
+        ingressClassName: nginx
+        tls:
+        - hosts: github-webhook.service.fonzdm.xyz
+          secretName: git-webhook-ssl
+        hosts:
+          - host: github-webhook.service.fonzdm.xyz
+            paths:
+            - path: /
+              pathType: Prefix

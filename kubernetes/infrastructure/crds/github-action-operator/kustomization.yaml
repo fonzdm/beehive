@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+secretGenerator:
+    - name: github-controller-manager
+      literals:
+        - ENC[AES256_GCM,data:lmngryXuWQl8X+0kFv0zjGDbGy3v,iv:2WC3JyKOzoPfKz3kbOBcgYzf6+U+InyL+o262HlwyWM=,tag:exZ4vawuFHDohvl9PbN4mg==,type:str]
+        - ENC[AES256_GCM,data:byloA/NPVG0WCICyBisG5JSS9hJrBigl8pmy+EsENrq/cDUtfvyPirBmmC6lw8k=,iv:jgool6EPGsj4lmcOH/MMtnHDwB1KC1JkuEsNAaoquAQ=,tag:cuJZUuQ6Garc6u9hKhrQHw==,type:str]
+      files:
+        - github_app_private_key=./secrets/github-app-private-key.pem
+    - name: github-selfhosted-webhook-token
+      literals:
+        - ENC[AES256_GCM,data:gTLF78bskLnhUdXFxgDszPOtdwUTXkuzvhJeMnmP83CCIIfFd91F51HezNS2MkFsV6yb93sxhjxfdLkIRMrxjHvZDQWMetRIwq8KuQu1hw==,iv:lKfMDMABoE0nxo/dCJA1/sBVhAaD8ori+7g1xxGNVOQ=,tag:sUVBXCSb+iLQEZCfo9nNWg==,type:str]
+generatorOptions:
+    disableNameSuffixHash: true
+resources:
+    - secret.yaml
+    - repository.yaml
+    - release.yaml
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCdGtKMjYzNWx4YWR4RFgy
+            MXVId2Z0NXVKbVFyZERsV2xoSGtGMTd2Z0ZjCm1JNEJURTc2K0xyeDIyNHE2ZlJl
+            aUhTNXY4ZElmcjJVay9ZSWNyVmF4dUUKLS0tIDdPM0tyKzN1bVdXQmE5NEt1OGhG
+            b0F2TUZlRHZpZ20xY2hVcmdldEtEU3cKnpSR/xnE7tlMkG1QBN6Mca2R3wQbQ3TY
+            3zi07lHcSDMwByZ89VvAC4VyOum0iSdlSsN4zE0lucruySq+VYgtUg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2025-10-31T14:24:04Z"
+    mac: ENC[AES256_GCM,data:0vJb+6OBRZHhXESY0z3CKdpFN5qe00nQtt17EzMP53Mv0JZsVYq0ADw/YxnQ+d2F/N5ZlRd9wACqNhPo3KV5PsfeOyi3ZdBY6QOjWxiqh9Vczb1CSnmYkgtlUe3aJKBGWkxOxVnIfF5HyuE6kHEgyx9oJhuBvQ963CKbPEtHO2g=,iv:0EGO3opt4OC9+7m5lrSHR75JzvLG3+xEX2KQJ9rBpVo=,tag:ztL4r4U7Pbhzba+BO6kApQ==,type:str]
+    encrypted_regex: ^(literals)$
+    version: 3.10.2
