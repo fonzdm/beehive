@@ -55,7 +55,8 @@ spec:
           nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16   
         ingressClassName: nginx
         tls:
-        - hosts: github-webhook.service.fonzdm.xyz
+        - hosts: 
+          - github-webhook.service.fonzdm.xyz
           secretName: git-webhook-ssl
         hosts:
           - host: github-webhook.service.fonzdm.xyz
