@@ -14,7 +14,6 @@ secretGenerator:
 generatorOptions:
     disableNameSuffixHash: true
 resources:
-    - secret.yaml
     - repository.yaml
     - release.yaml
 sops:
