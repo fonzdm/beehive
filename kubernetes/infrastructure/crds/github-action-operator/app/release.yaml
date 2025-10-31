@@ -40,7 +40,7 @@ spec:
       secret:
         enabled: true
         create: false
-        name: github-selfhosted-webhook-token
+        name: controller-manager
       serviceAccount:
         create: true
       ingress:

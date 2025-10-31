@@ -1,18 +1,7 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
-secretGenerator:
-    - name: github-controller-manager
-      literals:
-        - ENC[AES256_GCM,data:lmngryXuWQl8X+0kFv0zjGDbGy3v,iv:2WC3JyKOzoPfKz3kbOBcgYzf6+U+InyL+o262HlwyWM=,tag:exZ4vawuFHDohvl9PbN4mg==,type:str]
-        - ENC[AES256_GCM,data:byloA/NPVG0WCICyBisG5JSS9hJrBigl8pmy+EsENrq/cDUtfvyPirBmmC6lw8k=,iv:jgool6EPGsj4lmcOH/MMtnHDwB1KC1JkuEsNAaoquAQ=,tag:cuJZUuQ6Garc6u9hKhrQHw==,type:str]
-      files:
-        - github_app_private_key=./secrets/github-app-private-key.pem
-    - name: github-selfhosted-webhook-token
-      literals:
-        - ENC[AES256_GCM,data:gTLF78bskLnhUdXFxgDszPOtdwUTXkuzvhJeMnmP83CCIIfFd91F51HezNS2MkFsV6yb93sxhjxfdLkIRMrxjHvZDQWMetRIwq8KuQu1hw==,iv:lKfMDMABoE0nxo/dCJA1/sBVhAaD8ori+7g1xxGNVOQ=,tag:sUVBXCSb+iLQEZCfo9nNWg==,type:str]
-generatorOptions:
-    disableNameSuffixHash: true
 resources:
+    - secret.yaml
     - repository.yaml
     - release.yaml
 sops:
