@@ -4,18 +4,4 @@ resources:
     - secret.yaml
     - repository.yaml
     - release.yaml
-sops:
-    age:
-        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBCdGtKMjYzNWx4YWR4RFgy
-            MXVId2Z0NXVKbVFyZERsV2xoSGtGMTd2Z0ZjCm1JNEJURTc2K0xyeDIyNHE2ZlJl
-            aUhTNXY4ZElmcjJVay9ZSWNyVmF4dUUKLS0tIDdPM0tyKzN1bVdXQmE5NEt1OGhG
-            b0F2TUZlRHZpZ20xY2hVcmdldEtEU3cKnpSR/xnE7tlMkG1QBN6Mca2R3wQbQ3TY
-            3zi07lHcSDMwByZ89VvAC4VyOum0iSdlSsN4zE0lucruySq+VYgtUg==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-10-31T14:24:04Z"
-    mac: ENC[AES256_GCM,data:0vJb+6OBRZHhXESY0z3CKdpFN5qe00nQtt17EzMP53Mv0JZsVYq0ADw/YxnQ+d2F/N5ZlRd9wACqNhPo3KV5PsfeOyi3ZdBY6QOjWxiqh9Vczb1CSnmYkgtlUe3aJKBGWkxOxVnIfF5HyuE6kHEgyx9oJhuBvQ963CKbPEtHO2g=,iv:0EGO3opt4OC9+7m5lrSHR75JzvLG3+xEX2KQJ9rBpVo=,tag:ztL4r4U7Pbhzba+BO6kApQ==,type:str]
-    encrypted_regex: ^(literals)$
-    version: 3.10.2
+namespace: crd-ns
