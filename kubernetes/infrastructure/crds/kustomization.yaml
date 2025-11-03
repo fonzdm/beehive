@@ -5,4 +5,5 @@ resources:
   - namespace.yaml
   - psql-operator/repository.yaml
   - psql-operator/release.yaml
-  - github-action-operator/ks.yaml
+  - github-action-operator/ks-base.yaml
+  - github-action-operator/ks-runners.yaml

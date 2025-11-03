@@ -1,0 +1,10 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: self-hosted-runner-deployment
+  namespace: crd-ns
+spec:
+  template:
+    Spec:
+      labels:
+        - self-hosted

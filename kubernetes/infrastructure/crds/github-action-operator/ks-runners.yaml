@@ -1,0 +1,22 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app github-actions-runners
+  namespace: &namespace crd-ns
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  dependsOn:
+    - name: github-actions
+      namespace: *namespace
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./kubernetes/infrastructure/crds/github-action-operator/runners
+  targetNamespace: *namespace
+  prune: true
+  timeout: 5m0s
