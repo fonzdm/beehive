@@ -7,5 +7,6 @@ spec:
   template:
     spec:
       organization: humansbehindkeyboards
+      ephemeral: true
       labels:
         - self-hosted

@@ -4,12 +4,13 @@ metadata:
   name: self-hosted-runner-deployment-autoscaler
   namespace: crd-ns
 spec:
+  scaleDownDelaySecondsAfterScaleOut: 300
   maxReplicas: 5
-  minReplicas: 0
+  minReplicas: 1
   scaleTargetRef:
     kind: RunnerDeployment
     name: self-hosted-runner-deployment
   scaleUpTriggers:
-  - duration: 30m
+  - duration: 120m
     githubEvent:
       workflowJob: {}
