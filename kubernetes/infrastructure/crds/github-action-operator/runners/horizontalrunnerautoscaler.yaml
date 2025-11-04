@@ -6,7 +6,7 @@ metadata:
 spec:
   scaleDownDelaySecondsAfterScaleOut: 300
   maxReplicas: 5
-  minReplicas: 1
+  minReplicas: 0
   scaleTargetRef:
     kind: RunnerDeployment
     name: self-hosted-runner-deployment
