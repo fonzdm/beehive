@@ -7,6 +7,5 @@ spec:
   template:
     spec:
       organization: humansbehindkeyboards
-      repository: mumoshu/actions-runner-controller-ci
       labels:
         - self-hosted
