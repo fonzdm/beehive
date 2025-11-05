@@ -63,7 +63,7 @@ spec:
         labels:
           app.kubernetes.io/name: netbird-relay
         image:
-          repository: ghcr.io/netbirdio/netbird
+          repository: ghcr.io/netbirdio/relay
           tag: latest
           pullPolicy: IfNotPresent
         affinity:
@@ -76,7 +76,6 @@ spec:
                   values:
                   - netbird-relay
               topologyKey: "kubernetes.io/hostname"
-
         service:
           type: LoadBalancer
           port: 9030
