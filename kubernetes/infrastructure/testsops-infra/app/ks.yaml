@@ -17,5 +17,5 @@ spec:
     namespace: flux-system
   path: ./kubernetes/infrastructure/testsops-infra/app/deployment
   targetNamespace: *namespace
-  prune: true
-  timeout: 5m0s
+  prune: false
+  timeout: 30m0s
