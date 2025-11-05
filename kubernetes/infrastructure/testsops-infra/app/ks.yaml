@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  labels:
+    selfhost.security: sops
+  name: &app testsops-infra
+  namespace: &namespace testsops-infra
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./kubernetes/infrastructure/testsops-infra/app/deployment
+  targetNamespace: *namespace
+  prune: true
+  timeout: 5m0s
