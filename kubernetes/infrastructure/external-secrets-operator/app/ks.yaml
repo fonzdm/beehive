@@ -18,7 +18,7 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./kubernetes/infrastructure/crds/external-secrets-operator/app/deployment
+  path: ./kubernetes/infrastructure/external-secrets-operator/app/deployment
   targetNamespace: *namespace
   prune: true
   timeout: 5m0s
