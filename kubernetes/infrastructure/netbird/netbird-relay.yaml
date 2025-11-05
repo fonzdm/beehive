@@ -40,6 +40,10 @@ spec:
                   containerPort: 9030
                   protocol: UDP
                   name: quic
+              - op: remove
+                path: /spec/template/spec/containers/0/livenessProbe
+              - op: remove
+                path: /spec/template/spec/containers/0/readinessProbe
 
     values:
       
