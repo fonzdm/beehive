@@ -15,7 +15,7 @@ spec:
       kind: ClusterSecretStore
     refreshInterval: "10m" #External Secret Refresh Time
     target:
-      name: sops-store
+      name: sops-age
       creationPolicy: 'Owner'
     dataFrom:
       - extract: 
