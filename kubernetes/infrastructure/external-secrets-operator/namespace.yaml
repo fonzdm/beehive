@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: crd-ns
+  name: external-secrets
   labels:
     pod-security.kubernetes.io/enforce: privileged
-    selfhost.sops: "true"
 
