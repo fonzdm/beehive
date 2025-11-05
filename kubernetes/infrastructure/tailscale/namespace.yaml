@@ -4,4 +4,4 @@ metadata:
   name: tailscale
   labels:
     pod-security.kubernetes.io/enforce: privileged
-
+    selfhost.security: sops

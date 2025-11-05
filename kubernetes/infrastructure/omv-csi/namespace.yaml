@@ -4,4 +4,4 @@ metadata:
   name: omv-nas
   labels:
     pod-security.kubernetes.io/enforce: privileged
-
+    selfhost.security: sops

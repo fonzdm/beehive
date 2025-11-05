@@ -4,5 +4,5 @@ metadata:
   name: crd-ns
   labels:
     pod-security.kubernetes.io/enforce: privileged
-    selfhost.sops: "true"
+    selfhost.security: sops
 

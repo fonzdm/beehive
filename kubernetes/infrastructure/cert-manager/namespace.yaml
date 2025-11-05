@@ -4,4 +4,5 @@ metadata:
   name: cert-m
   labels:
     pod-security.kubernetes.io/enforce: privileged
+    selfhost.security: sops
 

@@ -7,7 +7,7 @@ spec:
   externalSecretName: "sops-age-es"
   namespaceSelectors:
   - matchLabels:
-      selfhost.sops: "true"
+      selfhost.security: sops
   refreshTime: "1h" #Cluster External Secret refresh Time
   externalSecretSpec:
     secretStoreRef:

@@ -4,4 +4,5 @@ metadata:
   name: cloudflare-operator-system 
   labels:
     pod-security.kubernetes.io/enforce: privileged
+    selfhost.security: sops
 
