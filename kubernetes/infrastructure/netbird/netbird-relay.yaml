@@ -62,8 +62,11 @@ spec:
         containerPort: 9030
         labels:
           app.kubernetes.io/name: netbird-relay
+        image:
+          repository: ghcr.io/netbirdio/netbird
+          tag: latest
+          pullPolicy: IfNotPresent
         affinity:
-
           podAntiAffinity:
             requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
