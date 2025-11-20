@@ -35,7 +35,7 @@ spec:
                 containers:
                     main:
                         image:
-                            tag: v2.1.0
+                            tag: v2.3.1
                         env:
                             DB_HOSTNAME: immich-db-cluster-rw
                             DB_USERNAME: immich
