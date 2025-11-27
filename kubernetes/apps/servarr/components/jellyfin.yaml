@@ -59,8 +59,6 @@ spec:
                 JELLYFIN_CACHE_DIR: /cache
                 JELLYFIN_PublishedServerUrl: ""
     persistence:
-      transcode:
-        enabled: false
       config:
         enabled: true
         type: pvc
@@ -71,6 +69,18 @@ spec:
           main:
             main:
               mountPath: /config
+      logs:
+        enabled: true
+        mountPath: "/logs"
+        type: "emptyDir"
+      cache:
+        enabled: true
+        mountPath: "/cache"
+        type: "emptyDir"
+      transcode:
+        enabled: true
+        mountPath: "/cache/transcodes"
+        type: "emptyDir"
       media:
         enabled: true
         type: pvc
