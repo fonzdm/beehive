@@ -40,7 +40,7 @@ spec:
                 required: true
                 expandObjectName: false
                 annotations:
-                  cert-manager.io/cluster-issuer: *issuer
+                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
                 ingressClassName: nginx
                 hosts:
                     - host: sonarr.media.fonzdm.xyz
