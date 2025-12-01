@@ -20,8 +20,10 @@ spec:
                     env:
                         FIREWALL_OUTBOUND_SUBNETS: 192.168.0.0/16,10.244.0.0/16,10.96.0.0/12
                         UPDATER_PERIOD: 2h
-                        HEALTH_VPN_DURATION_INITIAL: 30s
-                        DOT: "off"
+                        HEALTH_VPN_DURATION_INITIAL: 90s
+                        DOT: "on"
+                        DNS_UPSTREAM_RESOLVERS: "cloudflare,opendns"
+                        DNS_SERVER: on
                         DNS_KEEP_NAMESERVER: "off"
                         VPN_SERVICE_PROVIDER: protonvpn
                         OPENVPN_USER: ENC[AES256_GCM,data:Iup/4MnQp3g74fpg8obt4NmOg2ETfEJA,iv:DBYMmb/mAaWGULAGUJSTIZIPi0ZevRd+pyrfT7CI9PY=,tag:kKj58ED8DCN2UYnRw1q7cA==,type:str]
