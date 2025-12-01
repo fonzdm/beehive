@@ -1,4 +1,4 @@
-apiVersion: helm.toolkit.fluxcd.io/v2beta1
+apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
     name: sonarr
@@ -39,17 +39,18 @@ spec:
                 primary: true
                 required: true
                 expandObjectName: false
-                annotations: {}
-                #cert-manager.io/cluster-issuer: *issuer
-                ingressClassName: tailscale
+                annotations:
+                  cert-manager.io/cluster-issuer: *issuer
+                ingressClassName: nginx
                 hosts:
-                    - host: sonarr
+                    - host: sonarr.media.fonzdm.xyz
                       paths:
                         - path: /
                           pathType: Prefix
                 tls:
                     - hosts:
-                        - sonarr
+                        - sonarr.media.fonzdm.xyz
+                      secretName: sonarr-ing-external-secret
                 integrations:
                     certManager:
                         enabled: false
