@@ -1,6 +1,7 @@
 nfs:
     server: ENC[AES256_GCM,data:smBAIf+lRYmKry6SPA==,iv:e+bJKTdsA61ANhp7BDUNBpsVXI4U+Df2/a199gi2L4I=,tag:xiSK9KU0J7/Tm/Wi4OCYaQ==,type:str]
     path: ENC[AES256_GCM,data:09vR2UcQ7JcudC3DJNY2,iv:I8stTILrzVuNcvjM/jHjA5vMjUFFTvGZT7JtAW0OkV0=,tag:VBwWW7/LGNPmTqPwXjsCpQ==,type:str]
+    pathPattern: "${namespace}-${pvcName}"
 storageClass:
     name: nfs-client
     defaultClass: true
@@ -8,6 +9,12 @@ storageClass:
     reclaimPolicy: Retain
     volumeBindingMode: Immediate
     allowVolumeExpansion: true
+    mountOptions:
+    - nfsvers=4
+    - hard
+    - noatime
+    - actimeo=0
+    - local_lock=all
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
