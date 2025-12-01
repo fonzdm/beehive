@@ -14,7 +14,6 @@ storageClass:
     - hard
     - noatime
     - actimeo=0
-    - local_lock=all
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
