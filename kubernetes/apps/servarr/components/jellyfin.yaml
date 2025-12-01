@@ -12,15 +12,6 @@ spec:
         kind: HelmRepository
         name: truecharts
   values:
-    workload:
-      main:
-        podSpec:
-          containers:
-            main:
-              resources:
-                limits:
-                  cpu: 0 # unlimited
-                  memory: 7Gi
 
     metrics:
       main:
@@ -52,6 +43,10 @@ spec:
         podSpec:
           containers:
             main:
+              resources:
+                limits:
+                  cpu: 0 # unlimited
+                  memory: 7Gi
               env:
                 JELLYFIN_DATA_DIR: /data
                 JELLYFIN_CONFIG_DIR: /config
