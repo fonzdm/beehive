@@ -10,7 +10,17 @@ spec:
       chart: jellyseerr
       sourceRef:
         kind: HelmRepository
-        name: truecharts 
+        name: truecharts
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment
+              labelSelector: "app.kubernetes.io/instance=jellyseerr"
+            patch: |-
+              - op: remove
+                path: /spec/template/spec/affinity/podAffinity
+ 
   values:
     metrics:
       main:

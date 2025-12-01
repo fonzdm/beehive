@@ -11,6 +11,17 @@ spec:
             sourceRef:
                 kind: HelmRepository
                 name: truecharts
+
+    postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: Deployment 
+              labelSelector: "app.kubernetes.io/instance=sonarr"
+            patch: |-
+              - op: remove
+                path: /spec/template/spec/affinity/podAffinity
+
     values:
         metrics:
             main:
