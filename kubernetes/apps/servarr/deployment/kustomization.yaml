@@ -6,13 +6,13 @@ resources:
   - resources/servarr-ing-external.yaml
   - regcred.yaml 
   - repository.yaml
-  - components/qbittorrent.yaml
+ # - components/qbittorrent.yaml
  # - components/lidarr.yaml
  # - components/radarr.yaml
  # - components/sonarr.yaml
  # - components/jellyfin.yaml
-  - components/audiobookshelf.yaml
+ # - components/audiobookshelf.yaml
  #- components/prowlarr.yaml
-  - components/flaresolverr.yaml
-  - components/jellyseerr.yaml
+ # - components/flaresolverr.yaml
+ # - components/jellyseerr.yaml
  #- components/bazarr.yaml
