@@ -30,9 +30,11 @@ spec:
                     env:
                         FIREWALL_OUTBOUND_SUBNETS: 192.168.0.0/16,10.244.0.0/16,10.96.0.0/12
                         UPDATER_PERIOD: 2h
-                        HEALTH_VPN_DURATION_INITIAL: 30s
-                        DOT: "off"
-                        DNS_KEEP_NAMESERVER: "on"
+                        HEALTH_VPN_DURATION_INITIAL: 90s
+                        DOT: "on"
+                        DNS_UPSTREAM_RESOLVERS: "cloudflare,opendns"
+                        DNS_SERVER: on
+                        DNS_KEEP_NAMESERVER: "off"
                         VPN_SERVICE_PROVIDER: protonvpn
                         OPENVPN_PASSWORD: ENC[AES256_GCM,data:pn+C9Rp8dgWNNjb11y2wvNfuQqsYopNx,iv:6K1Z17pZKNHPcvZ3tAPUbPboSfar/o3HKO4gNsE9Is0=,tag:EyMl6HjZaBuFl1NqSwpiWQ==,type:str]
                         OPENVPN_USER: ENC[AES256_GCM,data:MqDb0gLQ+vwICA4ZUjh5fv0ANnZpmTuM,iv:ybrLyb2YtIiJfeMWTMg6zdZZVYQlgzPhDeURYuJG77s=,tag:OhzXuIloit1D6F/FtUeI2g==,type:str]
@@ -54,15 +56,18 @@ spec:
                 primary: true
                 required: true
                 expandObjectName: false
-                ingressClassName: tailscale
+                annotations:
+                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+                ingressClassName: nginx
                 hosts:
-                    - host: prowlarr
+                    - host: prowlarr.media.fonzdm.xyz
                       paths:
                         - path: /
                           pathType: Prefix
                 tls:
                     - hosts:
-                        - prowlarr
+                        - prowlarr.media.fonzdm.xyz
+                      secretName: prowlarr-ing-external-secret
                 integrations:
                     certManager:
                         enabled: false
@@ -74,7 +79,7 @@ spec:
                 type: pvc
                 size: 500Mi
                 accessModes: ReadWriteMany
-                storageClass: nfs-client
+                storageClass: omv-nfs-delete
                 targetSelector:
                     main:
                         main:

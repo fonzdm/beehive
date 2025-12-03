@@ -38,17 +38,18 @@ spec:
                 primary: true
                 required: true
                 expandObjectName: false
-                annotations: {}
-                #cert-manager.io/cluster-issuer: *issuer
-                ingressClassName: tailscale
+                annotations:
+                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+                ingressClassName: nginx
                 hosts:
-                    - host: radarr
+                    - host: radarr.media.fonzdm.xyz
                       paths:
                         - path: /
                           pathType: Prefix
                 tls:
                     - hosts:
-                        - radarr
+                        - radarr.media.fonzdm.xyz
+                      secretName: radarr-ing-external-secret
                 integrations:
                     certManager:
                         enabled: false
@@ -60,7 +61,7 @@ spec:
                 type: pvc
                 size: 500Mi
                 accessModes: ReadWriteMany
-                storageClass: nfs-client
+                storageClass: omv-nfs-delete
                 targetSelector:
                     main:
                         main:

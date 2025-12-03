@@ -1,23 +1,22 @@
-apiVersion: helm.toolkit.fluxcd.io/v2
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
-    name: sonarr
+    name: bazarr
     namespace: servarr
 spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: sonarr
+            chart: bazarr
             sourceRef:
                 kind: HelmRepository
                 name: truecharts
-
     postRenderers:
     - kustomize:
         patches:
           - target:
-              kind: Deployment 
-              labelSelector: "app.kubernetes.io/instance=sonarr"
+              kind: Deployment
+              labelSelector: "app.kubernetes.io/instance=bazarr"
             patch: |-
               - op: remove
                 path: /spec/template/spec/affinity/podAffinity
@@ -32,9 +31,9 @@ spec:
                     containers:
                         main:
                             env:
-                                SONARR__API_KEY: ENC[AES256_GCM,data:ro3xVXGiWkCHsr3mfD6RCb0vnRN5wgmPSYo6jbXA6Ac=,iv:8yMxGxUTlYEhVUwa5ulSsPiHV1wpG8+NYBV7TDFqtKc=,tag:NwLJ80EiXC6LyCUqkdGH8A==,type:str]
+                                BAZAAR__API_KEY: ENC[AES256_GCM,data:thhCxTnTJTUFbDgl4r5hOrqT7x84j8nnroA+OX9j+sI=,iv:ilNUx7nau8+ydBwxGGk+AfnfvLuYv0Qovrd9oDED6lA=,tag:Y5iRzxuUaJ7jDMOZ7dUGjw==,type:str]
         ingress:
-            sonarr-ing:
+            bazarr-ing:
                 enabled: true
                 primary: true
                 required: true
@@ -43,14 +42,14 @@ spec:
                   cert-manager.io/cluster-issuer: letsencrypt-cloudflare
                 ingressClassName: nginx
                 hosts:
-                    - host: sonarr.media.fonzdm.xyz
+                    - host: bazarr.media.fonzdm.xyz
                       paths:
                         - path: /
                           pathType: Prefix
                 tls:
                     - hosts:
-                        - sonarr.media.fonzdm.xyz
-                      secretName: sonarr-ing-external-secret
+                        - bazarr.media.fonzdm.xyz
+                      secretName: bazarr-ing-external-secret
                 integrations:
                     certManager:
                         enabled: false
@@ -62,7 +61,7 @@ spec:
                 type: pvc
                 size: 500Mi
                 accessModes: ReadWriteMany
-                storageClass: nfs-client
+                storageClass: omv-nfs-delete
                 targetSelector:
                     main:
                         main:
@@ -76,13 +75,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKTmJxS2k1TzAyclBKYTZ3
-            VzJ6L0RIVElXc1MxaWY3a1UwUHN3VnRwb2hnClh4TVNqSzB4R3UreFJpMmtLVHZF
-            WE9XdC9ad2lleWp3cWZxdmVIeGtzazgKLS0tIFdiZFlpR2tPalQwVTZnZ1JLcmZ3
-            QXdkY0pSeXdiQ1VvYUZ3eTNrWEt0UHMKTxNOZ2GrQCM9vjVP6410x5KadiTyvZFl
-            zbr743oUBLOpmr0KNOl0X/yZlyiznPSaWrBdCLaZdaVO2Sfzwdsi0g==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1OVhtWTFlUzQzS0lnWFRx
+            R3BoRGZ5VjlRckNDbGkrc3dOWjZVRHVtZmlVCmdEMnRXVE91eVlSUm1UMHB6b1Vj
+            UVpiam93Y3Y4RjFGWk5wU2lPV05EVzgKLS0tIEdZZzBUL3VWTVZidVVBY0tQTWFD
+            K3Y2d0hOUDA4UHQwM1lWcENuY3JCcnMKNu5v0JmtfRiTwYfA+kmIoeGJWadIHa5F
+            791Y6se7si/I6MvlAq4EDHoJgpFcJb9EZ9ir1OUGYDwtj6C4mwA+MA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T12:40:01Z"
-    mac: ENC[AES256_GCM,data:cakhGZIY3TwkR3lL2ri7CpI+LyqzoLvW0rwiEr0DUXuPXfhVpGyz3BUkjjBbK7QqxJLylZCVf7LqZQRzFVfO642mq1aiFhsTWvKS85ho+nG5G1JLXvfHeShDOTiw7tdmFIFd7VPhpkzClSrsgTusiKaTOJ4kRRQ7qtnov9WDVvs=,iv:G3PbmBOZWwGIc0Nnq1kbyvs8BMuZpaZAyXMOAtkUKSo=,tag:erN6/k29ZBFg/UdGE3x74A==,type:str]
-    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    lastmodified: "2025-09-03T14:47:22Z"
+    mac: ENC[AES256_GCM,data:qFpW9feOWkODMCQu/wTj1qxI25gAk25hQguKGWR+QwnSQKbQmep+Sj5VQXsOaR6MjY/7fWaSW46WeKHUNpZ40bomZ+xMxkyAXAGeo+q3S5CZ0R+wlOdfS1QHLB4lpsOzReUHkv/HLRshsjPzi4i0kuMAuX16mRjkIxJEmgUjY5k=,iv:Nz4lgzw7UrRhIITDBb87uYTmg+yPxKCkL1cpm+Rf480=,tag:MQsDZ6irQG4C1ypd18FUzQ==,type:str]
+    encrypted_regex: ^([A-Z0-9_]+_API_KEY)$
     version: 3.10.2

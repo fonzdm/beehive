@@ -22,17 +22,18 @@ spec:
         primary: true
         required: true
         expandObjectName: false
-        ingressClassName: tailscale
+        ingressClassName: nginx
         annotations:
-          tailscale.com/funnel: "true"
+          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
         hosts:
-        - host: jellyfin
+        - host: jellyfin.media.fonzdm.xyz
           paths:
           - path: /
             pathType: Prefix
         tls:
         - hosts:
-          - jellyfin
+          - jellyfin.media.fonzdm.xyz
+          secretName: jellyfin-ing-external-secret
         integrations:
           certManager:
             enabled: false
@@ -59,7 +60,7 @@ spec:
         type: pvc
         size: 20Gi
         accessModes: ReadWriteMany
-        storageClass: nfs-client
+        storageClass: omv-nfs-delete
         targetSelector:
           main:
             main:
