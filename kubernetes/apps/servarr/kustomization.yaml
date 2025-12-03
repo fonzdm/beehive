@@ -11,7 +11,7 @@ resources:
  # - components/lidarr.yaml
  # - components/radarr.yaml
  # - components/sonarr.yaml
-  - components/jellyfin.yaml
+ # - components/jellyfin.yaml
   - components/audiobookshelf.yaml
  #- components/prowlarr.yaml
   - components/flaresolverr.yaml
