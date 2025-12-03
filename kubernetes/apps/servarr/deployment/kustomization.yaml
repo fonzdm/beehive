@@ -3,7 +3,7 @@ kind: Kustomization
 namespace: servarr 
 resources:
   - resources/talos-media-volume.yaml
-  - resources/servarr-ing-external.yaml
+  #- resources/servarr-ing-external.yaml
   - regcred.yaml 
   - repository.yaml
  # - components/qbittorrent.yaml

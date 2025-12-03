@@ -26,7 +26,7 @@ spec:
         type: pvc
         size: 500Mi
         accessModes: ReadWriteMany
-        storageClass: nfs-client
+        storageClass: omv-nfs-delete
         targetSelector:
           main:
             main:

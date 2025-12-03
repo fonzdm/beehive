@@ -27,15 +27,20 @@ spec:
           primary: true
           required: true
           expandObjectName: false
-          ingressClassName: tailscale
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+            ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
+            nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
+          ingressClassName: nginx
           hosts:
-            - host: audiobookshelf
+            - host: audiobookshelf.media.fonzdm.xyz
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - audiobookshelf
+                - audiobookshelf.media.fonzdm.xyz
+              secretName: audiobookshelf-ing-external-secret
           integrations:
             certManager:
               enabled: false
@@ -47,7 +52,7 @@ spec:
           type: pvc
           size: 500Mi
           accessModes: ReadWriteMany
-          storageClass: nfs-client 
+          storageClass: omv-nfs-delete
           targetSelector:
             main:
               main:
