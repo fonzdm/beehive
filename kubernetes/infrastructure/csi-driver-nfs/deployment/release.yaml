@@ -1,0 +1,42 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: csi-driver-nfs
+  namespace: csi-driver-nfs
+spec:
+  interval: 10m
+  releaseName: csi-driver-nfs
+  driftDetection:
+    mode: enabled
+  chartRef:
+    kind: HelmRepository
+    name: csi-driver-nfs
+  values:
+    controller:
+      replicas: 3
+      runOnControlPlane: true
+    externalSnapshotter:
+      enabled: true
+    storageClass:
+      create: true
+    storageClasses:
+      - name: omv-nfs-delete
+        annotations:
+          storageclass.kubernetes.io/is-default-class: "true"
+        parameters:
+          server: omv-0.infra.fonzdm.xyz
+          share: /k8s-nfs
+          subDir: ${pvc.metadata.namespace}-${pvc.metadata.name}
+        reclaimPolicy: Delete
+        volumeBindingMode: Immediate
+        mountOptions:
+          - nfsvers=4.1
+      - name: omv-nfs-retain
+        parameters:
+          server: omv-0.infra.fonzdm.xyz
+          share: /k8s-nfs
+          subDir: ${pvc.metadata.namespace}-${pvc.metadata.name}
+        reclaimPolicy: Retain
+        volumeBindingMode: Immediate
+        mountOptions:
+          - nfsvers=4.1

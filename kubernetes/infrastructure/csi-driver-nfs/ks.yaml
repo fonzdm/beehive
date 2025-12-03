@@ -1,0 +1,21 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  labels:
+    selfhost.security: sops
+  name: &app csi-driver-nfs
+  namespace: &namespace csi-driver-nfs
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 30m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./kubernetes/infrastructure/csi-driver-nfs/deployment
+  targetNamespace: *namespace
+  prune: false
+  timeout: 30m0s
