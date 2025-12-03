@@ -1,0 +1,51 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: harbor-db-cluster
+  namespace: harbor
+spec:
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:16-0.3.0 
+
+  bootstrap:
+    initdb:
+      database: harbor
+      owner: harbor
+      secret:
+        name: harbor-db-secret
+
+  managed:
+    roles:
+      - name: harbor
+        superuser: true
+        login: true
+
+  postgresql:
+    shared_preload_libraries:
+      - 'vchord.so'
+  
+  storage:
+    size: 12Gi
+    storageClass: nfs-client
+
+---
+
+apiVersion: postgresql.cnpg.io/v1
+kind: Database
+metadata:
+  name: harbor-db
+  namespace: cloud
+spec:
+  name: harbor
+  owner: harbor
+  cluster:
+    name: immich-db-cluster
+  extensions:
+  - name: vector
+    ensure: present
+  - name: vchord
+    ensure: present
+    version: 0.3.0
+  - name: earthdistance
+    ensure: present
+  - name: vectors
+    ensure: absent

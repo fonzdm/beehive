@@ -4,18 +4,23 @@ kind: Kustomization
 metadata:
   labels:
     selfhost.security: sops
-  name: &app servarr
-  namespace: &namespace servarr
+  name: &app harbor
+  namespace: &namespace harbor
 spec:
   commonMetadata:
     labels:
       app.kubernetes.io/name: *app
-  interval: 30m0s
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: harbor
+      namespace: *namespace
+  interval: 10m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./kubernetes/apps/servarr/deployment
+  path: ./kubernetes/apps/harbor/app/deployment
   targetNamespace: *namespace
   prune: true
-  timeout: 30m0s
+  timeout: 5m0s
