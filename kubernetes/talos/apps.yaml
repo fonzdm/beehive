@@ -32,4 +32,5 @@ spec:
       target:
         group: kustomize.toolkit.fluxcd.io
         kind: Kustomization
+        labelSelector: "selfhost.security=sops"
 
