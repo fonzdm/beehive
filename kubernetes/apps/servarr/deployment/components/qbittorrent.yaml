@@ -14,7 +14,7 @@ spec:
     values:
         gluetunImage:
             repository: qmcgaw/gluetun
-            tag: pr-2988
+            tag: latest
             pullPolicy: IfNotPresent
         addons:
             gluetun:
