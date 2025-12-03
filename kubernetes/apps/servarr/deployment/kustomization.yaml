@@ -6,7 +6,7 @@ resources:
   #- resources/servarr-ing-external.yaml
   - regcred.yaml 
   - repository.yaml
- # - components/qbittorrent.yaml
+  - components/qbittorrent.yaml
  # - components/lidarr.yaml
  # - components/radarr.yaml
  # - components/sonarr.yaml
