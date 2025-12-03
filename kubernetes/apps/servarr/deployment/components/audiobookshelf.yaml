@@ -33,13 +33,13 @@ spec:
             nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
           ingressClassName: nginx
           hosts:
-            - host: audiobookshelf.media.fonzdm.xyz
+            - host: abs.media.fonzdm.xyz
               paths:
                 - path: /
                   pathType: Prefix
           tls:
             - hosts:
-                - audiobookshelf.media.fonzdm.xyz
+                - abs.media.fonzdm.xyz
               secretName: audiobookshelf-ing-external-secret
           integrations:
             certManager:
