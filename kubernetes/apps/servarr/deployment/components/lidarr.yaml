@@ -46,9 +46,9 @@ spec:
                 expandObjectName: false
                 ingressClassName: nginx
                 annotations:
-                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                  ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                  nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
+                    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+                    ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
+                    nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
                 hosts:
                     - host: lidarr.media.fonzdm.xyz
                       paths:
@@ -57,7 +57,7 @@ spec:
                 tls:
                     - hosts:
                         - lidarr.media.fonzdm.xyz
-                        secretName: lidarr-ing-external-secret
+                      secretName: lidarr-ing-external-secret
                 integrations:
                     certManager:
                         enabled: false
