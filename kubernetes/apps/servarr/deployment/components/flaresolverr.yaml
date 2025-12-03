@@ -21,7 +21,7 @@ spec:
             pullPolicy: IfNotPresent
         addons:
             gluetun:
-                enabled: true
+                enabled: false
                 killSwitch: false
                 container:
                     env:
