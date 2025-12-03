@@ -12,6 +12,10 @@ spec:
                 kind: HelmRepository
                 name: truecharts
     values:
+        gluetunImage:
+            repository: qmcgaw/gluetun
+            tag: pr-2988
+            pullPolicy: IfNotPresent
         addons:
             gluetun:
                 enabled: true
