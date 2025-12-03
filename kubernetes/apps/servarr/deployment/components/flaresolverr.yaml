@@ -12,6 +12,9 @@ spec:
                 kind: HelmRepository
                 name: truecharts
     values:
+        image:
+          repository: ghcr.io/thephaseless/byparr
+          tag: latest
         gluetunImage:
             repository: qmcgaw/gluetun
             tag: latest
