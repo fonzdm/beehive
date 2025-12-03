@@ -17,5 +17,5 @@ spec:
     namespace: flux-system
   path: ./kubernetes/apps/servarr/deployment
   targetNamespace: *namespace
-  prune: false
+  prune: true
   timeout: 30m0s
