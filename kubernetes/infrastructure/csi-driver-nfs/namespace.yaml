@@ -4,3 +4,4 @@ metadata:
   name: csi-driver-nfs
   labels:
     selfhost.security: sops
+    pod-security.kubernetes.io/enforce: privileged
