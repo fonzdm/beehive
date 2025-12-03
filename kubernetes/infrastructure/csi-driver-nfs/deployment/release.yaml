@@ -17,7 +17,16 @@ spec:
   values:
     controller:
       replicas: 3
-      runOnControlPlane: true
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: "app"
+                operator: In
+                values:
+                - csi-nfs-controller
+            topologyKey: "kubernetes.io/hostname"
     externalSnapshotter:
       enabled: true
     storageClass:
