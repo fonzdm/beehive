@@ -22,18 +22,18 @@ spec:
       enabled: true
     storageClass:
       create: true
-    storageClasses:
-      - name: omv-nfs-delete
-        annotations:
-          storageclass.kubernetes.io/is-default-class: "true"
-        parameters:
+      name: omv-nfs-delete
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+      parameters:
           server: omv-0.infra.fonzdm.xyz
           share: /k8s-nfs
           subDir: ${pvc.metadata.namespace}-${pvc.metadata.name}
-        reclaimPolicy: Delete
-        volumeBindingMode: Immediate
-        mountOptions:
-          - nfsvers=4.1
+      reclaimPolicy: Delete
+      volumeBindingMode: Immediate
+      mountOptions:
+        - nfsvers=4.1
+    storageClasses:
       - name: omv-nfs-retain
         parameters:
           server: omv-0.infra.fonzdm.xyz
