@@ -8,9 +8,12 @@ spec:
   releaseName: csi-driver-nfs
   driftDetection:
     mode: enabled
-  chartRef:
-    kind: HelmRepository
-    name: csi-driver-nfs
+  chart:
+      spec:
+          chart: csi-driver-nfs
+          sourceRef:
+              kind: HelmRepository
+              name: csi-driver-nfs
   values:
     controller:
       replicas: 3
