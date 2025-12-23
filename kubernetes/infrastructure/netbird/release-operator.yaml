@@ -12,7 +12,7 @@ spec:
                 kind: HelmRepository
                 name: netbird-helmrepo 
     values:
-      managementURL: "https://netbird.gionsihome.duckdns.org:443"
+      managementURL: "https://vpn.h-bk.xyz:443"
       cluster:
         name: fonzdm-talos
       ingress:
