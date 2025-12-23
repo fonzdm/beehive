@@ -18,7 +18,7 @@ spec:
       ingress:
         enabled: true
         router:
-          enabled: true
+          enabled: false
       netbirdAPI:
         keyFromSecret: 
           name: "netbird-mgmt-api-key"
