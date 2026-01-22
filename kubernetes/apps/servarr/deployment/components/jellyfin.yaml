@@ -12,7 +12,10 @@ spec:
         kind: HelmRepository
         name: truecharts
   values:
-
+    image:
+      repository: oci.trueforge.org/containerforge/jellyfin
+      pullPolicy: IfNotPresent
+      tag: rolling
     metrics:
       main:
         enabled: false
