@@ -4,4 +4,3 @@ namespace: metallb
 resources:
   - repository.yaml
   - release.yaml
-  - ippool.yaml
