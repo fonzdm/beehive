@@ -22,3 +22,6 @@ spec:
   targetNamespace: *namespace
   prune: true
   timeout: 5m0s
+  dependsOn:
+  - name: external-secrets
+    namespace: external-secrets
