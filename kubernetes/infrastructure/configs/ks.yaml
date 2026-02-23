@@ -14,7 +14,6 @@ spec:
     name: flux-system
     namespace: flux-system
   path: ./kubernetes/infrastructure/configs/manifests
-  targetNamespace: *namespace
   prune: true
   timeout: 5m0s
   dependsOn:
