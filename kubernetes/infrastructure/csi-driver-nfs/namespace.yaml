@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: csi-driver-nfs
-  labels:
-    selfhost.security: sops
-    pod-security.kubernetes.io/enforce: privileged
