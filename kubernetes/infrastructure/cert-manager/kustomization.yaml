@@ -3,10 +3,4 @@ kind: Kustomization
 namespace: cert-m 
 resources:
   - namespace.yaml
-  - repository.yaml
-  - release.yaml
-  - issuer.yaml
-  - ca-certificate.yaml
-  - ca-issuer.yaml
-  - root-cluster-issuer.yaml
-
+  - app/ks.yaml
