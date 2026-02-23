@@ -4,6 +4,8 @@ kind: Kustomization
 metadata:
   name: &app cert-m
   namespace: &namespace cert-m
+  labels:
+    selfhost.security: sops
 spec:
   commonMetadata:
     labels:
