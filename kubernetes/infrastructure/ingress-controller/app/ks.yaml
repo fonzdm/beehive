@@ -20,7 +20,7 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./kubernetes/infrastructure/ingerss-controller/app/deployment
+  path: ./kubernetes/infrastructure/ingress-controller/app/deployment
   targetNamespace: *namespace
   prune: true
   timeout: 5m0s
