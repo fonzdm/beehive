@@ -27,7 +27,7 @@ spec:
       enabled: true
       annotations: {}
       # -- Gateway references to attach this HTTPRoute to
-      parentRefs: []
+      parentRefs:
       - name: traefik-gateway
         namespace: ingress
         sectionName: https
