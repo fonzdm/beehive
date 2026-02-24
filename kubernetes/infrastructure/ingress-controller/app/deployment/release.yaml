@@ -13,7 +13,7 @@ spec:
                 name: traefik-repo
     upgrade:
         remediation:
-            retries: 3
+            retries: 5
     values:
         logs:
             general:
