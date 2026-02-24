@@ -3,5 +3,5 @@ kind: Kustomization
 namespace: ingress
 resources:
   - namespace.yaml
-  #- app/ks.yaml
+  - app/ks.yaml
   #- configs/ks.yaml
