@@ -18,10 +18,6 @@ spec:
         logs:
             general:
                 level: DEBUG
-        access:
-            enabled: true
-        crds:
-            enabled: true
         deployment:
             replicas: 2
         providers:
@@ -34,17 +30,14 @@ spec:
                 allowCrossNamespace: true
         ports:
             web:
-                port: :80
+                port: 80
             websecure:
-                port: :443
-                tls:
-                    enabled: true
+                port: 443
                 transport:
                     respondingTimeouts:
                         readTimeout: 600s
                         idleTimeout: 600s
                         writeTimeout: 600s
-                middlewares: {}
         ingressRoute:
             dashboard:
                 enabled: true
