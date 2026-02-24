@@ -39,6 +39,8 @@ spec:
     # Enable ONLY hostpath LocalPV
     localpv-provisioner:
       enabled: true
+      localpv:
+        basePath: /var/mnt/raid-data/pvcs
 
     # Node Disk Manager (safe + recommended)
     ndm:
