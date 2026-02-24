@@ -1,15 +1,23 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: test-pv
+spec:
+  storageClassName: localpv-raid
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+
+---
+
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: test-volume
+  name: test-pvc
   namespace: openebs
 spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
-  storageClassName: localpv-raid
+  volumeName: test-pv
 
 ---
 
@@ -38,4 +46,4 @@ spec:
   volumes:
     - name: test-storage
       persistentVolumeClaim:
-        claimName: test-volume
+        claimName: test-pvc
