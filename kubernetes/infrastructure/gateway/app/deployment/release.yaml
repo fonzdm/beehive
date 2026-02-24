@@ -63,9 +63,10 @@ spec:
               spec:
                 basicAuth:
                     secret: dashboard-auth-secret
-        # Allow the Gateway to expose HTTPRoute from all namespaces
         gateway:
-            namespacePolicy: All
+            enabled: false
+        gatewayClass:
+            enabled: false
         service:
             annotations:
                 metallb.io/ip-allocated-from-pool: external-pool
