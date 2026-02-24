@@ -10,8 +10,6 @@ metadata:
         value: "hostpath"
       - name: BasePath
         value: "/var/mnt/raid-data/pvcs"
-      - name: PathPattern
-        value: "${.PVC.namespace}/${.PVC.name}"
 provisioner: openebs.io/local
 volumeBindingMode: WaitForFirstConsumer
-reclaimPolicy: Retain
+reclaimPolicy: Delete
