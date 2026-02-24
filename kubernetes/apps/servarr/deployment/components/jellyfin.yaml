@@ -15,16 +15,31 @@ spec:
     replicaCount: 1
     image:
       pullPolicy: IfNotPresent
-
     persistence:
       config:
         enabled: true
-        size: 5Gi
+        size: 8Gi
         storageClass: 'localpv-raid'
       media:
         enabled: true
         existingClaim: talos-media-volume
-
+    httpRoute:
+      enabled: true
+      annotations: {}
+      # -- Gateway references to attach this HTTPRoute to
+      parentRefs: []
+      - name: traefik-gateway
+        namespace: ingress
+        sectionName: https
+      # -- Hostnames to match for this HTTPRoute
+      hostnames:
+      - stream.fonzdm.xyz
+      # -- Rules for routing traffic
+      rules:
+        - matches:
+            - path:
+                type: PathPrefix
+                value: /
     ingress:
       enabled: true
       className: 'traefik'
@@ -41,11 +56,7 @@ spec:
         - secretName: jellyfin-tls
           hosts:
             - jellyfin.media.fonzdm.xyz
-
     resources:
-      limits:
-        cpu: 0
-        memory: 4Gi
       requests:
         cpu: 500m
         memory: 1Gi
