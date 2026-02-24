@@ -5,5 +5,5 @@ metadata:
   namespace: servarr
 spec:
   interval: 1h0m0s
-  url: "oci://tccr.io/truecharts"
+  url: oci://oci.trueforge.org/truecharts
   type: oci
