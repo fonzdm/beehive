@@ -5,8 +5,8 @@ metadata:
   namespace: servarr
 spec:
   accessModes:
-  - ReadWriteMany
+  - ReadWriteOnce
   resources:
     requests:
       storage: 2000Gi
-  storageClassName: omv-nfs-retain
+  storageClassName: localpv-raid

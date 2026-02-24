@@ -25,11 +25,7 @@ spec:
         primary: true
         required: true
         expandObjectName: false
-        ingressClassName: nginx
-        annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-          #ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-          #nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
+        ingressClassName: traefik
         hosts:
         - host: jellyfin.media.fonzdm.xyz
           paths:
@@ -41,9 +37,14 @@ spec:
           secretName: jellyfin-ing-external-secret
         integrations:
           certManager:
-            enabled: false
+            enabled: true
+            certificateIssuer: "letsencrypt-cloudflare"
           traefik:
-            enabled: false
+            enabled: true
+            entrypoints:
+            - websecure
+            forceTLS: true
+            middlewares: []
     workload:
       main:
         podSpec:
@@ -64,8 +65,8 @@ spec:
         enabled: true
         type: pvc
         size: 20Gi
-        accessModes: ReadWriteMany
-        storageClass: omv-nfs-delete
+        accessModes: ReadWriteOnce
+        storageClass: localpv-raid
         targetSelector:
           main:
             main:
