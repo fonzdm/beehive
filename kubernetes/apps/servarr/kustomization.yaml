@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: servarr 
 resources:
   - namespace.yaml
-  #- ks.yaml
+  - ks.yaml
