@@ -21,6 +21,5 @@ spec:
       name: jellyfin
       namespace: *namespace
   path: ./kubernetes/apps/servarr/deployment
-  targetNamespace: *namespace
   prune: true
   timeout: 30m0s

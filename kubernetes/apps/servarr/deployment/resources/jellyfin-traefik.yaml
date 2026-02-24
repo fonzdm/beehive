@@ -34,4 +34,20 @@ spec:
         name: jellyfin-buffering
     backendRefs:
     - name: jellyfin
-      port: 8096
+      port: 
+
+---
+      
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-httproutes-from-servarr
+  namespace: ingress
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: servarr
+  to:
+  - group: ""
+    kind: Service      
