@@ -34,7 +34,7 @@ spec:
         name: jellyfin-buffering
     backendRefs:
     - name: jellyfin
-      port: 
+      port: 8096 
 
 ---
       
