@@ -2,8 +2,8 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: &app configs
-  namespace: &namespace flux-system
+  name: &app external-secrets-configs
+  namespace: &namespace external-secrets
 spec:
   commonMetadata:
     labels:
@@ -13,11 +13,10 @@ spec:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
-  path: ./kubernetes/infrastructure/configs/manifests
+  path: ./kubernetes/infrastructure/external-secrets-operator/configs/manifests
+  targetNamespace: *namespace
   prune: true
   timeout: 5m0s
   dependsOn:
   - name: external-secrets
-    namespace: external-secrets
-  - name: metallb
-    namespace: metallb
+    namespace: *namespace

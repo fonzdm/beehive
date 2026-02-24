@@ -4,3 +4,4 @@ namespace: cert-m
 resources:
   - namespace.yaml
   - app/ks.yaml
+  - configs/ks.yaml

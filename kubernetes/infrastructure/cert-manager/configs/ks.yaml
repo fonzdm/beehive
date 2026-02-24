@@ -1,0 +1,26 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app cert-manager-configs
+  namespace: &namespace cert-m
+  labels:
+    selfhost.security: sops
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./kubernetes/infrastructure/cert-manager/configs/manifests
+  targetNamespace: *namespace
+  prune: true
+  timeout: 5m0s
+  dependsOn:
+  - name: external-secrets
+    namespace: external-secrets
+  - name: cert-m
+    namespace: *namespace

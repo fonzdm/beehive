@@ -4,3 +4,4 @@ namespace: metallb
 resources:
   - namespace.yaml
   - app/ks.yaml
+  - configs/ks.yaml
