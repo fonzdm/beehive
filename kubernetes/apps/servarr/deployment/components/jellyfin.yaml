@@ -23,23 +23,6 @@ spec:
       media:
         enabled: true
         existingClaim: talos-media-volume
-    httpRoute:
-      enabled: true
-      annotations: {}
-      # -- Gateway references to attach this HTTPRoute to
-      parentRefs:
-      - name: traefik-gateway
-        namespace: ingress
-        sectionName: https
-      # -- Hostnames to match for this HTTPRoute
-      hostnames:
-      - stream.fonzdm.xyz
-      # -- Rules for routing traffic
-      rules:
-        - matches:
-            - path:
-                type: PathPrefix
-                value: /
     ingress:
       enabled: true
       className: 'traefik'
