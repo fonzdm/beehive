@@ -4,10 +4,13 @@ metadata:
   name: localpv-raid
   annotations:
     storageclass.kubernetes.io/is-default-class: "true"
+    cas.openebs.io/config: |
+      - name: StorageType
+        value: "hostpath"
+      - name: BasePath
+        value: "/var/mnt/raid-data/pvcs"
+      - name: pathPattern
+        value: "${.PVC.namespace}/${.PVC.name}"
 provisioner: openebs.io/local
 volumeBindingMode: WaitForFirstConsumer
 reclaimPolicy: Retain
-parameters:
-  BasePath: /var/mnt/raid-data/pvcs
-  pathPattern: "${.PVC.namespace}/${.PVC.name}"
-  storageType: hostpath
