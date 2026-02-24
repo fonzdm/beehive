@@ -7,13 +7,13 @@ spec:
   gatewayClassName: traefik
   listeners:
   - name: web
-    port: 8000
+    port: 80
     protocol: HTTP
     allowedRoutes:
       namespaces:
         from: All
   - name: websecure
-    port: 8443
+    port: 443
     protocol: HTTPS
     allowedRoutes:
       namespaces:
