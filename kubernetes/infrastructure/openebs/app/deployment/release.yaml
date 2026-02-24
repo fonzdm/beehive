@@ -19,21 +19,58 @@ spec:
       retries: 5
 
   values:
+    # --------------------------------------------------
+    # OpenEBS v4.4 — LOCALPV ONLY (Talos Homelab)
+    # --------------------------------------------------
+
+    # Disable replicated storage platform (Mayastor)
     engines:
+      replicated:
+        mayastor:
+          enabled: false
+
+      # Disable other local engines we don't want
       local:
         lvm:
           enabled: false
         zfs:
           enabled: false
-    mayastor:
-      enabled: false
-    jiva:
-      enabled: false
-    cstor:
-      enabled: false
+
+    # Enable ONLY hostpath LocalPV
     localpv-provisioner:
       enabled: true
+
+    # Node Disk Manager (safe + recommended)
+    ndm:
+      enabled: true
+
+    ndmOperator:
+      enabled: true
+
+    # ---- Disable platform services pulled by Mayastor ----
+    loki:
+      enabled: false
+
+    minio:
+      enabled: false
+
+    nats:
+      enabled: false
+
+    alloy:
+      enabled: false
+
+    apiServer:
+      enabled: false
+
+    etcd:
+      enabled: false
+
+    obs:
+      enabled: false
+
+    # Optional — Talos already has snapshots CRDs usually
     openebs-crds:
       csi:
         volumeSnapshots:
-          enabled: true
+          enabled: false
