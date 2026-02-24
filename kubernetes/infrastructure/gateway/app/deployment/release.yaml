@@ -64,7 +64,7 @@ spec:
                 basicAuth:
                     secret: dashboard-auth-secret
         gateway:
-            enabled: true
+            enabled: false
         gatewayClass:
             enabled: true
         service:
