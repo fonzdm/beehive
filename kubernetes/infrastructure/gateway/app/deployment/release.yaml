@@ -64,9 +64,9 @@ spec:
                 basicAuth:
                     secret: dashboard-auth-secret
         gateway:
-            enabled: false
+            enabled: true
         gatewayClass:
-            enabled: false
+            enabled: true
         service:
             annotations:
                 metallb.io/ip-allocated-from-pool: external-pool
