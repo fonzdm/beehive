@@ -7,3 +7,16 @@ spec:
   interval: 1h0m0s
   url: oci://oci.trueforge.org/truecharts
   type: oci
+
+---
+
+#https://jellyfin.github.io/jellyfin-helm
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: jellyfin-charts
+  namespace: servarr
+spec:
+  interval: 1h0m0s
+  url: https://jellyfin.github.io/jellyfin-helm

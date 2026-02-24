@@ -10,88 +10,42 @@ spec:
       chart: jellyfin
       sourceRef:
         kind: HelmRepository
-        name: truecharts
+        name: jellyfin-charts
   values:
+    replicaCount: 1
     image:
-      repository: oci.trueforge.org/containerforge/jellyfin
       pullPolicy: IfNotPresent
-      tag: rolling
-    metrics:
-      main:
-        enabled: false
-    ingress:
-      jellyfin-ing:
-        enabled: true
-        primary: true
-        required: true
-        expandObjectName: false
-        ingressClassName: traefik
-        hosts:
-        - host: jellyfin.media.fonzdm.xyz
-          paths:
-          - path: /
-            pathType: Prefix
-        tls:
-        - hosts:
-          - jellyfin.media.fonzdm.xyz
-          secretName: jellyfin-ing-external-secret
-        integrations:
-          certManager:
-            enabled: true
-            certificateIssuer: "letsencrypt-cloudflare"
-          traefik:
-            enabled: true
-            entrypoints:
-            - websecure
-            forceTLS: true
-            middlewares: []
-    workload:
-      main:
-        podSpec:
-          containers:
-            main:
-              resources:
-                limits:
-                  cpu: 0 # unlimited
-                  memory: 7Gi
-              env:
-                JELLYFIN_DATA_DIR: /data
-                JELLYFIN_CONFIG_DIR: /config
-                JELLYFIN_LOG_DIR: /logs
-                JELLYFIN_CACHE_DIR: /cache
-                JELLYFIN_PublishedServerUrl: ""
+
     persistence:
       config:
         enabled: true
-        type: pvc
-        size: 20Gi
-        accessModes: ReadWriteOnce
-        storageClass: localpv-raid
-        targetSelector:
-          main:
-            main:
-              mountPath: /config
-      logs:
-        enabled: true
-        mountPath: "/logs"
-        type: "emptyDir"
-      cache:
-        enabled: true
-        mountPath: "/cache"
-        type: "emptyDir"
-      data:
-        enabled: true
-        mountPath: "/data"
-      transcode:
-        enabled: true
-        mountPath: "/cache/transcodes"
-        type: "emptyDir"
+        size: 5Gi
+        storageClass: 'localpv-raid'
       media:
         enabled: true
-        type: pvc
         existingClaim: talos-media-volume
-        targetSelector:
-          main:
-            main:
-              mountPath: /mnt/media
 
+    ingress:
+      enabled: true
+      className: 'traefik'
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        traefik.ingress.kubernetes.io/router.middlewares: default-jellyfin-buffering@kubernetescrd
+      hosts:
+        - host: jellyfin.media.fonzdm.xyz
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - secretName: jellyfin-tls
+          hosts:
+            - jellyfin.media.fonzdm.xyz
+
+    resources:
+      limits:
+        cpu: 0
+        memory: 4Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
