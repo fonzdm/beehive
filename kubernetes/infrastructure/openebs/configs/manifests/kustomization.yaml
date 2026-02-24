@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: openebs
 resources:
   - storageclass.yaml
-
+  - test-volume.yaml
