@@ -24,7 +24,7 @@ spec:
         enabled: true
         existingClaim: talos-media-volume
     ingress:
-      enabled: true
+      enabled: false
       className: 'traefik'
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-cloudflare
