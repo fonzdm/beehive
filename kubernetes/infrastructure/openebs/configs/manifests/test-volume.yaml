@@ -1,15 +1,3 @@
-kind: PersistentVolume
-apiVersion: v1
-metadata:
-  name: test-pv
-spec:
-  storageClassName: localpv-raid
-  capacity:
-    storage: 1Gi
-  accessModes:
-    - ReadWriteOnce
-  volumeMode: Filesystem
-
 ---
 
 apiVersion: v1
@@ -18,14 +6,18 @@ metadata:
   name: test-pvc
   namespace: openebs
 spec:
-  volumeName: test-pv
+  storageClassName: localpv-raid
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
 
 ---
 
 apiVersion: v1
 kind: Pod
 metadata:
-  name: pvc-test
+  name: test-pvc-pod
   namespace: openebs
 spec:
   restartPolicy: Never
