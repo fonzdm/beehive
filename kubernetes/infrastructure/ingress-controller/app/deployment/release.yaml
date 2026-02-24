@@ -1,0 +1,102 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+    name: traefik
+    namespace: ingress
+spec:
+    interval: 1h0m0s
+    chart:
+        spec:
+            chart: traefik
+            sourceRef:
+                kind: HelmRepository
+                name: traefik-repo
+    upgrade:
+        remediation:
+            retries: 3
+    values:
+        logs:
+            general:
+                level: DEBUG
+        access:
+            enabled: true
+        crds:
+            enabled: true
+        deployment:
+            replicas: 2
+        providers:
+            kubernetesGateway:
+                enabled: true
+            kubernetesIngress:
+                enabled: false
+            kubernetesCRD:
+                enabled: true
+                allowCrossNamespace: true
+        ports:
+            web:
+                port: :80
+            websecure:
+                port: :443
+                tls:
+                    enabled: true
+                transport:
+                    respondingTimeouts:
+                        readTimeout: 600s
+                        idleTimeout: 600s
+                        writeTimeout: 600s
+                middlewares: {}
+        ingressRoute:
+            dashboard:
+                enabled: true
+                # Custom match rule with host domain
+                matchRule: Host(`ingress.infra.fonzdm.xyz`)
+                entryPoints:
+                    - websecure
+                middlewares:
+                    - name: dashboard-auth
+        extraObjects:
+            - apiVersion: v1
+              kind: Secret
+              metadata:
+                name: dashboard-auth-secret
+              type: kubernetes.io/basic-auth
+              stringData:
+                username: ENC[AES256_GCM,data:7U6G2qmZ,iv:6vGBj/hdBpjJLPkfbMJLFh9DOOt4yAoQlZAlkPO0/Sw=,tag:BoJm/jEY8IMiEDjfCdBadQ==,type:str]
+                password: ENC[AES256_GCM,data:/UBCp3oTsFFhC86zEDxQUKIivBI=,iv:r3J0mDH75XJsnkmzJK7iMB2JVM5rbmqkh7jZH2Mwytg=,tag:LtVNfCNu/pByi9p1cfJ8Zg==,type:str]
+            - apiVersion: traefik.io/v1alpha1
+              kind: Middleware
+              metadata:
+                name: dashboard-auth
+              spec:
+                basicAuth:
+                    secret: dashboard-auth-secret
+        # Allow the Gateway to expose HTTPRoute from all namespaces
+        gateway:
+            namespacePolicy: All
+        service:
+            annotations:
+                metallb.io/ip-allocated-from-pool: external-pool
+                metallb.io/allow-shared-ip: external-pool
+                metallb.io/loadBalancerIPs: 172.16.0.1
+        resources:
+            limits:
+                cpu: 500m
+                memory: 512Mi
+            requests:
+                cpu: 100m
+                memory: 256Mi
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3ZGJmRHpsNEhTNlF0Zmdu
+            amd5VFNaNmttdC92cGxoSlNBV3dscmFIR0UwCkIzcmpybXI3bmJwdEo0ZlNhYmNY
+            WStubFhSUnJVT2FPUXFQeHE4RzBja1kKLS0tIEJhWjlQYXdJTTBya1Y0Zk43ZW0w
+            b05aTEZVRm5USy9qbVBuT3VBL1Zwc1EKIz16Zfn1shAPvxYj8okGNdmjP+OnjxNd
+            Svpzkc2OYNV8dW8D3ISHef+/el8/6osrpKxcYhDRQdUFo7BKCvs1Hg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-02-24T09:55:06Z"
+    mac: ENC[AES256_GCM,data:EoLuTj552ru2TGwIsMEjSWrDSkrT89ZL4X6Vfd0OU0utauGxUdo7OE+m0ow1pJ3SL3xebmIDP0wkUcoFZ3uiZDOslo2fSvp+w8617zhqYKzTJAKScRttFhpuwCcMtfINmj3CPvLX5xaPema1Jfqm+Xv1Jfc7Z1wbjtsDxo7nUro=,iv:HTQ3wvdEQJmfHnidtgC+IPgiNT4bjcr2tZ18qeRB6Ho=,tag:2rUCoN/Q7Yl7l6xG4rZcpQ==,type:str]
+    encrypted_regex: ^(data|stringData)$
+    version: 3.10.2
