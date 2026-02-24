@@ -18,7 +18,7 @@ spec:
     secretRef:
       name: sops-age
   dependsOn:
-  - name: infrastrucutre
+  - name: infrastructure
     namespace: flux-system
   patches:
     # Add Sops decryption to child Kustomizations
