@@ -3,10 +3,10 @@ kind: Kustomization
 namespace: cloud 
 resources:
   - namespace.yaml
-  - repository.yaml
-  - pvc.yaml
-  - icloud-volume.yaml
-  - secret.yaml
-  - db.yaml
-  - cloudflare-tunnel.yaml
-  - release.yaml
+  # - repository.yaml
+  # - pvc.yaml
+  # - icloud-volume.yaml
+  # - secret.yaml
+  # - db.yaml
+  # - cloudflare-tunnel.yaml
+  # - release.yaml
