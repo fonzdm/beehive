@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: test-volume
-  namespace: sopenebsr
+  namespace: openebs
 spec:
   accessModes:
   - ReadWriteMany
@@ -10,3 +10,32 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: localpv-raid
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvc-test
+  namespace: openebs
+spec:
+  restartPolicy: Never
+
+  containers:
+    - name: tester
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "PVC test successful" > /data/hello.txt
+          sleep 3600
+
+      volumeMounts:
+        - name: test-storage
+          mountPath: /data
+
+  volumes:
+    - name: test-storage
+      persistentVolumeClaim:
+        claimName: test-volume
