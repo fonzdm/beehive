@@ -1,0 +1,40 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: openebs
+  namespace: openebs
+spec:
+  interval: 30m
+
+  chart:
+    spec:
+      chart: openebs
+      version: "3.*"
+      sourceRef:
+        kind: HelmRepository
+        name: openebs
+        namespace: openebs
+
+  upgrade:
+    remediation:
+      retries: 5
+
+  values:
+    engines:
+      local:
+        lvm:
+          enabled: false
+        zfs:
+          enabled: false
+    mayastor:
+      enabled: false
+    jiva:
+      enabled: false
+    cstor:
+      enabled: false
+    localpv-provisioner:
+      enabled: true
+    openebs-crds:
+      csi:
+        volumeSnapshots:
+          enabled: true
