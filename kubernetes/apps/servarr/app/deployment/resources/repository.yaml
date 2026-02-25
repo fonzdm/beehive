@@ -34,4 +34,6 @@ spec:
   url: https://github.com/guidonguido/qbittorrent-operator.git
   ref:
     branch: main
+  ignore: |
+    config/prometheus
 
