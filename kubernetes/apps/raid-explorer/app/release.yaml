@@ -1,0 +1,96 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: raid-explorer
+  namespace: openebs
+spec:
+  interval: 30m
+
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: openebs
+  upgrade:
+    remediation:
+      retries: 5
+  values:
+    controllers:
+      main:
+        type: deployment
+        replicas: 1
+
+        containers:
+          main:
+            image:
+              repository: alpine
+              tag: "3.19"
+              pullPolicy: IfNotPresent
+
+            command:
+              - /bin/sh
+              - -c
+              - |
+                echo "RAID explorer started"
+                while true; do
+                  echo "==== RAID USAGE ===="
+                  du -hs /var/mnt/raid-data || true
+                  sleep 60
+                done
+
+            securityContext:
+              privileged: true
+              runAsUser: 0
+
+            probes:
+              liveness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - test -d /var/mnt/raid-data
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - ls /var/mnt/raid-data
+                  initialDelaySeconds: 5
+                  periodSeconds: 30
+
+              startup:
+                enabled: true
+                custom: true
+                spec:
+                  exec:
+                    command:
+                      - sh
+                      - -c
+                      - test -d /var/mnt/raid-data
+                  failureThreshold: 30
+                  periodSeconds: 5
+
+    # ---- HOST MOUNT ----
+    persistence:
+      raid:
+        enabled: true
+        type: hostPath
+        hostPath: /var/mnt/raid-data
+        hostPathType: Directory
+        globalMounts:
+          - path: /var/mnt/raid-data
+
+    service:
+      main:
+        enabled: false
