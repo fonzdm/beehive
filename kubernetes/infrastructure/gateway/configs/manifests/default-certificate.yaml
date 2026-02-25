@@ -13,3 +13,4 @@ spec:
   - "*.infra.fonzdm.xyz"
   - "*.service.fonzdm.xyz"
   - "*.media.fonzdm.xyz"
+  - "*.cloud.fonzdm.xyz"
