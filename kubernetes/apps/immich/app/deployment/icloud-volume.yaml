@@ -3,13 +3,13 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: icloudpd-volume
-  namespace: cloud
+  namespace: immich
 spec:
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
       storage: 500Gi
-  storageClassName: nfs-client
+  storageClassName: localpv-raid
 
 

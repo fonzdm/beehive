@@ -3,6 +3,7 @@ kind: Kustomization
 namespace: cloud 
 resources:
   - namespace.yaml
+  - app/ks.yaml
   # - repository.yaml
   # - pvc.yaml
   # - icloud-volume.yaml

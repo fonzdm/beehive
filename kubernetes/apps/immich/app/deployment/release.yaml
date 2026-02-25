@@ -2,7 +2,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
     name: immich
-    namespace: cloud
+    namespace: immich
 spec:
     interval: 1h0m0s
     chart:
@@ -75,10 +75,10 @@ spec:
             persistence:
                 cache:
                     enabled: true
-                    size: 30Gi
+                    size: 20Gi
                     type: persistentVolumeClaim
-                    accessMode: ReadWriteMany
-                    storageClass: nfs-client
+                    accessMode: ReadWriteOnce
+                    storageClass: localpv-raid
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
