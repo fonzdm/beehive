@@ -1,0 +1,32 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: &app netbird
+  namespace: &namespace netbird
+  labels:
+    selfhost.security: sops
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  healthChecks:
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: *app
+      namespace: *namespace
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  path: ./kubernetes/infrastructure/netbird/app/deployment
+  prune: true
+  timeout: 5m0s
+  dependsOn:
+  - name: external-secrets-configs
+    namespace: external-secrets
+  - name: metallb-configs
+    namespace: metallb
+  - name: traefik
+    namespace: ingress
