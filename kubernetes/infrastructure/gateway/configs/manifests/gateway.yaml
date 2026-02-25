@@ -22,4 +22,4 @@ spec:
       certificateRefs:
       - kind: Secret
         name: wildcard-apps-tls
-        namespace: traefik
+        namespace: ingress
