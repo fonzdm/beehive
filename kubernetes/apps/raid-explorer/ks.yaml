@@ -18,7 +18,7 @@ spec:
       kind: HelmRelease
       name: *app
       namespace: *namespace
-  path: ./kubernetes/apps/raid-explorer/
+  path: ./kubernetes/apps/raid-explorer/app
   targetNamespace: *namespace
   prune: true
   timeout: 5m0s
