@@ -33,7 +33,7 @@ apiVersion: postgresql.cnpg.io/v1
 kind: Database
 metadata:
   name: immich-db
-  namespace: cloud
+  namespace: immich
 spec:
   name: immich
   owner: immich
