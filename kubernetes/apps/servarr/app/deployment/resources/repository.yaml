@@ -35,5 +35,5 @@ spec:
   ref:
     branch: main
   ignore: |
-    config/prometheus
+    config/prometheus/*
 
