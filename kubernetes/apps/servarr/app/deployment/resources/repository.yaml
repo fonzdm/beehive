@@ -31,9 +31,7 @@ metadata:
   namespace: servarr
 spec:
   interval: 1m0s
-  url: https://github.com/guidonguido/qbittorrent-operator.git
+  url: https://github.com/fonzdm/qbittorrent-operator.git
   ref:
     branch: main
-  ignore: |
-    config/prometheus/*
 
