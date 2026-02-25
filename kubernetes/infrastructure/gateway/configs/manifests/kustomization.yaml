@@ -5,4 +5,4 @@ resources:
   - default-certificate.yaml
   - tlsstore.yaml
   - gateway.yaml
-
+  - servarr-reference-grant.yaml
