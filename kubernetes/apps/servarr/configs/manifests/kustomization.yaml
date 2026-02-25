@@ -5,3 +5,4 @@ resources:
   - qbittorrent-credentials-secret.yaml
   - torrent-config.yaml
   - jellyfin-traefik.yaml
+  - qbittorrent-traefik.yaml
