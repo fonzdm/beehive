@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: jellyfin-charts
   values:
-    replicaCount: 1
+    replicaCount: 0
     image:
       pullPolicy: IfNotPresent
     persistence:
@@ -25,20 +25,6 @@ spec:
         existingClaim: talos-media-volume
     ingress:
       enabled: false
-      className: 'traefik'
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-        traefik.ingress.kubernetes.io/router.entrypoints: websecure
-        traefik.ingress.kubernetes.io/router.middlewares: default-jellyfin-buffering@kubernetescrd
-      hosts:
-        - host: jellyfin.media.fonzdm.xyz
-          paths:
-            - path: /
-              pathType: Prefix
-      tls:
-        - secretName: jellyfin-tls
-          hosts:
-            - jellyfin.media.fonzdm.xyz
     resources:
       requests:
         cpu: 500m

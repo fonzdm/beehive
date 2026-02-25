@@ -3,11 +3,10 @@ kind: Kustomization
 namespace: servarr 
 resources:
   - resources/talos-media-volume.yaml
-  - resources/jellyfin-traefik.yaml
   #- resources/servarr-ing-external.yaml
   # - regcred.yaml 
-  - repository.yaml
-  # - components/qbittorrent.yaml
+  - resources/repository.yaml
+  - components/qbittorrent-operator.yaml
   # - components/lidarr.yaml
   # - components/radarr.yaml
   # - components/sonarr.yaml

@@ -20,6 +20,6 @@ spec:
       kind: HelmRelease
       name: jellyfin
       namespace: *namespace
-  path: ./kubernetes/apps/servarr/deployment
+  path: ./kubernetes/apps/servarr/app/deployment
   prune: true
   timeout: 30m0s

@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  labels:
+    selfhost.security: sops
+  name: &app servarr-configs
+  namespace: &namespace servarr
+spec:
+  commonMetadata:
+    labels:
+      app.kubernetes.io/name: *app
+  interval: 30m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+    namespace: flux-system
+  healthChecks:
+    - apiVersion: kustomize.toolkit.fluxcd.io/v1
+      kind: Kustomization
+      name: qbittorrent-operator
+      namespace: *namespace
+  path: ./kubernetes/apps/servarr/configs/manifests
+  prune: true
+  timeout: 30m0s
+  dependsOn:
+  - name: servarr
+    namespace: *namespace

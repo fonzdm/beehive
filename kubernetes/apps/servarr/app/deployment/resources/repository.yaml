@@ -20,3 +20,15 @@ metadata:
 spec:
   interval: 1h0m0s
   url: https://jellyfin.github.io/jellyfin-helm
+
+
+---
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: qbittorrent-operator
+  namespace: servarr
+spec:
+  interval: 1m0s
+  url: https://github.com/guidonguido/qbittorrent-operator.git

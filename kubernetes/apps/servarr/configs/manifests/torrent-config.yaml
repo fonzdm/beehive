@@ -1,0 +1,20 @@
+apiVersion: torrent.qbittorrent.io/v1alpha1
+kind: TorrentServer
+metadata:
+  name: qbittorrent
+  namespace: media-server
+spec:
+  env:
+    - name: PUID
+      value: "0"
+    - name: PGID
+      value: "0"
+    - name: UMASK
+      value: "022"
+  configStorage:
+    size: "4Gi"
+  downloadVolumes:
+    - claimName: talos-media-volume
+      mountPath: /downloads/media
+  credentialsSecret:
+    name: qbittorrent-credentials
