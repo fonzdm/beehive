@@ -12,7 +12,7 @@ spec:
         kind: HelmRepository
         name: jellyfin-charts
   values:
-    replicaCount: 0
+    replicaCount: 1
     image:
       pullPolicy: IfNotPresent
     persistence:
