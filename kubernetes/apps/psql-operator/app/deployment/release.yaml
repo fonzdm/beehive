@@ -1,8 +1,8 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: psql-operator 
-  namespace: crd-ns
+  name: postgres-operator 
+  namespace: postgres-operator
 spec:
   interval: 1h0m0s
   chart:
@@ -10,4 +10,4 @@ spec:
       chart: cloudnative-pg
       sourceRef:
         kind: HelmRepository
-        name: psql-operator
+        name: postgres-operator
