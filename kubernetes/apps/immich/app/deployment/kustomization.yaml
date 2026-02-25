@@ -7,6 +7,5 @@ resources:
   - icloud-volume.yaml
   - secret.yaml
   - db.yaml
-  - cloudflare-tunnel.yaml
   - release.yaml
   - httproute.yaml
