@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: frigate 
+resources:
+  - namespace.yaml
+  # - app/ks.yaml
+  # - repository.yaml
+  # - pvc.yaml
+  # - icloud-volume.yaml
+  # - secret.yaml
+  # - db.yaml
+  # - cloudflare-tunnel.yaml
+  # - release.yaml
