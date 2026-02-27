@@ -28,6 +28,7 @@ spec:
                     app:
                         image:
                             repository: ghcr.io/home-operations/sonarr
+                            tag: rolling
                         env:
                             SONARR__APP__INSTANCENAME: Sonarr
                             SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:ttgBt3mPSdGZUxOkbz1Crtr+V1JkbzZzdv5t2j6Hkvp8,iv:H8sBU8+PuAmIVtTEe2AXK8cV372Vo5VuRj2WqmnH2L4=,tag:T5X0EsFnoitP+ubsd4OEPQ==,type:str]
