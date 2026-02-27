@@ -28,6 +28,8 @@ spec:
           effect: "NoSchedule"
 
         config: |
+            auth:
+                reset_admin_password: false
             mqtt:
                 enabled: False
             tls:
