@@ -1,0 +1,69 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: home-assistant
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  chartRef:
+    kind: OCIRepository
+    name: home-assistant
+  interval: 30m
+  timeout: 15m
+  values:
+    controllers:
+      home-assistant:
+        pod:
+          securityContext:
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 65533
+            runAsUser: 65534
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/home-assistant
+              tag: 2025.11.1
+            env:
+              TZ: Europe/Rome
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.1.0/24
+              HASS_HTTP_TRUSTED_PROXY_2: 10.42.0.0/16
+            resources:
+              requests:
+                cpu: 100m
+              limits:
+                memory: 2Gi
+            # Configure HA Community Store as soon as the container start
+            lifecycle:
+              postStart:
+                exec:
+                  command: [ "bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -" ]
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+    service:
+      app:
+        ports:
+          http:
+            appProtocol: kubernetes.io/wss
+            port: 8123
+        primary: true
+    persistence:
+      config:
+        existingClaim: "{{ .Release.Name }}"
+        globalMounts:
+          - path: /config
+      config-cache:
+        existingClaim: "{{ .Release.Name }}-cache"
+        globalMounts:
+          - path: /config/.venv
+      tmp:
+        type: emptyDir
+    ingress:
+      home-assistant:
+        enabled: false
