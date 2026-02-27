@@ -44,5 +44,5 @@ metadata:
   namespace: servarr
 spec:
   interval: 1h0m0s
-  url: oci://ghcr.io/bjw-s-labs/helm/app-template
+  url: oci://ghcr.io/bjw-s-labs/helm
   type: oci
