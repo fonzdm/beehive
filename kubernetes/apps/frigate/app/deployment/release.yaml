@@ -23,5 +23,14 @@ spec:
             topology.kubernetes.io/zone: minipc-0
 
         config: |
-            cameras: {}
+            mqtt:
+              enabled: false
+            cameras:
+                dummy_camera:
+                    enabled: False
+                    ffmpeg:
+                        inputs:
+                        - path: rtsp://127.0.0.1:554/rtsp
+                          roles:
+                          - detect
       
