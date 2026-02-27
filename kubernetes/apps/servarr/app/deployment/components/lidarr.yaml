@@ -28,8 +28,8 @@ spec:
                         image:
                             repository: ghcr.io/home-operations/lidarr
                         env:
-                            LIDARR__APP__INSTANCENAME: Sonarr
-                            LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:3XER6A+ypTjFM3HhZQNtTQW457gjopTpMDGfk4bD09yiLxCKTA==,iv:pOtfSjlAwdOOow1R0IDKZLjGmQ4YiSsFuPmnR1dyUKM=,tag:4wiTgfVlMHOufF4eE7tTJA==,type:str]
+                            LIDARR__APP__INSTANCENAME: Lidarr
+                            LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:nvs+K7bhqHMEeRZBLC9vC8EPuwor4OMq74yIY9O/4wRj,iv:0PHzi5Rs0errBLTAEwKPtuKjcZt0irBUEZVT9ONxd+w=,tag:TuokjrgvbXy4tH7nUDYjig==,type:str]
                             LIDARR__AUTH__METHOD: External
                             LIDARR__AUTH__REQUIRED: DisabledForLocalAddresses
                             LIDARR__LOG__DBENABLED: "False"
@@ -88,13 +88,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBaTE40MkFEU0pjVnJVdjA2
-            eXlVR3NYa0hETXo5d0ZvajR4Uy94SjkyYmhVCkcyZWgwWCtOOGNUTkdRbThVbmhl
-            QWU3d3VTL2JlNUdlSURhc1pZTndTTjQKLS0tIGE2dnFQY3VJZlJiR2V1TUxzVmt5
-            N29FSWpNRVhzSlVJTGREUXEyb3ZGcHMK7VZGu+m++bqGEf66VqyWELkUpwddVSQL
-            Sy9DuXKl6/RIqEO9cgU7af4danXuhFz1cxmJxv06ex+h6WmudKthvQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBuRWp0b2tlQ3kwL1pxRjcz
+            MG1KZ2U5ZDRVSGVJc3VYRXZXdWdLc1ZmVlc0CmE1NTMrUTQ1dmlkOGRteFN3bHZO
+            aW8vbnJEcHJPdUVkOHFlOGkvU21KTHMKLS0tIHE1RlBYZ2QrRWIzMENwMHI1OWVp
+            M1BlTVBDclVDM0oyTHh5MjVwTDJVcFEKTjNBCBcqZ85X0YRLaz9Yr9Q8ViovhLL9
+            a0pmRkzI1BcIDiXG/5JnVag+rX5414r7DaTW7kXDjzI3NzPhPcMKTg==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-02-27T16:00:08Z"
-    mac: ENC[AES256_GCM,data:PeKnz8i4Q4VKs2ur7Zt5LRpcRJotOxnsUeTiU23GYHE3ZfkNYG71OVqyKXM7BrQuTAyk/qdO93y3aszGq6EAS1iiAFQp++Pp4PcGRLn/AXYdrR3GHlmzvX7dbAaG+bQowSseTJo0uIKS4a8c92yRSJv25aW8xVJ3uV0DcYjh/Lc=,iv:V7+ESvhNDtgnSovdcV67ZLLbvg/JipiJvOvE8ASbK/o=,tag:YeUEx9LVbhdcT+uh9EPApw==,type:str]
+    lastmodified: "2026-02-27T16:29:03Z"
+    mac: ENC[AES256_GCM,data:BZFbOQpUA6lmc1zfRTVDV5z8jOaV9VWtFUIaaeYqppL8JwOKD84zaZnlQksrjcGutOJYbZMHYt0IKa42DwjFlRRrDt/O9fPznoq/HLKWTigcE5Qm/gFMJXFdRAvmtO2kAxc1dopFtxH+ZdpHRG40N/6JHROLMY6VGBaq5HelihA=,iv:5PuJjV61R4pEK2lDVC4rYldshi8TpohNeUcfqaF+Nn8=,tag:D0SxlUfglS65T/jbeJ47Rw==,type:str]
     encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2

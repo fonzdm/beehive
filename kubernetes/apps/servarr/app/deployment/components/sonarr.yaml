@@ -29,7 +29,7 @@ spec:
                             repository: ghcr.io/home-operations/sonarr
                         env:
                             SONARR__APP__INSTANCENAME: Sonarr
-                            SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:MtyfaQptB0XEct4qesAM+uRirlKUbu5hLR8gs+/49zk=,iv:1YeumY+Z0CS68TNwC6ssjPaMLVRhAzjZJ0kjw0QE1s0=,tag:hFGcfFGVp3iw5R3MMpC2Sw==,type:str]
+                            SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:ttgBt3mPSdGZUxOkbz1Crtr+V1JkbzZzdv5t2j6Hkvp8,iv:H8sBU8+PuAmIVtTEe2AXK8cV372Vo5VuRj2WqmnH2L4=,tag:T5X0EsFnoitP+ubsd4OEPQ==,type:str]
                             SONARR__AUTH__METHOD: External
                             SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
                             SONARR__LOG__DBENABLED: "False"
@@ -88,13 +88,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGT0N3V09DRlh5YXJWY0V1
-            clUzWTJOZlZyOFEwTFhnMDZOc0NuYlhTNEFFCkM4dmdubVpqTjFONmd4bHRXdnY2
-            akVyN0g3Z1ZuR1g5OUhzdG1zLzBSazgKLS0tIERDakRDSUJWYTdxaWdTZGtadzhx
-            dERnQkFwb2lsdWt5ZnNrQ2NubGM5dDQKCVO/NLxwEcKYrxAWqzlHR6h06KW6ArgW
-            cSXLq9G63+WGwnn8LfrA+ITbtpr4faw5a3ggVs2gqBoCvDY/UqhHFA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBLU25NK3I5YXFYb0hQeEM1
+            UFZkajhqL3A4Q2NVV2xZTHNnekY3eHVocENNCndhOGt4OXlEWmROYVVOUy9CZHlV
+            SzVHV2srUEVtYXp3VER0dUwrMXNmNTgKLS0tIHROZitNVXMwTnpRWDN6NXB5MTVn
+            Z0RReUlNc0hkRkp1RFUvVDFLYmxXeFkKF9nDDyxeH040FN3EHL9kxlh36Ig9rKYh
+            R/pP6APVYnUbu86ErcI9a+iCyzSg9TE44x1KxlvMsztHe4vTrVvBkw==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-02-27T15:48:26Z"
-    mac: ENC[AES256_GCM,data:8KNkDDMq16xt6LCBrDbh2FAKAJ7p3G4nabkYfxf0Igs+ppidkdWc6MJhEIC/0vpHOvyg68dLlSpw+2EvDi9qL/DiOwwO7wwc4D0JE3Ts64KWTBFj/OFE7dATK4TEJZM4hs+HfE037eZQGfdL58seiHO8whYd2wP1JPoI2HKLQ+0=,iv:N8N/tq8dPcrJb7l5Tjb1lNshVYdQvnmcBvYuqJXj1gY=,tag:PdCyL06CVz7p8zJ0nuGmag==,type:str]
+    lastmodified: "2026-02-27T16:29:09Z"
+    mac: ENC[AES256_GCM,data:yEG2jX58ucXdPE6MOmvPMjPxRfBX/6JmRm2XZsuyxFZArDxT+uM3HyGIlF3oPMc/JcHG8xvq4Y/3HibeSzWIchJ7RQY0byx8fVDnbvjaVlr2WKw0fXuoONv3RGoH3PmHqZa4AeBRDRSL4ymYxnH4QeD8skw0Crs/0ajqggXF2DU=,iv:+/+5TlIsdKPCFInjMBJl6h22+LWX0pUTVWF7quK3WB4=,tag:mx8jgrdjr2Fd0Pu3G9il+Q==,type:str]
     encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2
