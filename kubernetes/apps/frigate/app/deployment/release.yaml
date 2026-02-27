@@ -24,7 +24,9 @@ spec:
 
         config: |
             mqtt:
-              enabled: false
+                enabled: False
+            tls:
+                enabled: False
             cameras:
                 dummy_camera:
                     enabled: False
