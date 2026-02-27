@@ -15,6 +15,20 @@ spec:
 ---
 
 apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-pvc-minipc
+  namespace: openebs
+spec:
+  storageClassName: localpv-minipc
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      storage: 1Gi
+
+---
+
+apiVersion: v1
 kind: Pod
 metadata:
   name: test-pvc-pod
@@ -40,3 +54,39 @@ spec:
     - name: test-storage
       persistentVolumeClaim:
         claimName: test-pvc
+
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pvc-minipc-pod
+  namespace: openebs
+spec:
+  restartPolicy: Never
+
+  containers:
+    - name: tester
+      image: busybox:1.36
+      command:
+        - sh
+        - -c
+        - |
+          echo "PVC test successful" > /data/hello.txt
+          sleep 3600
+
+      volumeMounts:
+        - name: test-storage
+          mountPath: /data
+
+ tolerations:
+    - key: "storage"
+      operator: "Equal"
+      value: "no-nas"
+      effect: "NoSchedule"
+
+  volumes:
+    - name: test-storage
+      persistentVolumeClaim:
+        claimName: test-pvc-minipc
