@@ -9,6 +9,7 @@ spec:
   resources:
     requests:
       storage: 5Gi
+  storageClassName: localpv-minipc
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -20,3 +21,4 @@ spec:
   resources:
     requests:
       storage: 1Gi
+  storageClassName: localpv-minipc
