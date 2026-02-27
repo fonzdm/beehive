@@ -6,9 +6,9 @@ metadata:
 spec:
   env:
     - name: PUID
-      value: "0"
+      value: "65534"
     - name: PGID
-      value: "0"
+      value: "65533"
     - name: UMASK
       value: "022"
   configStorage:
