@@ -15,14 +15,14 @@ spec:
       kind: HelmRelease
       name: netbird-operator
       namespace: *namespace
-  interval: 10m0s
+  interval: 30m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
     namespace: flux-system
   path: ./kubernetes/infrastructure/netbird/app/deployment
   prune: true
-  timeout: 5m0s
+  timeout: 10m0s
   dependsOn:
   - name: external-secrets-configs
     namespace: external-secrets
