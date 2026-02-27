@@ -35,6 +35,6 @@ spec:
         name: frigate-buffering
     backendRefs:
     - name: frigate
-      port: 5000
+      port: 8971
 
 ---
