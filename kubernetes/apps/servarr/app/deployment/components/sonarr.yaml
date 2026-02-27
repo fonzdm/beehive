@@ -11,94 +11,93 @@ spec:
             sourceRef:
                 kind: HelmRepository
                 name: app-template
-
     values:
         controllers:
-          sonarr:
-            annotations:
-              reloader.stakater.com/auto: "true"
-            pod:
-              securityContext:
-                fsGroup: 2000
-                fsGroupChangePolicy: "OnRootMismatch"
-                runAsGroup: 2000
-                runAsNonRoot: true
-                runAsUser: 2000
-            containers:
-              app:
-                image:
-                  repository: ghcr.io/home-operations/sonarr
-                  tag: 4.0.16.2946
-                env:
-                  SONARR__APP__INSTANCENAME: Sonarr
-                  SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:ro3xVXGiWkCHsr3mfD6RCb0vnRN5wgmPSYo6jbXA6Ac=,iv:8yMxGxUTlYEhVUwa5ulSsPiHV1wpG8+NYBV7TDFqtKc=,tag:NwLJ80EiXC6LyCUqkdGH8A==,type:str]
-                  SONARR__AUTH__METHOD: External
-                  SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
-                  SONARR__LOG__DBENABLED: "False"
-                  SONARR__LOG__LEVEL: info
-                  SONARR__SERVER__PORT: &port 8989
-                  SONARR__UPDATE__BRANCH: develop
-                probes:
-                  liveness:
-                    enabled: true
-                    spec:
-                      periodSeconds: 30
-                      timeoutSeconds: 5
-                      failureThreshold: 5
-                  readiness:
-                    enabled: true
-                    custom: true
-                    spec:
-                      httpGet:
-                        path: /ping
-                        port: *port
-                      periodSeconds: 10
-                      timeoutSeconds: 5
-                      failureThreshold: 5
-                  startup:
-                    enabled: true
-                    spec:
-                      failureThreshold: 30
-                      periodSeconds: 10
-                resources:
-                  requests:
-                    cpu: 20m
-                    memory: 384Mi
-                  limits:
-                    memory: 2Gi
-                securityContext:
-                  allowPrivilegeEscalation: false
-                  readOnlyRootFilesystem: true
-                  capabilities:
-                    drop:
-                      - ALL
+            sonarr:
+                annotations:
+                    reloader.stakater.com/auto: "true"
+                pod:
+                    securityContext:
+                        fsGroup: 2000
+                        fsGroupChangePolicy: OnRootMismatch
+                        runAsGroup: 2000
+                        runAsNonRoot: true
+                        runAsUser: 2000
+                containers:
+                    app:
+                        image:
+                            repository: ghcr.io/home-operations/sonarr
+                            tag: 4.0.16.2946
+                        env:
+                            SONARR__APP__INSTANCENAME: Sonarr
+                            SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:MtyfaQptB0XEct4qesAM+uRirlKUbu5hLR8gs+/49zk=,iv:1YeumY+Z0CS68TNwC6ssjPaMLVRhAzjZJ0kjw0QE1s0=,tag:hFGcfFGVp3iw5R3MMpC2Sw==,type:str]
+                            SONARR__AUTH__METHOD: External
+                            SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                            SONARR__LOG__DBENABLED: "False"
+                            SONARR__LOG__LEVEL: info
+                            SONARR__SERVER__PORT: 8989
+                            SONARR__UPDATE__BRANCH: develop
+                        probes:
+                            liveness:
+                                enabled: true
+                                spec:
+                                    periodSeconds: 30
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            readiness:
+                                enabled: true
+                                custom: true
+                                spec:
+                                    httpGet:
+                                        path: /ping
+                                        port: 8989
+                                    periodSeconds: 10
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            startup:
+                                enabled: true
+                                spec:
+                                    failureThreshold: 30
+                                    periodSeconds: 10
+                        resources:
+                            requests:
+                                cpu: 20m
+                                memory: 384Mi
+                            limits:
+                                memory: 2Gi
+                        securityContext:
+                            allowPrivilegeEscalation: false
+                            readOnlyRootFilesystem: true
+                            capabilities:
+                                drop:
+                                    - ALL
         service:
-          app:
-            ports:
-              http:
-                port: *port
+            app:
+                ports:
+                    http:
+                        port: 8989
         persistence:
-          config:
-            existingClaim: sonarr-config
-          media:
-            existingClaim: talos-media-volume
-          tmpfs:
-            type: emptyDir
-            globalMounts:
-              - path: /tmp
-                subPath: tmp
+            config:
+                existingClaim: sonarr-config
+            media:
+                existingClaim: talos-media-volume
+            tmpfs:
+                type: emptyDir
+                globalMounts:
+                    - path: /tmp
+                      subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBKTmJxS2k1TzAyclBKYTZ3
-            VzJ6L0RIVElXc1MxaWY3a1UwUHN3VnRwb2hnClh4TVNqSzB4R3UreFJpMmtLVHZF
-            WE9XdC9ad2lleWp3cWZxdmVIeGtzazgKLS0tIFdiZFlpR2tPalQwVTZnZ1JLcmZ3
-            QXdkY0pSeXdiQ1VvYUZ3eTNrWEt0UHMKTxNOZ2GrQCM9vjVP6410x5KadiTyvZFl
-            zbr743oUBLOpmr0KNOl0X/yZlyiznPSaWrBdCLaZdaVO2Sfzwdsi0g==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGT0N3V09DRlh5YXJWY0V1
+            clUzWTJOZlZyOFEwTFhnMDZOc0NuYlhTNEFFCkM4dmdubVpqTjFONmd4bHRXdnY2
+            akVyN0g3Z1ZuR1g5OUhzdG1zLzBSazgKLS0tIERDakRDSUJWYTdxaWdTZGtadzhx
+            dERnQkFwb2lsdWt5ZnNrQ2NubGM5dDQKCVO/NLxwEcKYrxAWqzlHR6h06KW6ArgW
+            cSXLq9G63+WGwnn8LfrA+ITbtpr4faw5a3ggVs2gqBoCvDY/UqhHFA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T12:40:01Z"
-    mac: ENC[AES256_GCM,data:cakhGZIY3TwkR3lL2ri7CpI+LyqzoLvW0rwiEr0DUXuPXfhVpGyz3BUkjjBbK7QqxJLylZCVf7LqZQRzFVfO642mq1aiFhsTWvKS85ho+nG5G1JLXvfHeShDOTiw7tdmFIFd7VPhpkzClSrsgTusiKaTOJ4kRRQ7qtnov9WDVvs=,iv:G3PbmBOZWwGIc0Nnq1kbyvs8BMuZpaZAyXMOAtkUKSo=,tag:erN6/k29ZBFg/UdGE3x74A==,type:str]
+    lastmodified: "2026-02-27T15:48:26Z"
+    mac: ENC[AES256_GCM,data:8KNkDDMq16xt6LCBrDbh2FAKAJ7p3G4nabkYfxf0Igs+ppidkdWc6MJhEIC/0vpHOvyg68dLlSpw+2EvDi9qL/DiOwwO7wwc4D0JE3Ts64KWTBFj/OFE7dATK4TEJZM4hs+HfE037eZQGfdL58seiHO8whYd2wP1JPoI2HKLQ+0=,iv:N8N/tq8dPcrJb7l5Tjb1lNshVYdQvnmcBvYuqJXj1gY=,tag:PdCyL06CVz7p8zJ0nuGmag==,type:str]
     encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2
