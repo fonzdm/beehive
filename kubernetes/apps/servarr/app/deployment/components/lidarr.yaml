@@ -1,99 +1,101 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: lidarr
+    name: sonarr
     namespace: servarr
 spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: lidarr
+            chart: app-template
             sourceRef:
                 kind: HelmRepository
-                name: truecharts
-    postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              labelSelector: "app.kubernetes.io/instance=lidarr"
-            patch: |-
-              - op: remove
-                path: /spec/template/spec/affinity/podAffinity
-
+                name: app-template
     values:
-        enabled: true
-        operator:
-            register: false
-            verify:
-                enabled: true
-                additionalsystem: []
-        metrics:
-            main:
-                enabled: false
-        workload:
-            main:
-                podSpec:
-                    containers:
-                        main:
-                            env:
-                                LIDARR__API_KEY: ENC[AES256_GCM,data:tssLVz2xUVrrsqGlvC6jRVZMuAjmV+hEK1dzuVmVxGA=,iv:pp5h/b3JGnxYSqnfHrweYw2PuSlj359R0yP8NtNuc2g=,tag:UTxwbFS/KaLrNG+v/Z4lzA==,type:str]
-        ingress:
-            lidarr-ing:
-                enabled: true
-                primary: true
-                required: true
-                expandObjectName: false
-                ingressClassName: nginx
+        controllers:
+            sonarr:
                 annotations:
-                    cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                    ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                    nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-                hosts:
-                    - host: lidarr.media.fonzdm.xyz
-                      paths:
-                        - path: /
-                          pathType: Prefix
-                tls:
-                    - hosts:
-                        - lidarr.media.fonzdm.xyz
-                      secretName: lidarr-ing-external-secret
-                integrations:
-                    certManager:
-                        enabled: false
-                    traefik:
-                        enabled: false
+                    reloader.stakater.com/auto: "true"
+                pod:
+                    securityContext:
+                        fsGroup: 2000
+                        fsGroupChangePolicy: OnRootMismatch
+                        runAsGroup: 2000
+                        runAsNonRoot: true
+                        runAsUser: 2000
+                containers:
+                    app:
+                        image:
+                            repository: ghcr.io/home-operations/sonarr
+                            tag: 4.0.16.2946
+                        env:
+                            SONARR__APP__INSTANCENAME: Sonarr
+                            SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:MtyfaQptB0XEct4qesAM+uRirlKUbu5hLR8gs+/49zk=,iv:1YeumY+Z0CS68TNwC6ssjPaMLVRhAzjZJ0kjw0QE1s0=,tag:hFGcfFGVp3iw5R3MMpC2Sw==,type:str]
+                            SONARR__AUTH__METHOD: External
+                            SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                            SONARR__LOG__DBENABLED: "False"
+                            SONARR__LOG__LEVEL: info
+                            SONARR__SERVER__PORT: 8989
+                            SONARR__UPDATE__BRANCH: develop
+                        probes:
+                            liveness:
+                                enabled: true
+                                spec:
+                                    periodSeconds: 30
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            readiness:
+                                enabled: true
+                                custom: true
+                                spec:
+                                    httpGet:
+                                        path: /ping
+                                        port: 8989
+                                    periodSeconds: 10
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            startup:
+                                enabled: true
+                                spec:
+                                    failureThreshold: 30
+                                    periodSeconds: 10
+                        resources:
+                            requests:
+                                cpu: 20m
+                                memory: 384Mi
+                            limits:
+                                memory: 2Gi
+                        securityContext:
+                            allowPrivilegeEscalation: false
+                            readOnlyRootFilesystem: true
+                            capabilities:
+                                drop:
+                                    - ALL
+        service:
+            app:
+                ports:
+                    http:
+                        port: 8989
         persistence:
-            config:
-                enabled: true
-                type: pvc
-                size: 2500Mi
-                accessModes: ReadWriteMany
-                storageClass: omv-nfs-delete
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /config
             media:
-                enabled: true
-                type: pvc
                 existingClaim: talos-media-volume
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /mnt/media
+            tmpfs:
+                type: emptyDir
+                globalMounts:
+                    - path: /tmp
+                      subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqeitzVnJmb0ZnQzl2M0R6
-            SUxWM213VlNWTFNjQzFDMDBua2dSTTVWZ2k0CkdPczlBUFR3ZlJaNzNrODU5a0tn
-            WGVRZkt3eDFZdU0vcjFMd3NKT1JRVTgKLS0tIFdVZUpKc0JtWHQxR2pYMVF6V2hT
-            b2xDbmNvc0Jhek05R3lMRG5EM3p1TW8K11P+tDfWKwKUQJa4uuSSbcOSwZ7HIXn6
-            fQI6RkBJX2eiKOfjg/AEH0R666IeHHN2dF4dJoUhOje9W8xopHPAxQ==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBGT0N3V09DRlh5YXJWY0V1
+            clUzWTJOZlZyOFEwTFhnMDZOc0NuYlhTNEFFCkM4dmdubVpqTjFONmd4bHRXdnY2
+            akVyN0g3Z1ZuR1g5OUhzdG1zLzBSazgKLS0tIERDakRDSUJWYTdxaWdTZGtadzhx
+            dERnQkFwb2lsdWt5ZnNrQ2NubGM5dDQKCVO/NLxwEcKYrxAWqzlHR6h06KW6ArgW
+            cSXLq9G63+WGwnn8LfrA+ITbtpr4faw5a3ggVs2gqBoCvDY/UqhHFA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T12:39:58Z"
-    mac: ENC[AES256_GCM,data:hraShkE4q9C1kL2+o2s67IMeBUXBTRhNMVNtQ3nsrDQy98FZtNaBROz+zqgyzHII1DysPMguytG3+COXF9+FyEfVnfp/nfasbeGAizPD/e4ZowdvRoqq6m6FV4K3dLCGOOOHgOvnD2xtz7cxXDHF2tTf9NNmtCRb2Biu3doFFao=,iv:riXRArg2fYxEZ9sAbXxIBzPc0stYOLuhJI/zAK+I7uc=,tag:uo3TES+u0OCXBliAwhM5CQ==,type:str]
-    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    lastmodified: "2026-02-27T15:48:26Z"
+    mac: ENC[AES256_GCM,data:8KNkDDMq16xt6LCBrDbh2FAKAJ7p3G4nabkYfxf0Igs+ppidkdWc6MJhEIC/0vpHOvyg68dLlSpw+2EvDi9qL/DiOwwO7wwc4D0JE3Ts64KWTBFj/OFE7dATK4TEJZM4hs+HfE037eZQGfdL58seiHO8whYd2wP1JPoI2HKLQ+0=,iv:N8N/tq8dPcrJb7l5Tjb1lNshVYdQvnmcBvYuqJXj1gY=,tag:PdCyL06CVz7p8zJ0nuGmag==,type:str]
+    encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2

@@ -6,3 +6,5 @@ resources:
   - torrent-config.yaml
   - jellyfin-traefik.yaml
   - qbittorrent-traefik.yaml
+  - sonarr-traefik.yaml
+  - lidarr-traefik.yaml
