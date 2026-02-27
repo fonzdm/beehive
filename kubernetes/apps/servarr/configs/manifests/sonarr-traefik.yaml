@@ -15,6 +15,7 @@ spec:
     - path:
         type: PathPrefix
         value: /
+    backendRefs:
     - name: sonarr
       port: 8989 
 
