@@ -9,7 +9,7 @@ resources:
   - components/qbittorrent-operator.yaml
   # - components/lidarr.yaml
   # - components/radarr.yaml
-  # - components/sonarr.yaml
+  - components/sonarr.yaml
   - components/jellyfin.yaml
   # - components/audiobookshelf.yaml
   # - components/prowlarr.yaml

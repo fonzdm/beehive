@@ -7,72 +7,86 @@ spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: sonarr
+            chart: app-template
             sourceRef:
                 kind: HelmRepository
-                name: truecharts
-
-    postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment 
-              labelSelector: "app.kubernetes.io/instance=sonarr"
-            patch: |-
-              - op: remove
-                path: /spec/template/spec/affinity/podAffinity
+                name: app-template
 
     values:
-        metrics:
-            main:
-                enabled: false
-        workload:
-            main:
-                podSpec:
-                    containers:
-                        main:
-                            env:
-                                SONARR__API_KEY: ENC[AES256_GCM,data:ro3xVXGiWkCHsr3mfD6RCb0vnRN5wgmPSYo6jbXA6Ac=,iv:8yMxGxUTlYEhVUwa5ulSsPiHV1wpG8+NYBV7TDFqtKc=,tag:NwLJ80EiXC6LyCUqkdGH8A==,type:str]
-        ingress:
-            sonarr-ing:
-                enabled: true
-                primary: true
-                required: true
-                expandObjectName: false
-                annotations:
-                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                  ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                  nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-                ingressClassName: nginx
-                hosts:
-                    - host: sonarr.media.fonzdm.xyz
-                      paths:
-                        - path: /
-                          pathType: Prefix
-                tls:
-                    - hosts:
-                        - sonarr.media.fonzdm.xyz
-                      secretName: sonarr-ing-external-secret
-                integrations:
-                    certManager:
-                        enabled: false
-                    traefik:
-                        enabled: false
+        controllers:
+          sonarr:
+            annotations:
+              reloader.stakater.com/auto: "true"
+            pod:
+              securityContext:
+                fsGroup: 2000
+                fsGroupChangePolicy: "OnRootMismatch"
+                runAsGroup: 2000
+                runAsNonRoot: true
+                runAsUser: 2000
+            containers:
+              app:
+                image:
+                  repository: ghcr.io/home-operations/sonarr
+                  tag: 4.0.16.2946
+                env:
+                  SONARR__APP__INSTANCENAME: Sonarr
+                  SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:ro3xVXGiWkCHsr3mfD6RCb0vnRN5wgmPSYo6jbXA6Ac=,iv:8yMxGxUTlYEhVUwa5ulSsPiHV1wpG8+NYBV7TDFqtKc=,tag:NwLJ80EiXC6LyCUqkdGH8A==,type:str]
+                  SONARR__AUTH__METHOD: External
+                  SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                  SONARR__LOG__DBENABLED: "False"
+                  SONARR__LOG__LEVEL: info
+                  SONARR__SERVER__PORT: &port 8989
+                  SONARR__UPDATE__BRANCH: develop
+                probes:
+                  liveness:
+                    enabled: true
+                    spec:
+                      periodSeconds: 30
+                      timeoutSeconds: 5
+                      failureThreshold: 5
+                  readiness:
+                    enabled: true
+                    custom: true
+                    spec:
+                      httpGet:
+                        path: /ping
+                        port: *port
+                      periodSeconds: 10
+                      timeoutSeconds: 5
+                      failureThreshold: 5
+                  startup:
+                    enabled: true
+                    spec:
+                      failureThreshold: 30
+                      periodSeconds: 10
+                resources:
+                  requests:
+                    cpu: 20m
+                    memory: 384Mi
+                  limits:
+                    memory: 2Gi
+                securityContext:
+                  allowPrivilegeEscalation: false
+                  readOnlyRootFilesystem: true
+                  capabilities:
+                    drop:
+                      - ALL
+        service:
+          app:
+            ports:
+              http:
+                port: *port
         persistence:
-            config:
-                enabled: true
-                type: pvc
-                size: 500Mi
-                accessModes: ReadWriteMany
-                storageClass: omv-nfs-delete
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /config
-            media:
-                enabled: true
-                existingClaim: talos-media-volume
-                mountPath: /mnt/media
+          config:
+            existingClaim: sonarr-config
+          media:
+            existingClaim: talos-media-volume
+          tmpfs:
+            type: emptyDir
+            globalMounts:
+              - path: /tmp
+                subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
@@ -86,5 +100,5 @@ sops:
             -----END AGE ENCRYPTED FILE-----
     lastmodified: "2025-08-25T12:40:01Z"
     mac: ENC[AES256_GCM,data:cakhGZIY3TwkR3lL2ri7CpI+LyqzoLvW0rwiEr0DUXuPXfhVpGyz3BUkjjBbK7QqxJLylZCVf7LqZQRzFVfO642mq1aiFhsTWvKS85ho+nG5G1JLXvfHeShDOTiw7tdmFIFd7VPhpkzClSrsgTusiKaTOJ4kRRQ7qtnov9WDVvs=,iv:G3PbmBOZWwGIc0Nnq1kbyvs8BMuZpaZAyXMOAtkUKSo=,tag:erN6/k29ZBFg/UdGE3x74A==,type:str]
-    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2
