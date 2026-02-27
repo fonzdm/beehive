@@ -18,7 +18,15 @@ spec:
   healthChecks:
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
+      name: sonarr
+      namespace: *namespace
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
       name: jellyfin
+      namespace: *namespace
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: lidarr
       namespace: *namespace
   path: ./kubernetes/apps/servarr/app/deployment
   prune: false
