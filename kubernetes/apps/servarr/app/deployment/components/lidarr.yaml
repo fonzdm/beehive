@@ -5,12 +5,9 @@ metadata:
     namespace: servarr
 spec:
     interval: 1h0m0s
-    chart:
-        spec:
-            chart: app-template
-            sourceRef:
-                kind: HelmRepository
-                name: app-template
+    chartRef:
+        kind: OCIRepository
+        name: app-template
     values:
         controllers:
             lidarr:
