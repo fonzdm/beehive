@@ -34,7 +34,7 @@ spec:
         kind: Middleware
         name: frigate-buffering
     backendRefs:
-    - name: 
-      port: 
+    - name: frigate
+      port: 5000
 
 ---
