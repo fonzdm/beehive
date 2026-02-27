@@ -29,14 +29,14 @@ spec:
                             repository: ghcr.io/home-operations/sonarr
                             tag: 4.0.16.2946
                         env:
-                            SONARR__APP__INSTANCENAME: Sonarr
-                            SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:3XER6A+ypTjFM3HhZQNtTQW457gjopTpMDGfk4bD09yiLxCKTA==,iv:pOtfSjlAwdOOow1R0IDKZLjGmQ4YiSsFuPmnR1dyUKM=,tag:4wiTgfVlMHOufF4eE7tTJA==,type:str]
-                            SONARR__AUTH__METHOD: External
-                            SONARR__AUTH__REQUIRED: DisabledForLocalAddresses
-                            SONARR__LOG__DBENABLED: "False"
-                            SONARR__LOG__LEVEL: info
-                            SONARR__SERVER__PORT: 8989
-                            SONARR__UPDATE__BRANCH: develop
+                            LIDARR__APP__INSTANCENAME: Sonarr
+                            LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:3XER6A+ypTjFM3HhZQNtTQW457gjopTpMDGfk4bD09yiLxCKTA==,iv:pOtfSjlAwdOOow1R0IDKZLjGmQ4YiSsFuPmnR1dyUKM=,tag:4wiTgfVlMHOufF4eE7tTJA==,type:str]
+                            LIDARR__AUTH__METHOD: External
+                            LIDARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                            LIDARR__LOG__DBENABLED: "False"
+                            LIDARR__LOG__LEVEL: info
+                            LIDARR__SERVER__PORT: 8686
+                            LIDARR__UPDATE__BRANCH: develop
                         probes:
                             liveness:
                                 enabled: true
@@ -50,7 +50,7 @@ spec:
                                 spec:
                                     httpGet:
                                         path: /ping
-                                        port: 8989
+                                        port: 8686
                                     periodSeconds: 10
                                     timeoutSeconds: 5
                                     failureThreshold: 5
@@ -75,7 +75,7 @@ spec:
             app:
                 ports:
                     http:
-                        port: 8989
+                        port: 8686
         persistence:
             media:
                 existingClaim: talos-media-volume
