@@ -1,7 +1,7 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: sonarr
+    name: lidarr
     namespace: servarr
 spec:
     interval: 1h0m0s
@@ -13,7 +13,7 @@ spec:
                 name: app-template
     values:
         controllers:
-            sonarr:
+            lidarr:
                 annotations:
                     reloader.stakater.com/auto: "true"
                 pod:
@@ -26,8 +26,7 @@ spec:
                 containers:
                     app:
                         image:
-                            repository: ghcr.io/home-operations/sonarr
-                            tag: 4.0.16.2946
+                            repository: ghcr.io/home-operations/lidarr
                         env:
                             LIDARR__APP__INSTANCENAME: Sonarr
                             LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:3XER6A+ypTjFM3HhZQNtTQW457gjopTpMDGfk4bD09yiLxCKTA==,iv:pOtfSjlAwdOOow1R0IDKZLjGmQ4YiSsFuPmnR1dyUKM=,tag:4wiTgfVlMHOufF4eE7tTJA==,type:str]
