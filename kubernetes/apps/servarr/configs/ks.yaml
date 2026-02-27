@@ -22,6 +22,7 @@ spec:
       namespace: *namespace
   path: ./kubernetes/apps/servarr/configs/manifests
   timeout: 30m0s
+  prune: false
   dependsOn:
   - name: servarr
     namespace: *namespace
