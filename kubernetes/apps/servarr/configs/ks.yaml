@@ -21,7 +21,6 @@ spec:
       name: qbittorrent-operator
       namespace: *namespace
   path: ./kubernetes/apps/servarr/configs/manifests
-  prune: true
   timeout: 30m0s
   dependsOn:
   - name: servarr
