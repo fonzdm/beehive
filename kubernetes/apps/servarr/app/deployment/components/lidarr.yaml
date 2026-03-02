@@ -19,16 +19,16 @@ spec:
                     reloader.stakater.com/auto: "true"
                 pod:
                     securityContext:
-                        fsGroup: 65533
+                        fsGroup: 65533 
                         fsGroupChangePolicy: OnRootMismatch
-                        runAsGroup: 0
-                        runAsNonRoot: false
-                        runAsUser: 0
+                        runAsGroup: 65533
+                        runAsNonRoot: true
+                        runAsUser: 65534
                 containers:
                     app:
                         image:
-                            repository: ghcr.io/linuxserver-labs/prarr
-                            tag: lidarr-plugins
+                            repository: ghcr.io/home-operations/lidarr
+                            tag: rolling
                         env:
                             LIDARR__APP__INSTANCENAME: Lidarr
                             LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:nvs+K7bhqHMEeRZBLC9vC8EPuwor4OMq74yIY9O/4wRj,iv:0PHzi5Rs0errBLTAEwKPtuKjcZt0irBUEZVT9ONxd+w=,tag:TuokjrgvbXy4tH7nUDYjig==,type:str]
@@ -86,6 +86,11 @@ spec:
                 storageClass: 'localpv-raid'
                 accessMode: ReadWriteOnce
                 type: persistentVolumeClaim
+            tmpfs:
+                type: emptyDir
+                globalMounts:
+                    - path: /tmp
+                      subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
