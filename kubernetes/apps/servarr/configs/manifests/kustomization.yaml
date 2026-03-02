@@ -10,4 +10,3 @@ resources:
   - lidarr-traefik.yaml
   - slskd-traefik.yaml
   - prowlarr-traefik.yaml
-  - sonarr-traefik.yaml
