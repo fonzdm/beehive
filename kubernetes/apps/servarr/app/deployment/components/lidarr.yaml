@@ -84,6 +84,7 @@ spec:
                 enabled: true
                 size: 8Gi
                 storageClass: 'localpv-raid'
+                accessMode: ReadWriteOnce
             tmpfs:
                 type: emptyDir
                 globalMounts:
