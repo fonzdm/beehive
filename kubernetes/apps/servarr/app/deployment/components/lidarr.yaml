@@ -27,8 +27,8 @@ spec:
                 containers:
                     app:
                         image:
-                            repository: ghcr.io/home-operations/lidarr
-                            tag: rolling
+                            repository: ghcr.io/linuxserver-labs/prarr:lidarr-plugins
+                            tag: develop
                         env:
                             LIDARR__APP__INSTANCENAME: Lidarr
                             LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:nvs+K7bhqHMEeRZBLC9vC8EPuwor4OMq74yIY9O/4wRj,iv:0PHzi5Rs0errBLTAEwKPtuKjcZt0irBUEZVT9ONxd+w=,tag:TuokjrgvbXy4tH7nUDYjig==,type:str]
@@ -80,6 +80,10 @@ spec:
         persistence:
             media:
                 existingClaim: talos-media-volume
+            config:
+                enabled: true
+                size: 8Gi
+                storageClass: 'localpv-raid'
             tmpfs:
                 type: emptyDir
                 globalMounts:

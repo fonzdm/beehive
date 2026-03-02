@@ -10,6 +10,7 @@ resources:
   - components/lidarr.yaml
   # - components/radarr.yaml
   - components/sonarr.yaml
+  - components/slskd.yaml
   - components/jellyfin.yaml
   # - components/audiobookshelf.yaml
   # - components/prowlarr.yaml

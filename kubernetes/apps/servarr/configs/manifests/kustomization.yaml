@@ -8,3 +8,4 @@ resources:
   - qbittorrent-traefik.yaml
   - sonarr-traefik.yaml
   - lidarr-traefik.yaml
+  - slskd-traefik.yaml
