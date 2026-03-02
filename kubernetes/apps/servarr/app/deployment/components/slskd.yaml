@@ -14,7 +14,7 @@ spec:
                 namespace: servarr
     values:
         controllers:
-            lidarr:
+            slskd:
                 annotations:
                     reloader.stakater.com/auto: "true"
                 pod:
