@@ -22,7 +22,7 @@ spec:
     controllers:
       flaresolverr:
         type: deployment
-
+        replicas: 2
         pod:
           securityContext:
             runAsUser: 1000
