@@ -17,6 +17,6 @@ spec:
         value: /
     backendRefs:
     - name: radarr
-      port: 8686
+      port: 7878
 
 ---
