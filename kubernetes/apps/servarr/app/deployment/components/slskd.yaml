@@ -87,6 +87,7 @@ spec:
                 size: 4Gi
                 storageClass: localpv-raid
                 accessMode: ReadWriteOnce
+                type: persistentVolumeClaim
             tmpfs:
                 type: emptyDir
                 globalMounts:
