@@ -31,15 +31,15 @@ spec:
                             tag: latest
                         env:
                             SLSKD_USERNAME: fonzdm
-                            SLSKD_PASSWORD: ENC[AES256_GCM,data:QPpoGtJ0QQU=,iv:1anxVs18SuUpqMywamN4ovV02qhubUJTB7UmsKUcqfc=,tag:YOtnSpzNOpjrnkp7aSKaSg==,type:str]
+                            SLSKD_PASSWORD: ENC[AES256_GCM,data:vUOKXbc8NLw3,iv:CBbwvTa6OZC/WZIdXJBGJcevBttCFJXehj7AQ/JYaPc=,tag:QWsqkGc3TayJmAAM8dDCIQ==,type:str]
                             SLSKD_SHARED_DIR: /var/tmp/shared
                             SLSKD_DOWNLOADS_DIR: /mnt/media/Downloads
                             SLSKD_INCOMPLETE_DIR: /mnt/media/Downloads
                             SLSKD_REMOTE_CONFIGURATION: true
                             SLSKD_SLSK_LISTEN_PORT: 59303
                             SLSKD_SLSK_USERNAME: fonzdm
-                            SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:Yd1oelcACJc=,iv:EbhE6kufxO3xnTrrHTv0QmjEnoxGWHS9VfM4q9irEtc=,tag:MQW+3xMTFdsS1p2BMUffVQ==,type:str]
-                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:38f7FJxK5uikzG3x5gNmB1pUEDzZUxs685ky94fPEOCyKkQ2aUE=,iv:ykjBbWFcxIvAAgujCnpooWp6ZJHvkXLn7Hy8TLZsi8w=,tag:2h1e+CUwvcm7f3ZSM8hAbA==,type:str]
+                            SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:kdnZokcRjqqn,iv:7ZlmL9RpkeqOnxAWppNlLEAD4bZWckp6w0oMBoOQWlU=,tag:w5k/6E9Qj8FDE5hnm7U/eg==,type:str]
+                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:uon0qG/pHxTvkMW7/6/kDzyowIMxOPMIktXQdn1bo/e5WDsdsJblxm9NNg==,iv:EXf8pc3Jf8W3GHGSqvsUDjRFtqnW7ESMhfF0a+ENODk=,tag:Cxc0FT+0OPHMiTRktJc4Ew==,type:str]
                         probes:
                             liveness:
                                 enabled: true
@@ -98,13 +98,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0RXRCdXo1NTMzNy90QVlO
-            dDB3TkRjbk4rVDZHdVVNL2YxRGFiU1dvMUcwCmRRMU9UaTNGdGorRmVCNFNtWkhk
-            SGNPUTIyTklGa2pVcmNLeENZMWR0SEkKLS0tIERZRVlyeElXMXloZVJ6dzZkYmtZ
-            UWZ2TTNoS3Y2QTZYUFh5V0d3dUs4ZkEK+RrMhvyDs6wAwPN17XgCT/ngkl3OmjKM
-            y6B1oRexf6bsgcMmHhCjXIPXCJr6Bwy1MpGr2WUDjet2t4hj5eC7dA==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBRaWJVd3pPZHZBampxY1NU
+            TWtYeEpTQ1FLNVdXT2R5NHlqNUdVT1ZpUFg0CmZERlR4OGdiS0Nqbm9RY1Q1Tm5H
+            OEQ2V2tLUk1oMkFQTG13RkFkSnNzU28KLS0tIFBhcDcrZjdiNG5FN3dQYWM3aUF6
+            UW1Jb2RwcjExdHRVUmFxeHhLV2NNaEUKZUfpeoo1G3fvJ6Ljp+73qaUji/gxCHoX
+            KHGa/PPrCsJKSHXhZXSPNUXAT0wKhRp6G8Ax2jUmqo0tdWex82hzJA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-03-02T08:47:57Z"
-    mac: ENC[AES256_GCM,data:J6dVxqWoJCy20CEKWOjJI2tsBpFZmnb6aRzLtW5AFRlz3NunPa1XBuGji+ocULgEt+dK8ewNdr3m2z2w4/GooxaymCNawVNR+dM3HHLFoecppf5/pe4FE0AzqZMsmacRxk6KOuMBGnpvP8eB4jPsPO3M4LxptD/SgnKcdgtseI8=,iv:+Dheme4+8leKDIKBZtFOiWLh5NTyW9D/fGpG/DVXhn0=,tag:VczU/rLbwZdaTKydD6pIuw==,type:str]
+    lastmodified: "2026-03-02T09:20:21Z"
+    mac: ENC[AES256_GCM,data:aAonw+D/TBrg7QQMZAdUu6No9DzBGG/i3eXm3BJ91jERvR4NXgGIf3rmy14S2tyv0v7d9rpPzn65ATseggCCYvnrh22MRC/fxHjh5ABlBDX0804Iu1DimIlJhrW6cgSuIgomey29oLxGt7gg38fjPCyBl1QhJjxNxv5ZjFofvJU=,iv:FhtqMmR5FExZ1G1IPMRsgX+xDoCRPk9ip/JffF5ajJY=,tag:bYF9nNmNkMT/VGmBMTcyAw==,type:str]
     encrypted_regex: ^(?:SLSKD(?:_SLSK)?_PASSWORD|SLSKD_CONTROLLER_API_KEY)$
     version: 3.10.2
