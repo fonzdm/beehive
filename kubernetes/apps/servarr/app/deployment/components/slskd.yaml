@@ -17,13 +17,13 @@ spec:
             slskd:
                 annotations:
                     reloader.stakater.com/auto: "true"
-                # pod:
-                #     securityContext:
-                #         fsGroup: 65533
-                #         fsGroupChangePolicy: OnRootMismatch
-                #         runAsGroup: 65533
-                #         runAsNonRoot: true
-                #         runAsUser: 65534
+                pod:
+                    securityContext:
+                        fsGroup: 65533
+                        fsGroupChangePolicy: OnRootMismatch
+                        runAsGroup: 0
+                        runAsNonRoot: false
+                        runAsUser: 0
                 containers:
                     app:
                         image:
