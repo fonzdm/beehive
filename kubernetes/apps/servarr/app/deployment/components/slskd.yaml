@@ -6,12 +6,12 @@ metadata:
 spec:
     interval: 1h0m0s
     chart:
-      spec:
-        chart: app-template
-        sourceRef:
-          kind: HelmRepository
-          name: bjw-s
-          namespace: servarr
+        spec:
+            chart: app-template
+            sourceRef:
+                kind: HelmRepository
+                name: bjw-s
+                namespace: servarr
     values:
         controllers:
             lidarr:
@@ -19,7 +19,7 @@ spec:
                     reloader.stakater.com/auto: "true"
                 pod:
                     securityContext:
-                        fsGroup: 65533 
+                        fsGroup: 65533
                         fsGroupChangePolicy: OnRootMismatch
                         runAsGroup: 65533
                         runAsNonRoot: true
@@ -31,15 +31,15 @@ spec:
                             tag: latest
                         env:
                             SLSKD_USERNAME: fonzdm
-                            SLSKD_PASSWORD: ENC[AES256_GCM,data:DS4z22FWeIQ=,iv:64LocdrWMAX69NdCGloY0Y6yDgkwWF9V9/fUuAo8M88=,tag:rxgguSB2asTMwfJlDtSxSg==,type:str]
+                            SLSKD_PASSWORD: ENC[AES256_GCM,data:QPpoGtJ0QQU=,iv:1anxVs18SuUpqMywamN4ovV02qhubUJTB7UmsKUcqfc=,tag:YOtnSpzNOpjrnkp7aSKaSg==,type:str]
                             SLSKD_SHARED_DIR: /var/tmp/shared
                             SLSKD_DOWNLOADS_DIR: /mnt/media/Downloads
                             SLSKD_INCOMPLETE_DIR: /mnt/media/Downloads
                             SLSKD_REMOTE_CONFIGURATION: true
                             SLSKD_SLSK_LISTEN_PORT: 59303
                             SLSKD_SLSK_USERNAME: fonzdm
-                            SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:vHmQ+IV3vRU=,iv:vz+/MxfUB86PZNun52RBhTld1eTs6vXKeXrGTXEz29c=,tag:QFMqItp88MLgSnLVZGz8zQ==,type:str]
-                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:M7NMUJyK6NCesCtPAAT1SRB3kBoUhW4YkJ0Fz6xMDmQ=,iv:xqQ/ljrw+HeZoCKfX6QI6apPddL09KIb8OROucp4Ofw=,tag:TWrBIJBe/Vh5sp/Sctkl1w==,type:str]
+                            SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:Yd1oelcACJc=,iv:EbhE6kufxO3xnTrrHTv0QmjEnoxGWHS9VfM4q9irEtc=,tag:MQW+3xMTFdsS1p2BMUffVQ==,type:str]
+                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:38f7FJxK5uikzG3x5gNmB1pUEDzZUxs685ky94fPEOCyKkQ2aUE=,iv:ykjBbWFcxIvAAgujCnpooWp6ZJHvkXLn7Hy8TLZsi8w=,tag:2h1e+CUwvcm7f3ZSM8hAbA==,type:str]
                         probes:
                             liveness:
                                 enabled: true
@@ -85,7 +85,7 @@ spec:
             config:
                 enabled: true
                 size: 8Gi
-                storageClass: 'localpv-raid'
+                storageClass: localpv-raid
             tmpfs:
                 type: emptyDir
                 globalMounts:
@@ -96,13 +96,13 @@ sops:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSAyT0cyb2luT1dLbllVbWM3
-            MEpYeVcvNFhPRS8zd0ZkeC9oWjNyckpxdWxFClZxN0lqN2NtclNyOTRHb2x4dHVh
-            NUhMdmZCOHBiYURDWDVNOGZlbERRaUUKLS0tIDNnUTQvL3RsOUVrbzlFUlV0Vk9Y
-            NUFudi83VVRFRzZJK0pMVStSYmRWaU0KLU9GgioHCgGh+6xj0IhqkyvqT/JSJL6r
-            GAwHPITpqJ3EIU+FztlyOqz0wfIsxbBnCDn0+EH1hdiRfoRX34c73Q==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB0RXRCdXo1NTMzNy90QVlO
+            dDB3TkRjbk4rVDZHdVVNL2YxRGFiU1dvMUcwCmRRMU9UaTNGdGorRmVCNFNtWkhk
+            SGNPUTIyTklGa2pVcmNLeENZMWR0SEkKLS0tIERZRVlyeElXMXloZVJ6dzZkYmtZ
+            UWZ2TTNoS3Y2QTZYUFh5V0d3dUs4ZkEK+RrMhvyDs6wAwPN17XgCT/ngkl3OmjKM
+            y6B1oRexf6bsgcMmHhCjXIPXCJr6Bwy1MpGr2WUDjet2t4hj5eC7dA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-03T14:52:04Z"
-    mac: ENC[AES256_GCM,data:ffPV45rbVUJTncRpZVDRPgWQc2t5W2AxBWnwGTimOMn+6gP2osIHUcAlvSW9RTIpTSGhfz4H7HoGkzoLW1NiHNeyUVQ5XzMyL4jcFqoUlpJWUDZwatVCqKzXpAvWZLlzXhfOnWa7lxyGTUZTYcosJBsEtq99vJ4E+h7NZYeQvsc=,iv:W69ZhS/LlEVfXE5Tfbp2R9sUGXPJbivra+BRcx6/QUI=,tag:auSHuD0g4R1AZiCns3+0Yg==,type:str]
+    lastmodified: "2026-03-02T08:47:57Z"
+    mac: ENC[AES256_GCM,data:J6dVxqWoJCy20CEKWOjJI2tsBpFZmnb6aRzLtW5AFRlz3NunPa1XBuGji+ocULgEt+dK8ewNdr3m2z2w4/GooxaymCNawVNR+dM3HHLFoecppf5/pe4FE0AzqZMsmacRxk6KOuMBGnpvP8eB4jPsPO3M4LxptD/SgnKcdgtseI8=,iv:+Dheme4+8leKDIKBZtFOiWLh5NTyW9D/fGpG/DVXhn0=,tag:VczU/rLbwZdaTKydD6pIuw==,type:str]
     encrypted_regex: ^(?:SLSKD(?:_SLSK)?_PASSWORD|SLSKD_CONTROLLER_API_KEY)$
     version: 3.10.2
