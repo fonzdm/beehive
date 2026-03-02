@@ -7,83 +7,102 @@ spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: radarr
+            chart: app-template
             sourceRef:
                 kind: HelmRepository
-                name: truecharts
-    postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              labelSelector: "app.kubernetes.io/instance=radarr"
-            patch: |-
-              - op: remove
-                path: /spec/template/spec/affinity/podAffinity
-
+                name: bjw-s
+                namespace: servarr
     values:
-        metrics:
-            main:
-                enabled: false
-        workload:
-            main:
-                podSpec:
-                    containers:
-                        main:
-                            env:
-                                RADARR__API_KEY: ENC[AES256_GCM,data:nBROr5g3uj/2eQT7ozldrkrhvA2lvzm0xJbDxHqt3BU=,iv:Z0XE0n1DxZthgoeEdNsDTttikQwQYeghICo2FBg9Dkw=,tag:xicAyRLy3M1ISsIrmagEag==,type:str]
-        ingress:
-            radarr-ing:
-                enabled: true
-                primary: true
-                required: true
-                expandObjectName: false
+        controllers:
+            radarr:
                 annotations:
-                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                  ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                  nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-                ingressClassName: nginx
-                hosts:
-                    - host: radarr.media.fonzdm.xyz
-                      paths:
-                        - path: /
-                          pathType: Prefix
-                tls:
-                    - hosts:
-                        - radarr.media.fonzdm.xyz
-                      secretName: radarr-ing-external-secret
-                integrations:
-                    certManager:
-                        enabled: false
-                    traefik:
-                        enabled: false
+                    reloader.stakater.com/auto: "true"
+                pod:
+                    securityContext:
+                        fsGroup: 65533
+                        fsGroupChangePolicy: OnRootMismatch
+                        runAsGroup: 65533
+                        runAsNonRoot: true
+                        runAsUser: 65534
+                containers:
+                    app:
+                        image:
+                            repository: ghcr.io/home-operations/radarr
+                            tag: rolling
+                        env:
+                            RADARR__APP__INSTANCENAME: Radarr
+                            RADARR__AUTH__APIKEY: ENC[AES256_GCM,data:+k++oOUTw6b6KDGRmXdMZtM3V+3DNsEe/gQyH0T51wdd,iv:UCBU6OQJkvu0+sw1taISoVyAzqngQcxDe3w+QxyCWOY=,tag:3uwd4c1KnzyeWcPwNxowVw==,type:str]
+                            RADARR__AUTH__METHOD: External
+                            RADARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                            RADARR__LOG__DBENABLED: "False"
+                            RADARR__LOG__LEVEL: info
+                            RADARR__SERVER__PORT: 7878
+                            RADARR__UPDATE__BRANCH: develop
+                        probes:
+                            liveness:
+                                enabled: true
+                                spec:
+                                    periodSeconds: 30
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            readiness:
+                                enabled: true
+                                custom: true
+                                spec:
+                                    httpGet:
+                                        path: /ping
+                                        port: 7878
+                                    periodSeconds: 10
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            startup:
+                                enabled: true
+                                spec:
+                                    failureThreshold: 30
+                                    periodSeconds: 10
+                        resources:
+                            requests:
+                                cpu: 20m
+                                memory: 384Mi
+                            limits:
+                                memory: 2Gi
+                        securityContext:
+                            allowPrivilegeEscalation: false
+                            readOnlyRootFilesystem: true
+                            capabilities:
+                                drop:
+                                    - ALL
+        service:
+            app:
+                ports:
+                    http:
+                        port: 8686
         persistence:
+            media:
+                existingClaim: talos-media-volume
             config:
                 enabled: true
-                type: pvc
-                size: 500Mi
-                accessModes: ReadWriteMany
-                storageClass: omv-nfs-delete
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /config
-            media:
-                enabled: true
-                existingClaim: talos-media-volume
-                mountPath: /mnt/media
+                size: 8Gi
+                storageClass: localpv-raid
+                accessMode: ReadWriteOnce
+                type: persistentVolumeClaim
+            tmpfs:
+                type: emptyDir
+                globalMounts:
+                    - path: /tmp
+                      subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBtaC9EYU4vN3NPY0QzbXJ4
-            dVh0aGlHR1dXUDZNTytmR2NMWGxPT2xOWUZ3CkZZZFBFRGpxY0pLU0pxOVJuVnJ6
-            QjZ6TzViN3JZYUJEdThYdnZwNEJ2N3cKLS0tIEpzM2hpRVF2RDhSTUpPbHlDYWx2
-            TEo2dlhFN2J3dkNvK3pyc3RsN29RbGMK2b7K1hsDls/1uw+plR+f+Gevzuz4ql2j
-            R4Q/aTWwlstqj/ZV5TOJNHWforRlQepJW0HOwSoGRaCtipvPpXgs6w==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBSS0VWalhTVVJvVGVvNW84
+            ZkltaTlEUVpEZGV6d1FYK05GNkpXTWV5OFJFClZTVlo1clJHMFdwOXlXYjh4MjRj
+            S0dVTkJFYVdjbENZZVhQa3NxRGZiV3MKLS0tIHBJMDlvbG9ydSszUkErR2N2SGZI
+            ck5zUnZtcFVOUFFvS3BDZFBFcUx6bDQKIwe1qOFre+5gVqc9svirrrQhq3lVqAPW
+            AJ8n+nRFQZ4+9CZVEUKEzqa7Fz+u4/dIe5NS0FKR+XggENvxX0rOaQ==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T12:38:26Z"
-    mac: ENC[AES256_GCM,data:LDVb6zJM76cQVzOzpy0+xRSJG5U19wNcCWBVpCBC1g+qtpTX//tNTkYRYHXX7B62iPd9xHgmw1vLS0R6qa8MnhymI1H+cgw+BKQEO/QhnJYzw39eLP1/MasGMf3/nhfRmGiV8RogpDuQg9vFNpoiHitIS3lEA9gO/c5qY/6JuhA=,iv:4+YoM92JkRJ3OWh0GHJlAK7PO/chbrOGd0d7pE+tl24=,tag:YNWnWCkD+P65qDKscZDQsA==,type:str]
-    encrypted_regex: ^[A-Z0-9_]+__API_KEY$
+    lastmodified: "2026-03-02T10:02:19Z"
+    mac: ENC[AES256_GCM,data:YCcsf/O3NYtTSXPHHLoA55WqmydONVYddYeAtRV0QFUb7Z02+/9tYo70i5lFS1qhxpni9Be6QzIrM6dVaQDgVW3rV8waW9znmizzwy38syLhQyEAHdXouF50hHglukrQK7wOjR9V1bj/3iRR6UZ/IIRAivFNjlN5CvG2Pge2c5E=,iv:N8IoO5fLUmSXCeUJWjzC7Hem9Elq//j2MCUkOFgOJ38=,tag:UcuHA8aZHrhbDs1WPVNgKA==,type:str]
+    encrypted_regex: ^[A-Z0-9_]+__APIKEY$
     version: 3.10.2

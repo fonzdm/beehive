@@ -7,101 +7,87 @@ spec:
     interval: 1h0m0s
     chart:
         spec:
-            chart: prowlarr
+            chart: app-template
             sourceRef:
                 kind: HelmRepository
-                name: truecharts
-    postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              labelSelector: "app.kubernetes.io/instance=prowlarr"
-            patch: |-
-              - op: remove
-                path: /spec/template/spec/affinity/podAffinity
-
+                name: bjw-s
+                namespace: servarr
     values:
-        gluetunImage:
-            repository: qmcgaw/gluetun
-            tag: latest
-            pullPolicy: IfNotPresent
-        addons:
-            gluetun:
-                enabled: false
-                killSwitch: false
-                container:
-                    env:
-                        FIREWALL_OUTBOUND_SUBNETS: 192.168.0.0/16,10.244.0.0/16,10.96.0.0/12
-                        UPDATER_PERIOD: 2h
-                        HEALTH_VPN_DURATION_INITIAL: 90s
-                        DOT: "on"
-                        DNS_UPSTREAM_RESOLVERS: "cloudflare,opendns"
-                        DNS_SERVER: on
-                        DNS_KEEP_NAMESERVER: "off"
-                        VPN_SERVICE_PROVIDER: protonvpn
-                        OPENVPN_PASSWORD: ENC[AES256_GCM,data:pn+C9Rp8dgWNNjb11y2wvNfuQqsYopNx,iv:6K1Z17pZKNHPcvZ3tAPUbPboSfar/o3HKO4gNsE9Is0=,tag:EyMl6HjZaBuFl1NqSwpiWQ==,type:str]
-                        OPENVPN_USER: ENC[AES256_GCM,data:MqDb0gLQ+vwICA4ZUjh5fv0ANnZpmTuM,iv:ybrLyb2YtIiJfeMWTMg6zdZZVYQlgzPhDeURYuJG77s=,tag:OhzXuIloit1D6F/FtUeI2g==,type:str]
-                        SERVER_COUNTRIES: Switzerland
-                        FREE_ONLY: false
-        metrics:
-            main:
-                enabled: false
-        workload:
-            main:
-                podSpec:
-                    containers:
-                        main:
-                            env:
-                                PROWLARR__API_KEY: ENC[AES256_GCM,data:0Zb2O7tPx7GTQyRossQDY8TEHoo2NZF/sX7OBMSqHWI=,iv:S4vcnKqrAbJotrW/UKHpu3z8ZVndjO+ARrmtVtPLsVM=,tag:ozVx6MJMKppaoB5ObxTAOw==,type:str]
-        ingress:
-            prowlarr-ing:
-                enabled: true
-                primary: true
-                required: true
-                expandObjectName: false
+        controllers:
+            prowlarr:
                 annotations:
-                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                  ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                  nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-                ingressClassName: nginx
-                hosts:
-                    - host: prowlarr.media.fonzdm.xyz
-                      paths:
-                        - path: /
-                          pathType: Prefix
-                tls:
-                    - hosts:
-                        - prowlarr.media.fonzdm.xyz
-                      secretName: prowlarr-ing-external-secret
-                integrations:
-                    certManager:
-                        enabled: false
-                    traefik:
-                        enabled: false
+                    reloader.stakater.com/auto: "true"
+                pod:
+                    securityContext:
+                        fsGroup: 65533
+                        fsGroupChangePolicy: OnRootMismatch
+                        runAsGroup: 65533
+                        runAsNonRoot: true
+                        runAsUser: 65534
+                containers:
+                    app:
+                        image:
+                            repository: ghcr.io/home-operations/prowlarr
+                            tag: rolling
+                        env:
+                            PROWLARR__APP__INSTANCENAME: Prowlarr
+                            PROWLARR__AUTH__APIKEY: nd23789hd839b4t31fbn8934h7f23b97
+                            PROWLARR__AUTH__METHOD: External
+                            PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+                            PROWLARR__LOG__DBENABLED: "False"
+                            PROWLARR__LOG__LEVEL: info
+                            PROWLARR__SERVER__PORT: 9696
+                            PROWLARR__UPDATE__BRANCH: develop
+                        probes:
+                            liveness:
+                                enabled: true
+                                spec:
+                                    periodSeconds: 30
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            readiness:
+                                enabled: true
+                                custom: true
+                                spec:
+                                    httpGet:
+                                        path: /ping
+                                        port: 9696
+                                    periodSeconds: 10
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            startup:
+                                enabled: true
+                                spec:
+                                    failureThreshold: 30
+                                    periodSeconds: 10
+                        resources:
+                            requests:
+                                cpu: 20m
+                                memory: 384Mi
+                            limits:
+                                memory: 2Gi
+                        securityContext:
+                            allowPrivilegeEscalation: false
+                            readOnlyRootFilesystem: true
+                            capabilities:
+                                drop:
+                                    - ALL
+        service:
+            app:
+                ports:
+                    http:
+                        port: 8686
         persistence:
+            media:
+                existingClaim: talos-media-volume
             config:
                 enabled: true
-                type: pvc
-                size: 500Mi
-                accessModes: ReadWriteMany
-                storageClass: omv-nfs-delete
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /config
-sops:
-    age:
-        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBmaEFXU0lhcW5nTXBlb09o
-            cmVnYXVMSkpldG0xQU5YMDBncmVGYk9vTWhjCllrbWUzSnQyVXY3c3h4RHRDVkU0
-            QzFTNDFLNnhGb05lODkzZ2xucThSalUKLS0tIGNRZ3VtUzZ2ekFNSHJkQmgwM0pl
-            dHJibVQ3NStuWWsyZm9sSEM4dm9vQjQK3XSXARMQJikUCki5cRQ+pialDqxl119i
-            TKjZi0UwgJ56SxE9MfGtg1dQVlqaKwwWzE4DO09f6vGX92hXrAyHkg==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-08-25T13:39:23Z"
-    mac: ENC[AES256_GCM,data:yQtpyUk0PdYxYtMW3tZJxOMfgOvvS8QbiMfSAHiTSWYQgJj/KIPCT+HXojOHyGBqaNSHTclbPoeoJg955kAEilGjdutO8r4Ze8cXwoeEQY200CQIBDsmf27ZqTjH4ze6g7rf8V6yUiYx5W9RgoMQemuQF6PSPc7XmhH7/V1zgrQ=,iv:OV/hcWxxuzDhtTEFbXmKXy18kaiMSxtI04GsKjNag9k=,tag:Z4ca1QndUZrXVSXzTV5v1A==,type:str]
-    encrypted_regex: ^([A-Z0-9_]+__API_KEY|OPENVPN_USER|OPENVPN_PASSWORD)$
-    version: 3.10.2
+                size: 8Gi
+                storageClass: localpv-raid
+                accessMode: ReadWriteOnce
+                type: persistentVolumeClaim
+            tmpfs:
+                type: emptyDir
+                globalMounts:
+                    - path: /tmp
+                      subPath: tmp

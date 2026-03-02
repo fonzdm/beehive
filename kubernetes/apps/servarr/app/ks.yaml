@@ -30,7 +30,11 @@ spec:
       namespace: *namespace
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
-      name: slskd
+      name: prowlarr
+      namespace: *namespace
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: radarr
       namespace: *namespace
   path: ./kubernetes/apps/servarr/app/deployment
   prune: false
