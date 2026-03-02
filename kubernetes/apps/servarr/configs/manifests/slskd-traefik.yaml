@@ -17,6 +17,6 @@ spec:
         value: /
     backendRefs:
     - name: slskd
-      port: 59303
+      port: 5030
 
 ---
