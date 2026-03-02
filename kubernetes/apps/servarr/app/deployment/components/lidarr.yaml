@@ -86,11 +86,6 @@ spec:
                 storageClass: 'localpv-raid'
                 accessMode: ReadWriteOnce
                 type: persistentVolumeClaim
-            tmpfs:
-                type: emptyDir
-                globalMounts:
-                    - path: /tmp
-                      subPath: tmp
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
