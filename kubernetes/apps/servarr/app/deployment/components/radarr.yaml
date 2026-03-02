@@ -76,7 +76,7 @@ spec:
             app:
                 ports:
                     http:
-                        port: 8686
+                        port: 7878
         persistence:
             media:
                 existingClaim: talos-media-volume
