@@ -27,8 +27,8 @@ spec:
                 containers:
                     app:
                         image:
-                            repository: ghcr.io/linuxserver-labs/prarr:lidarr-plugins
-                            tag: develop
+                            repository: ghcr.io/linuxserver-labs/prarr
+                            tag: lidarr-plugins
                         env:
                             LIDARR__APP__INSTANCENAME: Lidarr
                             LIDARR__AUTH__APIKEY: ENC[AES256_GCM,data:nvs+K7bhqHMEeRZBLC9vC8EPuwor4OMq74yIY9O/4wRj,iv:0PHzi5Rs0errBLTAEwKPtuKjcZt0irBUEZVT9ONxd+w=,tag:TuokjrgvbXy4tH7nUDYjig==,type:str]
