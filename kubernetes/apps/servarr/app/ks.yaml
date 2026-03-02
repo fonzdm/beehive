@@ -36,6 +36,14 @@ spec:
       kind: HelmRelease
       name: radarr
       namespace: *namespace
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: slskd
+      namespace: *namespace
+    - apiVersion: helm.toolkit.fluxcd.io/v2
+      kind: HelmRelease
+      name: flaresolverr
+      namespace: *namespace
   path: ./kubernetes/apps/servarr/app/deployment
   prune: false
   timeout: 30m0s
