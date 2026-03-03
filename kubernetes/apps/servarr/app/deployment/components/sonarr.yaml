@@ -80,6 +80,12 @@ spec:
         persistence:
             media:
                 existingClaim: talos-media-volume
+            config:
+                enabled: true
+                size: 8Gi
+                storageClass: localpv-raid
+                accessMode: ReadWriteOnce
+                type: persistentVolumeClaim
             tmpfs:
                 type: emptyDir
                 globalMounts:
