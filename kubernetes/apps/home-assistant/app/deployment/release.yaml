@@ -95,5 +95,5 @@ spec:
               type: PathPrefix
               value: /
           backendRefs:
-          - name: home-assistant-server
+          - name: home-assistant
             port: 8123
