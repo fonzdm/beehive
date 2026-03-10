@@ -19,6 +19,13 @@ spec:
     controllers:
       home-assistant:
         pod:
+          nodeSelector:
+              topology.kubernetes.io/zone: minipc-0
+          tolerations:
+          - key: "storage"
+            operator: "Equal"
+            value: "no-nas"
+            effect: "NoSchedule"
           securityContext:
             fsGroup: 65533
             fsGroupChangePolicy: OnRootMismatch
