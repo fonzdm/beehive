@@ -6,9 +6,13 @@ metadata:
   name: home-assistant
   namespace: home-assistant
 spec:
-  chartRef:
-    kind: OCIRepository
-    name: home-assistant
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: home-assistant
   interval: 30m
   timeout: 15m
   values:
