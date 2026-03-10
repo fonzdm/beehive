@@ -34,6 +34,6 @@ spec:
         name: abs-buffering
     backendRefs:
     - name: audiobookshelf
-      port: 13378 
+      port: 10223 
 
 ---
