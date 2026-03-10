@@ -66,3 +66,23 @@ spec:
     ingress:
       home-assistant:
         enabled: false
+
+
+    route:
+      main:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+        - name: traefik-gateway
+          namespace: ingress
+          sectionName: websecure
+        hostnames:
+        - "ha.cloud.fonzdm.xyz"
+        rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
+          backendRefs:
+          - name: home-assistant-server
+            port: 8123
