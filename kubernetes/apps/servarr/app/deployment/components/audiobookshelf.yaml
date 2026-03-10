@@ -23,37 +23,14 @@ spec:
           enabled: false
       ingress:
         audiobookshelf-ing:
-          enabled: true
-          primary: true
-          required: true
-          expandObjectName: false
-          annotations:
-            nginx.ingress.kubernetes.io/proxy-body-size: "0"
-            cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-            ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-            nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-          ingressClassName: nginx
-          hosts:
-            - host: abs.media.fonzdm.xyz
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - abs.media.fonzdm.xyz
-              secretName: audiobookshelf-ing-external-secret
-          integrations:
-            certManager:
-              enabled: false
-            traefik:
-              enabled: false
+          enabled: false
       persistence:
         config:
           enabled: true
           type: pvc
           size: 500Mi
-          accessModes: ReadWriteMany
-          storageClass: omv-nfs-delete
+          accessModes: ReadWriteOnce
+          storageClass: localpv-raid
           targetSelector:
             main:
               main:

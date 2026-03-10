@@ -11,3 +11,4 @@ resources:
   - slskd-traefik.yaml
   - prowlarr-traefik.yaml
   - radarr-traefik.yaml
+  - abs-traefik.yaml

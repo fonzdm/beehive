@@ -12,7 +12,7 @@ resources:
   - components/sonarr.yaml
   - components/slskd.yaml
   - components/jellyfin.yaml
-  # - components/audiobookshelf.yaml
+  - components/audiobookshelf.yaml
   - components/prowlarr.yaml
   - components/flaresolverr.yaml
   # - components/jellyseerr.yaml
