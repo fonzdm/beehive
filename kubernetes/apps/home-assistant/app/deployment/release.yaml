@@ -20,7 +20,7 @@ spec:
       home-assistant:
         pod:
           nodeSelector:
-              topology.kubernetes.io/zone: minipc-0
+            topology.kubernetes.io/zone: minipc-0
           tolerations:
           - key: "storage"
             operator: "Equal"
@@ -35,17 +35,16 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant
-              tag: 2025.11.1
+              tag: 2026.3.1@sha256:067e54e2e107892a584936f064147f8bf47c0120eed34e272cf6eb6c8520b0de
             env:
               TZ: Europe/Rome
-              HASS_HTTP_TRUSTED_PROXY_1: 10.96.0.0/12
+              HASS_HTTP_TRUSTED_PROXY_1: 192.168.1.0/24
               HASS_HTTP_TRUSTED_PROXY_2: 10.244.0.0/16
             resources:
               requests:
                 cpu: 300m
               limits:
                 memory: 2Gi
-            
             lifecycle:
               postStart:
                 exec:
@@ -78,9 +77,8 @@ spec:
       home-assistant:
         enabled: false
 
-
     route:
-      main:
+      app:
         enabled: true
         kind: HTTPRoute
         parentRefs:
