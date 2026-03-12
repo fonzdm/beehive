@@ -20,7 +20,7 @@ spec:
       home-assistant:
         pod:
           nodeSelector:
-              topology.kubernetes.io/zone: minipc-0
+            topology.kubernetes.io/zone: minipc-0
           tolerations:
           - key: "storage"
             operator: "Equal"
@@ -45,7 +45,6 @@ spec:
                 cpu: 300m
               limits:
                 memory: 2Gi
-            
             lifecycle:
               postStart:
                 exec:
@@ -77,7 +76,6 @@ spec:
     ingress:
       home-assistant:
         enabled: false
-
 
     route:
       main:
