@@ -78,7 +78,7 @@ spec:
         enabled: false
 
     route:
-      main:
+      app:
         enabled: true
         kind: HTTPRoute
         parentRefs:
