@@ -61,7 +61,7 @@ spec:
                     ffmpeg:
                         inputs:
                         - path: rtsp://127.0.0.1:8554/lumus1
-                            roles:
+                          roles:
                             - detect
 
                     detect:
@@ -80,7 +80,7 @@ spec:
                     ffmpeg:
                         inputs:
                         - path: rtsp://127.0.0.1:8554/bullet1
-                            roles:
+                          roles:
                             - detect
 
                     detect:
@@ -99,7 +99,7 @@ spec:
                     ffmpeg:
                         inputs:
                         - path: rtsp://127.0.0.1:8554/dome1
-                            roles:
+                          roles:
                             - detect
 
                     detect:
