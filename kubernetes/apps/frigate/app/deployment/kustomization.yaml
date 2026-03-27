@@ -3,5 +3,6 @@ kind: Kustomization
 namespace: frigate
 resources:
   - repository.yaml
+  - secret.yaml
   - release.yaml
   - httproute.yaml
