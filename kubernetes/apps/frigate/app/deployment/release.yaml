@@ -33,7 +33,7 @@ spec:
         config: |
 
             auth:
-                reset_admin_password: false
+                reset_admin_password: true
 
             mqtt:
                 enabled: False
