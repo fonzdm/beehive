@@ -74,7 +74,7 @@ spec:
                         timestamp: true
                         bounding_box: true
                         retain:
-                        default: 3
+                            default: 3
 
                 bullet1:
                     ffmpeg:
@@ -93,7 +93,7 @@ spec:
                         timestamp: true
                         bounding_box: true
                         retain:
-                        default: 3
+                            default: 3
 
                 dome1:
                     ffmpeg:
@@ -112,4 +112,4 @@ spec:
                         timestamp: true
                         bounding_box: true
                         retain:
-                        default: 3
+                            default: 3
