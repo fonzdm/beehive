@@ -12,12 +12,9 @@ spec:
                 kind: HelmRepository
                 name: blakeblackshear
     values:
-        env:
-        - name: RTSP_PASSWORD
-          valueFrom:
-            secretKeyRef:
-                name: frigate-rtsp
-                key: RTSP_PASSWORD
+        envFromSecrets:
+        - frigate-rtsp
+        
         # -- amount of shared memory to use for caching
         shmSize: 2Gi
         # -- use memory for tmpfs (mounted to /tmp)
