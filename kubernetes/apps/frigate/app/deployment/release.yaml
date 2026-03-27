@@ -48,13 +48,13 @@ spec:
             go2rtc:
                 streams:
                     lumus1:
-                        - rtsp://admin:{RTSP_PASSWORD}@lumus1.cctv.fonzdm.xyz:554/h264Preview_01_sub
+                        - "rtsp://admin:{FRIGATE_RTSP_PASSWORD}@lumus1.cctv.fonzdm.xyz:554/h264Preview_01_sub"
 
                     bullet1:
-                        - rtsp://admin:{RTSP_PASSWORD}@bullet1.cctv.fonzdm.xyz:554/h264Preview_01_sub
+                        - "rtsp://admin:{FRIGATE_RTSP_PASSWORD}@bullet1.cctv.fonzdm.xyz:554/h264Preview_01_sub"
 
                     dome1:
-                        - rtsp://admin:{RTSP_PASSWORD}@dome1.cctv.fonzdm.xyz:554/h264Preview_01_sub
+                        - "rtsp://admin:{FRIGATE_RTSP_PASSWORD}@dome1.cctv.fonzdm.xyz:554/h264Preview_01_sub"
 
             cameras:
                 lumus1:
