@@ -27,8 +27,9 @@ spec:
                 containers:
                     app:
                         image:
-                            repository: ghcr.io/home-operations/radarr
-                            tag: rolling
+                            repository: ghcr.io/home-operations/radarr # {"$imagepolicy": "flux-system:radarr-imagepolicy:name"}
+                            tag: rolling # {"$imagepolicy": "flux-system:radarr-imagepolicy:tag"}
+                            digest: sha256:5e08c0eefd2770d1d29395c4f84fe5bf7dfc3a986598021306a5d8ac017a3989 # {"$imagepolicy": "flux-system:radarr-imagepolicy:digest"}
                         env:
                             RADARR__APP__INSTANCENAME: Radarr
                             RADARR__AUTH__APIKEY: ENC[AES256_GCM,data:+k++oOUTw6b6KDGRmXdMZtM3V+3DNsEe/gQyH0T51wdd,iv:UCBU6OQJkvu0+sw1taISoVyAzqngQcxDe3w+QxyCWOY=,tag:3uwd4c1KnzyeWcPwNxowVw==,type:str]

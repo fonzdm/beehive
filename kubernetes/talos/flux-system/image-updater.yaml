@@ -16,9 +16,26 @@ spec:
       author:
         email: alfixdemasi@gmail.com
         name: fonzdm
-      messageTemplate: '{{range .Changed.Changes}}{{print .OldValue}} -> {{println .NewValue}}{{end}}'
+      messageTemplate: |
+        Automated image update
+
+        Automation name: {{ .AutomationObject }}
+
+        Files:
+        {{ range $filename, $_ := .Changed.FileChanges -}}
+        - {{ $filename }}
+        {{ end -}}
+
+        Objects:
+        {{ range $resource, $changes := .Changed.Objects -}}
+        - {{ $resource.Kind }} {{ $resource.Name }}
+          Changes:
+        {{- range $_, $change := $changes }}
+            - {{ $change.OldValue }} -> {{ $change.NewValue }}
+        {{ end -}}
+        {{ end -}}
     push:
-      branch: main
+      branch: flux-auto-images-updates
   update:
     path: ./kubernetes
     strategy: Setters
@@ -44,6 +61,90 @@ metadata:
 spec:
   imageRepositoryRef:
     name: lidarr-imagerepo
+  filterTags:
+    pattern: '^rolling$'
+  policy:
+    alphabetical: {}
+  digestReflectionPolicy: Always
+  interval: 10m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: sonarr-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/home-operations/sonarr
+  interval: 5m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: sonarr-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: sonarr-imagerepo
+  filterTags:
+    pattern: '^rolling$'
+  policy:
+    alphabetical: {}
+  digestReflectionPolicy: Always
+  interval: 10m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: radarr-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/home-operations/radarr
+  interval: 5m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: radarr-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: radarr-imagerepo
+  filterTags:
+    pattern: '^rolling$'
+  policy:
+    alphabetical: {}
+  digestReflectionPolicy: Always
+  interval: 10m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: prowlarr-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/home-operations/prowlarr
+  interval: 5m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: prowlarr-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: prowlarr-imagerepo
   filterTags:
     pattern: '^rolling$'
   policy:
