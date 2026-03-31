@@ -8,11 +8,10 @@ spec:
   chart:
     spec:
       chart: app-template
-      version: 2.x
       sourceRef:
         kind: HelmRepository
         name: bjw-s
-        namespace: flux-system
+        namespace: servarr
 
   values:
     controllers:
