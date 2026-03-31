@@ -1,93 +1,93 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: prowlarr
-    namespace: servarr
+  name: prowlarr
+  namespace: servarr
 spec:
-    interval: 1h0m0s
-    chart:
-        spec:
-            chart: app-template
-            sourceRef:
-                kind: HelmRepository
-                name: bjw-s
-                namespace: servarr
-    values:
-        controllers:
-            prowlarr:
-                annotations:
-                    reloader.stakater.com/auto: "true"
-                pod:
-                    securityContext:
-                        fsGroup: 65533
-                        fsGroupChangePolicy: OnRootMismatch
-                        runAsGroup: 65533
-                        runAsNonRoot: true
-                        runAsUser: 65534
-                containers:
-                    app:
-                        image:
-                            repository: ghcr.io/home-operations/prowlarr # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:name"}
-                            tag: rolling # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:tag"}
-                            digest: sha256:e2459e199564ab852c6e677e951cef36c172a8e71a0e1c90665631b5a0c57438 # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:digest"}
-                        env:
-                            PROWLARR__APP__INSTANCENAME: Prowlarr
-                            PROWLARR__AUTH__METHOD: External
-                            PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
-                            PROWLARR__LOG__DBENABLED: "False"
-                            PROWLARR__LOG__LEVEL: info
-                            PROWLARR__SERVER__PORT: 9696
-                            PROWLARR__UPDATE__BRANCH: develop
-                        probes:
-                            liveness:
-                                enabled: true
-                                spec:
-                                    periodSeconds: 30
-                                    timeoutSeconds: 5
-                                    failureThreshold: 5
-                            readiness:
-                                enabled: true
-                                custom: true
-                                spec:
-                                    httpGet:
-                                        path: /ping
-                                        port: 9696
-                                    periodSeconds: 10
-                                    timeoutSeconds: 5
-                                    failureThreshold: 5
-                            startup:
-                                enabled: true
-                                spec:
-                                    failureThreshold: 30
-                                    periodSeconds: 10
-                        resources:
-                            requests:
-                                cpu: 20m
-                                memory: 384Mi
-                            limits:
-                                memory: 2Gi
-                        securityContext:
-                            allowPrivilegeEscalation: false
-                            readOnlyRootFilesystem: true
-                            capabilities:
-                                drop:
-                                    - ALL
-        service:
-            app:
-                ports:
-                    http:
-                        port: 9696
-        persistence:
-            media:
-                existingClaim: talos-media-volume
-            config:
+  interval: 1h0m0s
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: servarr
+  values:
+    controllers:
+      prowlarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 65533
+            runAsNonRoot: true
+            runAsUser: 65534
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/prowlarr # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:name"}
+              tag: rolling # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:tag"}
+              digest: sha256:a44d003ee6f6ce23882d009482ca2ac7f951df64e73bfa04711363268d278562 # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:digest"}
+            env:
+              PROWLARR__APP__INSTANCENAME: Prowlarr
+              PROWLARR__AUTH__METHOD: External
+              PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              PROWLARR__LOG__DBENABLED: "False"
+              PROWLARR__LOG__LEVEL: info
+              PROWLARR__SERVER__PORT: 9696
+              PROWLARR__UPDATE__BRANCH: develop
+            probes:
+              liveness:
                 enabled: true
-                size: 8Gi
-                storageClass: localpv-raid
-                accessMode: ReadWriteOnce
-                type: persistentVolumeClaim
-            tmpfs:
-                type: emptyDir
-                globalMounts:
-                    - path: /tmp
-                      subPath: tmp
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
+                enabled: true
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 9696
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
+                enabled: true
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 20m
+                memory: 384Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+    service:
+      app:
+        ports:
+          http:
+            port: 9696
+    persistence:
+      media:
+        existingClaim: talos-media-volume
+      config:
+        enabled: true
+        size: 8Gi
+        storageClass: localpv-raid
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+        - path: /tmp
+          subPath: tmp
