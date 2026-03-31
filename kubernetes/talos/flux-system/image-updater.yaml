@@ -20,7 +20,7 @@ spec:
     push:
       branch: main
   update:
-    path: ./kubernetes/talos
+    path: ./kubernetes
     strategy: Setters
 
 ---
