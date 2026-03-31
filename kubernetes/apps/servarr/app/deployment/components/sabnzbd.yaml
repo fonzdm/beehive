@@ -34,7 +34,7 @@ spec:
               TZ: Europe/Rome
               PUID: 1000
               PGID: 65533
-              SABNZBD__HOST_WHITELIST: sabnzbd.media.fonzdm.xyz
+              HOST_WHITELIST_ENTRIES: sabnzbd.media.fonzdm.xyz
 
     service:
       main:
