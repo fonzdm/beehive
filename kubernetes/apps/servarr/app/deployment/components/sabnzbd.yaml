@@ -67,6 +67,12 @@ spec:
           sectionName: websecure
         hostnames:
         - "sabnzbd.media.fonzdm.xyz"
+        filters:
+        - type: RequestHeaderModifier
+          requestHeaderModifier:
+            set:
+            - name: X-Forwarded-Proto
+              value: https
         rules:
         - matches:
           - path:
