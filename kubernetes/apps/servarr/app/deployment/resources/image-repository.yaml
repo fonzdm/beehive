@@ -17,9 +17,9 @@ metadata:
 spec:
   imageRepositoryRef:
     name: lidarr-imagerepo
-  policy:
-    semver:
-      range: 3.1.x
+  filterTags:
+    pattern: '^rolling$'
+  digestReflectionPolicy: Always
 
 ---
 
