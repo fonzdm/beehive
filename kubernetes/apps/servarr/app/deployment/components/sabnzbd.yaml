@@ -35,27 +35,26 @@ spec:
               PUID: 1000
               PGID: 65534
 
-
     service:
       main:
         ports:
           http:
             port: 8080
 
-        persistence:
-          media:
-            existingClaim: talos-media-volume
-          config:
-            enabled: true
-            size: 8Gi
-            storageClass: localpv-raid
-            accessMode: ReadWriteOnce
-            type: persistentVolumeClaim
-          tmpfs:
-            type: emptyDir
-            globalMounts:
-            - path: /tmp
-              subPath: tmp
+    persistence:
+      media:
+        existingClaim: talos-media-volume
+      config:
+        enabled: true
+        size: 8Gi
+        storageClass: localpv-raid
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+        - path: /tmp
+          subPath: tmp
               
     route:
       app:
