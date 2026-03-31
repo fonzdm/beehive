@@ -27,5 +27,4 @@ jobs:
           --base=main \
           --title="Pulling ${GITHUB_REF} into main" \
           --body=":crown: *An automated PR*" \
-          --reviewer=fonzdm \
-          --draft      
+          --reviewer=fonzdm
