@@ -22,6 +22,7 @@ spec:
   policy:
     alphabetical: {}
   digestReflectionPolicy: Always
+  interval: 10m
 
 ---
 
