@@ -27,7 +27,9 @@ spec:
             runAsUser: 1000
         initContainers:
           fix-config:
-            image: busybox
+            image: 
+              repository: busybox
+              tag: latest
             command:
             - sh
             - -c
@@ -40,8 +42,9 @@ spec:
                   || echo "host_whitelist = sabnzbd.media.fonzdm.xyz" >> "$CONFIG"
               fi
           volumeMounts:
-          - name: config
-            mountPath: /config
+            config:
+              name: config
+              mountPath: /config
         containers:
           app:
             image:
