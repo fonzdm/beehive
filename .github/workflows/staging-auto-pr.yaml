@@ -1,0 +1,31 @@
+name: Staging Auto-PR
+on:
+  create:
+
+jobs:
+  pull-request:
+    runs-on: ubuntu-latest
+    if: |
+      github.event.ref_type == 'branch' &&
+      github.event.ref == 'flux-auto-images-updates'      
+    permissions:
+      pull-requests: write
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Create Pull Request
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used implicitly by the gh CLI to authenticate with GitHub
+        GITHUB_REPO: ${{ github.repository }}
+        GITHUB_REF: ${{ github.ref }}
+      run: |
+        gh pr create \
+          --repo=${GITHUB_REPO} \
+          --head=flux-auto-images-updates \
+          --base=main \
+          --title="Pulling ${GITHUB_REF} into main" \
+          --body=":crown: *An automated PR*" \
+          --reviewer=fonzdm \
+          --draft      
