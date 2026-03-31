@@ -1,0 +1,25 @@
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: lidarr-imagerepo
+  namespace: servarr
+spec:
+  image: ghcr.io/home-operations/lidarr
+  interval: 5m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: lidarr-imagepolicy
+  namespace: servarr
+spec:
+  imageRepositoryRef:
+    name: lidarr-imagerepo
+  policy:
+    semver:
+      range: 3.1.x
+
+---
+
