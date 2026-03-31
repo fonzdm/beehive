@@ -39,7 +39,7 @@ spec:
                   && sed -i 's|host_whitelist *=.*|host_whitelist = sabnzbd.media.fonzdm.xyz|' "$CONFIG" \
                   || echo "host_whitelist = sabnzbd.media.fonzdm.xyz" >> "$CONFIG"
               fi
-        volumeMounts:
+          volumeMounts:
           - name: config
             mountPath: /config
         containers:
