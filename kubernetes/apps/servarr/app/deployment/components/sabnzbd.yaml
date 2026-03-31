@@ -33,8 +33,8 @@ spec:
             env:
               TZ: Europe/Rome
               PUID: 1000
-              PGID: 65534
-              SABNZBD__HOST: sabnzbd.media.fonzdm.xyz
+              PGID: 65533
+              SABNZBD__HOST_WHITELIST: sabnzbd.media.fonzdm.xyz
 
     service:
       main:
