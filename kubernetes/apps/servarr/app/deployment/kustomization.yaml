@@ -3,7 +3,6 @@ kind: Kustomization
 namespace: servarr 
 resources:
   - resources/talos-media-volume.yaml
-  - resources/image-repository.yaml
   - resources/repository.yaml
   - components/qbittorrent-operator.yaml
   - components/lidarr.yaml
