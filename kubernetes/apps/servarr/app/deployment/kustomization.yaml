@@ -14,6 +14,7 @@ resources:
   - components/jellyfin.yaml
   - components/audiobookshelf.yaml
   - components/prowlarr.yaml
+  - components/sabnzbd.yaml
   - components/flaresolverr.yaml
   # - components/jellyseerr.yaml
   # - components/bazarr.yaml

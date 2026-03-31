@@ -31,7 +31,6 @@ spec:
                             tag: rolling
                         env:
                             PROWLARR__APP__INSTANCENAME: Prowlarr
-                            PROWLARR__AUTH__APIKEY: nd23789hd839b4t31fbn8934h7f23b97
                             PROWLARR__AUTH__METHOD: External
                             PROWLARR__AUTH__REQUIRED: DisabledForLocalAddresses
                             PROWLARR__LOG__DBENABLED: "False"
