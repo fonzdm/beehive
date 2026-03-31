@@ -25,6 +25,23 @@ spec:
             runAsGroup: 65533
             runAsNonRoot: true
             runAsUser: 1000
+        initContainers:
+          fix-config:
+            image: busybox
+            command:
+            - sh
+            - -c
+            - |
+              CONFIG=/config/sabnzbd.ini
+
+              if [ -f "$CONFIG" ]; then
+                grep -q "host_whitelist" "$CONFIG" \
+                  && sed -i 's|host_whitelist *=.*|host_whitelist = sabnzbd.media.fonzdm.xyz|' "$CONFIG" \
+                  || echo "host_whitelist = sabnzbd.media.fonzdm.xyz" >> "$CONFIG"
+              fi
+        volumeMounts:
+          - name: config
+            mountPath: /config
         containers:
           app:
             image:
