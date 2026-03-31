@@ -19,6 +19,8 @@ spec:
     name: lidarr-imagerepo
   filterTags:
     pattern: '^rolling$'
+  policy:
+    alphabetical: {}
   digestReflectionPolicy: Always
 
 ---
