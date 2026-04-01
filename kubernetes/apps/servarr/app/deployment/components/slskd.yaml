@@ -1,102 +1,108 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-  name: slskd
-  namespace: servarr
+    name: slskd
+    namespace: servarr
 spec:
-  interval: 30m
-
-  chart:
-    spec:
-      chart: app-template
-      sourceRef:
-        kind: HelmRepository
-        name: bjw-s
-        namespace: servarr
-
-  upgrade:
-    cleanupOnFail: true
-
-  values:
-
-    controllers:
-      slskd:
-        type: deployment
-        pod:
-          securityContext:
-            runAsUser: 1000
-            runAsGroup: 65533
-            fsGroup: 65533
-            fsGroupChangePolicy: OnRootMismatch
-        containers:
-          app:
-            image:
-              repository: slskd/slskd
-              tag: latest
-              pullPolicy: IfNotPresent
-
-            env:
-              TZ: Europe/Rome
-              UMASK: "002"
-              SLSKD_REMOTE_CONFIGURATION: true
-              SLSKD_DOWNLOADS_DIR: /media/Downloads
-              SLSKD_INCOMPLETE_DIR: /media/IncompleteDownloads
-              SLSKD_SHARED_DIR: /media/Music
-
-            ports:
-              - name: http
-                containerPort: 5030
-              - name: soulseek
-                containerPort: 50300
-
-            probes:
-              liveness:
+    interval: 30m
+    chart:
+        spec:
+            chart: app-template
+            sourceRef:
+                kind: HelmRepository
+                name: bjw-s
+                namespace: servarr
+    upgrade:
+        cleanupOnFail: true
+    values:
+        controllers:
+            slskd:
+                type: deployment
+                pod:
+                    securityContext:
+                        runAsUser: 1000
+                        runAsGroup: 65533
+                        fsGroup: 65533
+                        fsGroupChangePolicy: OnRootMismatch
+                containers:
+                    app:
+                        image:
+                            repository: slskd/slskd
+                            tag: latest
+                            pullPolicy: IfNotPresent
+                        env:
+                            TZ: Europe/Rome
+                            UMASK: "002"
+                            SLSKD_REMOTE_CONFIGURATION: true
+                            SLSKD_DOWNLOADS_DIR: /media/Downloads
+                            SLSKD_INCOMPLETE_DIR: /media/IncompleteDownloads
+                            SLSKD_SHARED_DIR: /media/Music
+                            SLSKD_USERNAME: fonzdm
+                            SLSKD_PASSWORD: ENC[AES256_GCM,data:HHiTCkAMIuw=,iv:hvIe3DkifMnglVr8PkZE2mfD4znhElEDtphv3tOh+aQ=,tag:f4TAGXYd3U5JKxLFQudXPg==,type:str]
+                            SLSKD_SLSK_USERNAME: fonzdm-slsk-user
+                            SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:ERglEEhs7lQ7fW418HZvPw==,iv:qJ7Z2DnuTvK1hfCXwFUBFOEnHsSL2xEckJRKRw0K7u8=,tag:caavMH7ajlCVr3c7Tl5J3g==,type:str]
+                        ports:
+                            - name: http
+                              containerPort: 5030
+                            - name: soulseek
+                              containerPort: 50300
+                        probes:
+                            liveness:
+                                enabled: true
+                                spec:
+                                    periodSeconds: 30
+                                    timeoutSeconds: 5
+                                    failureThreshold: 5
+                            readiness:
+                                enabled: true
+                            startup:
+                                enabled: true
+                                spec:
+                                    failureThreshold: 30
+                                    periodSeconds: 10
+        service:
+            app:
+                controller: slskd
+                ports:
+                    http:
+                        port: 5030
+                    soulseek:
+                        port: 50300
+        ingress:
+            main:
+                enabled: false
+                # enable later if you expose through traefik/nginx
+        persistence:
+            config:
                 enabled: true
-                spec:
-                  periodSeconds: 30
-                  timeoutSeconds: 5
-                  failureThreshold: 5
-              readiness:
+                type: persistentVolumeClaim
+                accessMode: ReadWriteOnce
+                size: 2Gi
+                globalMounts:
+                    - path: /app
+            media:
                 enabled: true
-              startup:
-                enabled: true
-                spec:
-                  failureThreshold: 30
-                  periodSeconds: 10
-
-    service:
-      app:
-        controller: slskd
-        ports:
-          http:
-            port: 5030
-          soulseek:
-            port: 50300
-
-    ingress:
-      main:
-        enabled: false
-        # enable later if you expose through traefik/nginx
-
-    persistence:
-
-      config:
-        enabled: true
-        type: persistentVolumeClaim
-        accessMode: ReadWriteOnce
-        size: 2Gi
-        globalMounts:
-          - path: /app
-
-      media:
-        enabled: true
-        existingClaim: talos-media-volume
-        globalMounts:
-          - path: /media
-
-    resources:
-      requests:
-        cpu: 50m
-        memory: 256Mi
-      limits:
-        memory: 1Gi
+                existingClaim: talos-media-volume
+                globalMounts:
+                    - path: /media
+        resources:
+            requests:
+                cpu: 50m
+                memory: 256Mi
+            limits:
+                memory: 1Gi
+sops:
+    age:
+        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSBqQTdTK1FzenlxUGJVTDZw
+            MWFwTDNQb1JmUEUrditJUkh3OXBHcjA0bFdnCjdMbmpWam5XcHZORk5lODlIR1ZI
+            MDZRRGlmaS9VSkNqMW1USHhYVWdJNWcKLS0tIEtSOWIwQVNwSnVVa3FKNkxKVTZm
+            T3JCZWQxdk9tR1VBMHBSbkIzUlFueTQKkYxcNyN2GyvWmqnhjwQsncgkeUaJlShR
+            AupSgUSjI2lGPa7/g4CcrJPYmw6DVx//vnBLsiicBIxZo8kugf0g3Q==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2026-04-01T08:16:19Z"
+    mac: ENC[AES256_GCM,data:L0KiVdmgcLY9UEG2leCMUTOvrwQEX58BUAIUgZGz4HTpturer+Z3cDNSWTV0K4sqtY3MhZ+JLqLIS1bnXPDigpqI50A14p9dJF6zxem67azPkxASYDJaMApEwX6jBMuxzS96qmXycn8Ou05JX48xvYZ34NTxyvHF07napJhxMEg=,iv:0x1CYYBB1CHn/w1r5EO6vha9IGFS6WUvYGI1sL7Kf5w=,tag:sz9KJ0O/voiaC7q3jApSRw==,type:str]
+    encrypted_regex: ^(?:SLSKD(?:_SLSK)?_PASSWORD|SLSKD_CONTROLLER_API_KEY)$
+    version: 3.10.2
