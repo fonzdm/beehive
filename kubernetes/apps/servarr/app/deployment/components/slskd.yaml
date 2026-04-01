@@ -38,6 +38,10 @@ spec:
             env:
               TZ: Europe/Rome
               UMASK: "002"
+              SLSKD_REMOTE_CONFIGURATION: true
+              SLSKD_DOWNLOADS_DIR: /media/Downloads
+              SLSKD_INCOMPLETE_DIR: /media/IncompleteDownloads
+              SLSKD_SHARED_DIR: /media/Music
 
             ports:
               - name: http
