@@ -14,5 +14,5 @@ resources:
   - components/prowlarr.yaml
   - components/sabnzbd.yaml
   - components/flaresolverr.yaml
-  # - components/jellyseerr.yaml
+  - components/seerr.yaml
   # - components/bazarr.yaml
