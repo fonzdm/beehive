@@ -151,3 +151,34 @@ spec:
     alphabetical: {}
   digestReflectionPolicy: Always
   interval: 10m
+
+---
+
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: homeassistant-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/home-operations/home-assistant
+  interval: 5m
+
+---
+
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: homeassistant-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: homeassistant-imagerepo
+  filterTags:
+    pattern: '^rolling$'
+  policy:
+    alphabetical: {}
+  digestReflectionPolicy: Always
+  interval: 10m
+
+---
