@@ -41,7 +41,7 @@ spec:
                             SLSKD_PASSWORD: ENC[AES256_GCM,data:OhamfJau4bQ=,iv:zaL2gl1KoNpKxmzf42X1mpznuMmTk3eiJE377u+Wrf0=,tag:MFEH8Arwee2ModXJsw0LeQ==,type:str]
                             SLSKD_SLSK_USERNAME: fonzdm-slsk-user
                             SLSKD_SLSK_PASSWORD: ENC[AES256_GCM,data:2TnpRSMC/vk95kNt7u8JnQ==,iv:oKbMeWYR71aob5eSuttNzBw0IqmjKzAmrVzp3Vbmkeo=,tag:DsKGArK6hvva4GCmmmLGrw==,type:str]
-                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:K6chKXYuCqMu7TWMnrtMiOqcFTTyX+RMEercntEvEa+CfG4srnzOxo7TBNYFR2+JLC/wvYNVhC5fNcsh/YZuWA==,iv:AeSqnEr01ASgAQ5CyoYraBNxkzDpxUQdxN/tUKlVgsY=,tag:mmQDrcgPqVxjNYVP2L5m3Q==,type:str]
+                            SLSKD_CONTROLLER_API_KEY: ENC[AES256_GCM,data:nqfegdSblDDfe6Z/AxMybJNvxYTG5sHf9Ae44Li69zk77oEDkvKQSpOkAC56mNOALC36/zriMH2r,iv:IeKeIxd9F+sXdNz7Vq/YFMebpJJplkDIQ6mW4b/1DQA=,tag:kADam6XkSqIWwtJSa4OQhA==,type:str]
                         ports:
                             - name: http
                               containerPort: 5030
@@ -103,7 +103,7 @@ sops:
             cWtuckJlbDVFanVkYWZxb2EzRlA0c3cKWV19YSLM6XJgtA7enfCjHhP9F0oN4y5T
             QY3cNciWQ41pkQzR/IyEGcyqsNSL1gdfpU1S/0j7XWS//RU46fQNeA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-04-01T08:35:49Z"
-    mac: ENC[AES256_GCM,data:kyGNTbV53QouIRB1XVLOCa7BUEQbE7RTY+cij9n5w2Z2oDvw6qkalt2x7MKzyWNOwilnKpRf3+71xavud764pZFGmF5hUUKkLFpCH0UgcIiST+CwNmdEyFsrTPchbtTeDwRCZ5yFaP9zklKB0q4GGK7+rs4WlpJ9V6CV/ZWIu6c=,iv:YLQo1KddCYVUHHOZVxj3hiCQuho73B/tVJRqhfXY0Ts=,tag:CHnrL6xaD+inSatnzLxeYQ==,type:str]
+    lastmodified: "2026-04-01T08:46:47Z"
+    mac: ENC[AES256_GCM,data:+Q/9vHi6awokYdOJIJv0b3dEY4dkEWdvOyxFsxa2LAh/iE15FkBroWlM6CRxoqu5pEDnOg9il4zpq5cfHljaFAZhTFPGxOZhzYC80fpQrNIWhVgFqotVR/MVNEUFGZUqBSg/ntWD6g46fwFPQgw6EQ4IF/HUbhZDv9AzuVL7sQM=,iv:Um//8jjLrfDavotTKRO+Wrbt68IroQr+cOw2T4Fcd/Q=,tag:TRT7Dl7c3NoJBTO8SfCKKg==,type:str]
     encrypted_regex: ^(?:SLSKD(?:_SLSK)?_PASSWORD|SLSKD_CONTROLLER_API_KEY)$
     version: 3.10.2
