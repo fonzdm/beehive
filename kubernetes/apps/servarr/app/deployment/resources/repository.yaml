@@ -45,3 +45,16 @@ metadata:
 spec:
   interval: 12h
   url: https://bjw-s-labs.github.io/helm-charts
+
+---
+
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: OCIRepository
+metadata:
+  name: seerr
+  namespace: servarr
+spec:
+  interval: 5m0s
+  url: oci://ghcr.io/seerr-team/seerr/seerr-chart
+  ref:
+    tag: latest

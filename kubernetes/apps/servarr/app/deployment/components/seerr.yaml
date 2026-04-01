@@ -1,0 +1,40 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: seerr 
+  namespace: servarr 
+spec:
+  interval: 1h0m0s
+  chartRef:
+    kind: OCIRepository
+    name: seerr
+    namespace: servarr
+  values:
+    route:
+      main:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+        - name: traefik-gateway
+          namespace: ingress
+          sectionName: websecure
+        hostnames:
+        - "seerr.media.fonzdm.xyz"
+        matches:
+        - path:
+            type: PathPrefix
+            value: /
+        httpsRedirect: true
+    config:
+      persistence:
+        size: 8Gi
+        accessModes:
+          - ReadWriteOnce
+        storageClass: localpv-raid
+    volumes:
+    - name: media
+      persistentVolumeClaim:
+        claimName: talos-media-volume
+    volumeMounts:
+    - name: media
+      mountPath: "/media"
