@@ -17,7 +17,7 @@ jobs:
         fetch-depth: 0
     - name: Create Pull Request
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} # used implicitly by the gh CLI to authenticate with GitHub
+        GH_TOKEN: ${{ secrets.PR_PAT }} # used implicitly by the gh CLI to authenticate with GitHub
         GITHUB_REPO: ${{ github.repository }}
         GITHUB_REF: ${{ github.ref }}
       run: |
