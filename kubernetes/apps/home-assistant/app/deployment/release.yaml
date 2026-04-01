@@ -35,7 +35,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/home-assistant # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:name"}
               tag: rolling # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
-              digest: sha256:45d37a8be32fc1b2ebc64acc9ab219ca6226dcf04b4de0046d6c4e650b7a3022 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:digest"}
+              digest: sha256:30d97fac471d8374a8e8371df83285f22924175800a7a73a94ed71bb7eb161f7 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:digest"}
             env:
               TZ: Europe/Rome
               HASS_HTTP_TRUSTED_PROXY_1: 192.168.1.0/24
