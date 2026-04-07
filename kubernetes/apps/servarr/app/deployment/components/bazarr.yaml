@@ -1,89 +1,112 @@
 apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
-    name: bazarr
-    namespace: servarr
+  name: bazarr
+  namespace: servarr
 spec:
-    interval: 1h0m0s
-    chart:
-        spec:
-            chart: bazarr
-            sourceRef:
-                kind: HelmRepository
-                name: truecharts
-    postRenderers:
-    - kustomize:
-        patches:
-          - target:
-              kind: Deployment
-              labelSelector: "app.kubernetes.io/instance=bazarr"
-            patch: |-
-              - op: remove
-                path: /spec/template/spec/affinity/podAffinity
-
-    values:
-        metrics:
-            main:
-                enabled: false
-        workload:
-            main:
-                podSpec:
-                    containers:
-                        main:
-                            env:
-                                BAZAAR__API_KEY: ENC[AES256_GCM,data:thhCxTnTJTUFbDgl4r5hOrqT7x84j8nnroA+OX9j+sI=,iv:ilNUx7nau8+ydBwxGGk+AfnfvLuYv0Qovrd9oDED6lA=,tag:Y5iRzxuUaJ7jDMOZ7dUGjw==,type:str]
-        ingress:
-            bazarr-ing:
+  interval: 1h0m0s
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: servarr
+  values:
+    controllers:
+      bazarr:
+        annotations:
+          reloader.stakater.com/auto: "true"
+        pod:
+          securityContext:
+            fsGroup: 65533
+            fsGroupChangePolicy: OnRootMismatch
+            runAsGroup: 65533
+            runAsNonRoot: true
+            runAsUser: 65534
+        containers:
+          app:
+            image:
+              repository: ghcr.io/home-operations/bazarr # {"$imagepolicy": "flux-system:bazarr-imagepolicy:name"}
+              tag: rolling # {"$imagepolicy": "flux-system:bazarr-imagepolicy:tag"}
+              digest: sha256:83607d2b741ec9469db09489e88c473ae6fdf7d85f3b55d4fa809b43e25a2a6c # {"$imagepolicy": "flux-system:bazarr-imagepolicy:digest"}
+            env:
+              BAZARR__APP__INSTANCENAME: Sonarr
+              BAZARR__AUTH__METHOD: External
+              BAZARR__AUTH__REQUIRED: DisabledForLocalAddresses
+              BAZARR_LOG__DBENABLED: "False"
+              BAZARR__LOG__LEVEL: info
+            probes:
+              liveness:
                 enabled: true
-                primary: true
-                required: true
-                expandObjectName: false
-                annotations:
-                  cert-manager.io/cluster-issuer: letsencrypt-cloudflare
-                  ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16 
-                  nginx.ingress.kubernetes.io/whitelist-source-range: 192.168.0.0/16,100.124.0.0/16,10.244.0.0/16
-                ingressClassName: nginx
-                hosts:
-                    - host: bazarr.media.fonzdm.xyz
-                      paths:
-                        - path: /
-                          pathType: Prefix
-                tls:
-                    - hosts:
-                        - bazarr.media.fonzdm.xyz
-                      secretName: bazarr-ing-external-secret
-                integrations:
-                    certManager:
-                        enabled: false
-                    traefik:
-                        enabled: false
-        persistence:
-            config:
+                spec:
+                  periodSeconds: 30
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              readiness:
                 enabled: true
-                type: pvc
-                size: 500Mi
-                accessModes: ReadWriteMany
-                storageClass: omv-nfs-delete
-                targetSelector:
-                    main:
-                        main:
-                            mountPath: /config
-            media:
+                custom: true
+                spec:
+                  httpGet:
+                    path: /ping
+                    port: 6767
+                  periodSeconds: 10
+                  timeoutSeconds: 5
+                  failureThreshold: 5
+              startup:
                 enabled: true
-                existingClaim: talos-media-volume
-                mountPath: /mnt/media
-sops:
-    age:
-        - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
-          enc: |
-            -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSB1OVhtWTFlUzQzS0lnWFRx
-            R3BoRGZ5VjlRckNDbGkrc3dOWjZVRHVtZmlVCmdEMnRXVE91eVlSUm1UMHB6b1Vj
-            UVpiam93Y3Y4RjFGWk5wU2lPV05EVzgKLS0tIEdZZzBUL3VWTVZidVVBY0tQTWFD
-            K3Y2d0hOUDA4UHQwM1lWcENuY3JCcnMKNu5v0JmtfRiTwYfA+kmIoeGJWadIHa5F
-            791Y6se7si/I6MvlAq4EDHoJgpFcJb9EZ9ir1OUGYDwtj6C4mwA+MA==
-            -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2025-09-03T14:47:22Z"
-    mac: ENC[AES256_GCM,data:qFpW9feOWkODMCQu/wTj1qxI25gAk25hQguKGWR+QwnSQKbQmep+Sj5VQXsOaR6MjY/7fWaSW46WeKHUNpZ40bomZ+xMxkyAXAGeo+q3S5CZ0R+wlOdfS1QHLB4lpsOzReUHkv/HLRshsjPzi4i0kuMAuX16mRjkIxJEmgUjY5k=,iv:Nz4lgzw7UrRhIITDBb87uYTmg+yPxKCkL1cpm+Rf480=,tag:MQsDZ6irQG4C1ypd18FUzQ==,type:str]
-    encrypted_regex: ^([A-Z0-9_]+_API_KEY)$
-    version: 3.10.2
+                spec:
+                  failureThreshold: 30
+                  periodSeconds: 10
+            resources:
+              requests:
+                cpu: 20m
+                memory: 384Mi
+              limits:
+                memory: 2Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                - ALL
+    service:
+      app:
+        ports:
+          http:
+            port: 6767
+    persistence:
+      media:
+        existingClaim: talos-media-volume
+      config:
+        enabled: true
+        size: 8Gi
+        storageClass: localpv-raid
+        accessMode: ReadWriteOnce
+        type: persistentVolumeClaim
+      tmpfs:
+        type: emptyDir
+        globalMounts:
+        - path: /tmp
+          subPath: tmp
+    ingress:
+      bazarr:
+        enabled: false
+    route:
+      app:
+        enabled: true
+        kind: HTTPRoute
+        parentRefs:
+        - name: traefik-gateway
+          namespace: ingress
+          sectionName: websecure
+        hostnames:
+        - "bazarr.media.fonzdm.xyz"
+        rules:
+        - matches:
+          - path:
+              type: PathPrefix
+              value: /
+          backendRefs:
+          - name: bazarr
+            port: 6767
