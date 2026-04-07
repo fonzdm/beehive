@@ -3,4 +3,4 @@ kind: Kustomization
 namespace: frigate 
 resources:
   - namespace.yaml
-  - app/ks.yaml
+  #- app/ks.yaml
