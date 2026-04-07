@@ -29,7 +29,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/bazarr # {"$imagepolicy": "flux-system:bazarr-imagepolicy:name"}
               tag: rolling # {"$imagepolicy": "flux-system:bazarr-imagepolicy:tag"}
-              digest: sha256:83607d2b741ec9469db09489e88c473ae6fdf7d85f3b55d4fa809b43e25a2a6c # {"$imagepolicy": "flux-system:bazarr-imagepolicy:digest"}
+              digest: sha256:79fc37491f55c7e24427bcd669bce3df2d7415ca432a47ce9d53cc5988af8411 # {"$imagepolicy": "flux-system:bazarr-imagepolicy:digest"}
             env:
               BAZARR__APP__INSTANCENAME: Sonarr
               BAZARR__AUTH__METHOD: External
