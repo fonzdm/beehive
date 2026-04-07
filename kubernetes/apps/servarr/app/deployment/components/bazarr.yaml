@@ -45,11 +45,8 @@ spec:
                   failureThreshold: 5
               readiness:
                 enabled: true
-                custom: true
+                custom: false
                 spec:
-                  httpGet:
-                    path: /ping
-                    port: 6767
                   periodSeconds: 10
                   timeoutSeconds: 5
                   failureThreshold: 5
