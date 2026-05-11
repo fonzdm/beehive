@@ -38,10 +38,10 @@ spec:
                 cpu: 300m
               limits:
                 memory: 2Gi
-            lifecycle:
-              postStart:
-                exec:
-                  command: ["bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
+#            lifecycle:
+#              postStart:
+#                exec:
+#                  command: ["bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
