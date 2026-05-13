@@ -34,13 +34,13 @@ spec:
               HASS_HTTP_TRUSTED_PROXY_2: 10.244.0.0/16
             resources:
               requests:
-                cpu: 300m
+                cpu: 300m.
               limits:
                 memory: 2Gi
-#            lifecycle:
-#              postStart:
-#                exec:
-#                  command: ["bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
+            lifecycle:
+              postStart:
+                exec:
+                  command: ["bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -51,7 +51,6 @@ spec:
       app:
         ports:
           http:
-            appProtocol: kubernetes.io/wss
             port: 8123
         primary: true
     persistence:
