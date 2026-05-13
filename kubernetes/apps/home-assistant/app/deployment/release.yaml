@@ -58,6 +58,13 @@ spec:
         existingClaim: "{{ .Release.Name }}"
         globalMounts:
         - path: /config
+      configuration:
+        type: configMap
+        name: home-assistant-configuration
+        globalMounts:
+        - path: /config/configuration.yaml
+          subPath: configuration.yaml
+          readOnly: true
       config-cache:
         existingClaim: "{{ .Release.Name }}-cache"
         globalMounts:

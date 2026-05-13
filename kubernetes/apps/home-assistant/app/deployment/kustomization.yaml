@@ -5,3 +5,9 @@ resources:
   - repository.yaml
   - pvc.yaml
   - release.yaml
+configMapGenerator:
+  - name: home-assistant-configuration
+    files:
+      - configuration.yaml
+generatorOptions:
+  disableNameSuffixHash: true
