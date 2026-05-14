@@ -1,0 +1,51 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: multus
+  namespace: multus
+spec:
+  interval: 1h0m0s
+  targetNamespace: kube-system
+  chart:
+    spec:
+      chart: rke2-multus
+      sourceRef:
+        kind: HelmRepository
+        name: rke2-charts
+        namespace: multus
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              group: apps
+              version: v1
+              kind: DaemonSet
+              name: kube-multus-ds
+            patch: |-
+              apiVersion: apps/v1
+              kind: DaemonSet
+              metadata:
+                name: kube-multus-ds
+              spec:
+                template:
+                  spec:
+                    initContainers:
+                      - name: install-multus-binary
+                        command:
+                          - /thin_entrypoint
+                          - --multus-conf-file=auto
+                          - --cni-version=0.3.1
+                          - --multus-autoconfig-dir=/host/etc/cni/net.d
+                          - --multus-bin-file=/usr/src/multus-cni/bin/multus-shim
+                    containers:
+                      - name: kube-multus
+                        resources:
+                          requests:
+                            cpu: 100m
+                            memory: 64Mi
+                          limits:
+                            memory: 256Mi
+                    volumes:
+                      - name: host-run-netns
+                        hostPath:
+                          path: /var/run/netns/
