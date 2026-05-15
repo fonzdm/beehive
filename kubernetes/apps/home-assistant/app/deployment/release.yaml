@@ -66,6 +66,7 @@ spec:
                 "type": "macvlan",
                 "master": "eth0.2",
                 "mode": "bridge",
+                "mac": "da:6f:47:25:4f:ba",
                 "ipam": {
                   "type": "static",
                   "addresses": [
