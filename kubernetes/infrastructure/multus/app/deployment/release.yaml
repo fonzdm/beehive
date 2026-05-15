@@ -5,7 +5,7 @@ metadata:
   namespace: multus
 spec:
   interval: 1h0m0s
-  targetNamespace: kube-system
+  targetNamespace: multus
   chart:
     spec:
       chart: rke2-multus
@@ -26,6 +26,7 @@ spec:
               kind: DaemonSet
               metadata:
                 name: kube-multus-ds
+                namespace: multus
               spec:
                 template:
                   spec:
