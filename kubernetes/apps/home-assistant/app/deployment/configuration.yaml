@@ -3,5 +3,5 @@ default_config:
 http:
   use_x_forwarded_for: true
   trusted_proxies:
-    - !env_var HASS_HTTP_TRUSTED_PROXY_1
-    - !env_var HASS_HTTP_TRUSTED_PROXY_2
+    - 10.244.0.0/16
+    - 10.0.1.0/24

@@ -64,7 +64,7 @@ spec:
                 "cniVersion": "0.3.1",
                 "name": "iot",
                 "type": "macvlan",
-                "master": "eth0.2",
+                "master": "eth1.2",
                 "mode": "bridge",
                 "mac": "da:6f:47:25:4f:ba",
                 "ipam": {
