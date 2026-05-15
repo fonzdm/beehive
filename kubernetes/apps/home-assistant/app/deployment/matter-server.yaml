@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/main/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: matter-server
+  namespace: home-assistant
+spec:
+  chart:
+    spec:
+      chart: app-template
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: home-assistant
+  interval: 30m
+  timeout: 15m
+  values:
+    controllers:
+      matter-server:
+        pod:
+          annotations:
+            k8s.v1.cni.cncf.io/networks: |
+              [{
+                "name": "matter-iot",
+                "interface": "iot"
+              }]
+        containers:
+          app:
+            image:
+              repository: ghcr.io/matter-js/python-matter-server
+              tag: stable
+            args:
+            - --storage-path
+            - /data
+            - --paa-root-cert-dir
+            - /data/credentials
+            - --primary-interface
+            - iot
+            resources:
+              requests:
+                cpu: 50m
+                memory: 128Mi
+              limits:
+                memory: 512Mi
+    rawResources:
+      matter-iot-network:
+        enabled: true
+        forceRename: matter-iot
+        manifest:
+          apiVersion: k8s.cni.cncf.io/v1
+          kind: NetworkAttachmentDefinition
+          spec:
+            config: |
+              {
+                "cniVersion": "0.3.1",
+                "name": "matter-iot",
+                "type": "macvlan",
+                "master": "eth1.2",
+                "mode": "bridge",
+                "mac": "da:6f:47:25:4f:bc",
+                "ipam": {
+                  "type": "static",
+                  "addresses": [
+                    {
+                      "address": "10.0.1.12/24",
+                      "gateway": "10.0.1.1"
+                    }
+                  ]
+                }
+              }
+    service:
+      app:
+        ports:
+          http:
+            port: 5580
+    persistence:
+      data:
+        existingClaim: matter-server-data
+        globalMounts:
+        - path: /data

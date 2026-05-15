@@ -22,3 +22,15 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: localpv-raid
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: matter-server-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: localpv-raid

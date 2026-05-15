@@ -5,6 +5,7 @@ resources:
   - repository.yaml
   - pvc.yaml
   - release.yaml
+  - matter-server.yaml
 configMapGenerator:
   - name: home-assistant-configuration
     files:
