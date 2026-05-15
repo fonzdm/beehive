@@ -4,7 +4,7 @@ metadata:
   name: multus
   namespace: multus
 spec:
-  interval: 1h0m0s
+  interval: 0h30m0s
   targetNamespace: multus
   chart:
     spec:
