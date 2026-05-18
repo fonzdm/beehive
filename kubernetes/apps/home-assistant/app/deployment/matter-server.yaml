@@ -17,6 +17,21 @@ spec:
   values:
     controllers:
       matter-server:
+        initContainers:
+          fix-ipv6-ra: 
+            image:
+              repository: busybox
+              tag: latest
+            securityContext:
+              privileged: true
+            command:
+            - sh
+            - -c
+            - |
+              echo 2 > /proc/sys/net/ipv6/conf/iot/accept_ra
+              echo 1 > /proc/sys/net/ipv6/conf/iot/accept_ra_rtr_pref
+              echo 64 > /proc/sys/net/ipv6/conf/iot/accept_ra_rt_info_max_plen
+              echo 0 > /proc/sys/net/ipv6/conf/iot/forwarding
         pod:
           annotations:
             k8s.v1.cni.cncf.io/networks: |
