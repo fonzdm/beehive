@@ -53,9 +53,6 @@ spec:
               value: "64"
             - name: net.ipv6.conf.default.accept_ra_rt_info_max_plen
               value: "64"
-            capabilities:
-              add:
-              - NET_ADMIN
         containers:
           app:
             image:
@@ -74,6 +71,11 @@ spec:
                 memory: 128Mi
               limits:
                 memory: 512Mi
+            securityContext:
+              capabilities:
+                add:
+                - NET_ADMIN
+ 
     rawResources:
       matter-iot-network:
         enabled: true
