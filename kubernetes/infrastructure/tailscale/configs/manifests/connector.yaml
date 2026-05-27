@@ -1,4 +1,4 @@
-piVersion: tailscale.com/v1alpha1
+apiVersion: tailscale.com/v1alpha1
 kind: Connector
 metadata:
   name: home-subnet-router
