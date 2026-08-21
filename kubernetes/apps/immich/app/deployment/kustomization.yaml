@@ -7,5 +7,6 @@ resources:
   - icloud-volume.yaml
   - secret.yaml
   - db.yaml
-  - release.yaml
+  # Disabled Helm release; manifest is retained as release.yaml.
+  # - release.yaml
   - httproute.yaml

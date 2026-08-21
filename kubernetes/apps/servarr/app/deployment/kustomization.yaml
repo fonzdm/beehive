@@ -6,13 +6,14 @@ resources:
   - resources/repository.yaml
   - components/qbittorrent-operator.yaml
   - components/lidarr.yaml
-  - components/radarr.yaml
-  - components/sonarr.yaml
+  # Disabled Helm releases; manifests are retained in components/.
+  # - components/radarr.yaml
+  # - components/sonarr.yaml
   - components/slskd.yaml
   - components/jellyfin.yaml
   - components/audiobookshelf.yaml
   - components/prowlarr.yaml
-  #- components/sabnzbd.yaml
+  # - components/sabnzbd.yaml
   - components/flaresolverr.yaml
-  - components/seerr.yaml
-  - components/bazarr.yaml
+  # - components/seerr.yaml
+  # - components/bazarr.yaml
