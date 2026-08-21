@@ -60,16 +60,6 @@ spec:
               number: 8686
         path: /
         pathType: Prefix
-  - host: bazarr.media.fonzdm.xyz
-    http:
-      paths:
-      - backend:
-          service:
-            name: bazarr
-            port:
-              number: 6767
-        path: /
-        pathType: Prefix
   - host: jellyseerr.media.fonzdm.xyz
     http:
       paths:
@@ -113,9 +103,6 @@ spec:
   - hosts:
     - prowlarr.media.fonzdm.xyz
     secretName: prowlarr-ing-external-secret
-  - hosts:
-    - bazarr.media.fonzdm.xyz
-    secretName: bazarr-ing-external-secret
   - hosts:
     - sonarr.media.fonzdm.xyz
     secretName: sonarr-ing-external-secret
