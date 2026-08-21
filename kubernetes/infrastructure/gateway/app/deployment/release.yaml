@@ -15,9 +15,6 @@ spec:
         remediation:
             retries: 5
     values:
-        logs:
-            general:
-                level: DEBUG
         deployment:
             replicas: 2
         providers:
@@ -54,8 +51,8 @@ spec:
                 name: dashboard-auth-secret
               type: kubernetes.io/basic-auth
               stringData:
-                username: ENC[AES256_GCM,data:7U6G2qmZ,iv:6vGBj/hdBpjJLPkfbMJLFh9DOOt4yAoQlZAlkPO0/Sw=,tag:BoJm/jEY8IMiEDjfCdBadQ==,type:str]
-                password: ENC[AES256_GCM,data:/UBCp3oTsFFhC86zEDxQUKIivBI=,iv:r3J0mDH75XJsnkmzJK7iMB2JVM5rbmqkh7jZH2Mwytg=,tag:LtVNfCNu/pByi9p1cfJ8Zg==,type:str]
+                username: ENC[AES256_GCM,data:pLHiCNhc,iv:fOFfYRjOPVjlGy3aSDkdpP2ZX9JsYjLpjTzmKNguw5Q=,tag:W8i3QVRaM+YCCTcHQNvhcg==,type:str]
+                password: ENC[AES256_GCM,data:YDd7u9+f3O6bFHEbuqg6gWxwzpA=,iv:zYxj10zMAPoqymhslzUbDjo/LfYs9jqaM+aBVhZKAXY=,tag:D8F4y3Cux5oCZbLR6IkGeA==,type:str]
             - apiVersion: traefik.io/v1alpha1
               kind: Middleware
               metadata:
@@ -79,18 +76,20 @@ spec:
             requests:
                 cpu: 100m
                 memory: 256Mi
+        log:
+            level: DEBUG
 sops:
     age:
         - recipient: age1fcyhrk0yse8cx49cq398z2uaewp3vxzqek5uph0usgsthzvspppqjp7dru
           enc: |
             -----BEGIN AGE ENCRYPTED FILE-----
-            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA3ZGJmRHpsNEhTNlF0Zmdu
-            amd5VFNaNmttdC92cGxoSlNBV3dscmFIR0UwCkIzcmpybXI3bmJwdEo0ZlNhYmNY
-            WStubFhSUnJVT2FPUXFQeHE4RzBja1kKLS0tIEJhWjlQYXdJTTBya1Y0Zk43ZW0w
-            b05aTEZVRm5USy9qbVBuT3VBL1Zwc1EKIz16Zfn1shAPvxYj8okGNdmjP+OnjxNd
-            Svpzkc2OYNV8dW8D3ISHef+/el8/6osrpKxcYhDRQdUFo7BKCvs1Hg==
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA2bzJ5SHdNMmNtekl4MXN1
+            VWs0ZHo1VlFnM29BUm1maUlzTUtGK1ZWdkh3CklzaDdvY1lHakRIVXNlZUxMbHFi
+            SFhVM1FWcUUyemhMQ3pwS2JrZmNjeHcKLS0tIG1ERTdGcjNEeGo3bG5mSXNPdlB0
+            V0s3VWdJd3IrV1l2MGlVZ2w0TjBoOXcK9ruxV9Qnp+EAma/WwJThh+5QvIgkH1IO
+            1lSuqfEtgMrj1ct1tUpH68uvxSbNJK9iFNZBKCSAfRmpb0lFNE7NTA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2026-02-24T09:55:06Z"
-    mac: ENC[AES256_GCM,data:EoLuTj552ru2TGwIsMEjSWrDSkrT89ZL4X6Vfd0OU0utauGxUdo7OE+m0ow1pJ3SL3xebmIDP0wkUcoFZ3uiZDOslo2fSvp+w8617zhqYKzTJAKScRttFhpuwCcMtfINmj3CPvLX5xaPema1Jfqm+Xv1Jfc7Z1wbjtsDxo7nUro=,iv:HTQ3wvdEQJmfHnidtgC+IPgiNT4bjcr2tZ18qeRB6Ho=,tag:2rUCoN/Q7Yl7l6xG4rZcpQ==,type:str]
+    lastmodified: "2026-08-21T23:07:19Z"
+    mac: ENC[AES256_GCM,data:AaQyT70/dpzQ+aaZPXxo924yQFoeLpRwwcExmP2qIXer+R82Ugi67I79yKvH6NRRXXU/v66J+paUfCSDtxo2ECHfiIh1ZMYkrTQ5VgBufPLm2hPhBpuLtkLuqcCcwQYvbsC4QIJ2A0ByWRDVH9DqbUioZO1zUS0KBnCaMwtB6SY=,iv:/whDgOuuPLktvQmQ7k6W4x5lhkqv1oQdH8J4WLAykAw=,tag:D7vVoRORsby7ib7VK7UG+A==,type:str]
     encrypted_regex: ^(data|stringData)$
     version: 3.10.2
