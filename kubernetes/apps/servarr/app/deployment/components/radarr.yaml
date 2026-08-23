@@ -29,7 +29,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/radarr # {"$imagepolicy": "flux-system:radarr-imagepolicy:name"}
               tag: rolling # {"$imagepolicy": "flux-system:radarr-imagepolicy:tag"}
-              digest: sha256:260469d707617f4b5be1cd11a40be7e4889c63c5e7cdbc6a429626dc05863b6b # {"$imagepolicy": "flux-system:radarr-imagepolicy:digest"}
+              digest: sha256:01ab4edc881b117e30972482ae4362c13ca76ee73c891a7581cffe597d43ca31 # {"$imagepolicy": "flux-system:radarr-imagepolicy:digest"}
             env:
               RADARR__APP__INSTANCENAME: Radarr
               RADARR__AUTH__APIKEY: ENC[AES256_GCM,data:+k++oOUTw6b6KDGRmXdMZtM3V+3DNsEe/gQyH0T51wdd,iv:UCBU6OQJkvu0+sw1taISoVyAzqngQcxDe3w+QxyCWOY=,tag:3uwd4c1KnzyeWcPwNxowVw==,type:str]
