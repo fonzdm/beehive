@@ -1,23 +1,23 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
-  name: netbird-helmrepo 
+  name: netbird-operator
   namespace: netbird
 spec:
   interval: 1h0m0s
-  url: https://netbirdio.github.io/helms 
-  type: default
-
+  url: oci://ghcr.io/netbirdio/helm-charts/netbird-operator
+  ref:
+    tag: 0.8.0
 
 ---
 
+# Retained for the optional, currently disabled netbird-relay HelmRelease.
 apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
-  name: jaconi-helmrepo
+  name: netbird-helmrepo
   namespace: netbird
 spec:
   interval: 1h0m0s
-  url: https://charts.jaconi.io
-  type: default
+  url: https://netbirdio.github.io/helms
 

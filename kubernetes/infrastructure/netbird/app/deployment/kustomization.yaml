@@ -6,4 +6,5 @@ resources:
   - secret.yaml
   # - relay-secret.yaml
   - release-operator.yaml
+  - network-router.yaml
   # - netbird-relay.yaml

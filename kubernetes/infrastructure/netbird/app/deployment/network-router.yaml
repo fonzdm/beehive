@@ -1,0 +1,25 @@
+apiVersion: netbird.io/v1alpha1
+kind: NetworkRouter
+metadata:
+  name: fonzdm-talos
+  namespace: netbird
+spec:
+  dnsZoneRef:
+    name: fonzdm.xyz
+  workloadOverride:
+    replicas: 3
+    podTemplate:
+      spec:
+        containers:
+          - name: netbird
+            livenessProbe:
+              exec:
+                command:
+                  - netbird
+                  - status
+                  - --check
+                  - startup
+              initialDelaySeconds: 30
+              periodSeconds: 30
+              timeoutSeconds: 10
+              failureThreshold: 5
