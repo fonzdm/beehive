@@ -97,8 +97,10 @@ spec:
         - path: /config/configuration.yaml
           subPath: configuration.yaml
           readOnly: true
+      # Rebuild integration dependencies on each rollout so cached packages cannot
+      # override incompatible versions bundled with a new Home Assistant image.
       config-cache:
-        existingClaim: "{{ .Release.Name }}-cache"
+        type: emptyDir
         globalMounts:
         - path: /config/.venv
       tmp:
