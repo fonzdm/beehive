@@ -12,27 +12,35 @@ jobs:
   pull-request:
     runs-on: ubuntu-latest
     permissions:
+      contents: read
       pull-requests: write
     steps:
     - name: Checkout
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Create Pull Request
+    - name: Generate Pull Request Description
+      run: |
+        git fetch origin main
+        python .github/scripts/image-update-pr.py
+    - name: Create or Update Pull Request
       env:
         GH_TOKEN: ${{ secrets.PR_PAT }} # used implicitly by the gh CLI to authenticate with GitHub
         GITHUB_REPO: ${{ github.repository }}
       run: |
         existing_pr=$(gh pr list --repo="$GITHUB_REPO" \
           --head=flux-auto-images-updates --base=main --state=open \
-          --json number --jq 'length')
-        if [ "$existing_pr" -gt 0 ]; then
+          --json number --jq '.[0].number // empty')
+        title=$(cat "$RUNNER_TEMP/image-update-pr-title.txt")
+        if [ -n "$existing_pr" ]; then
+          gh pr edit "$existing_pr" --repo="$GITHUB_REPO" \
+            --title="$title" --body-file="$RUNNER_TEMP/image-update-pr-body.md"
           exit 0
         fi
         gh pr create \
           --repo="$GITHUB_REPO" \
           --head=flux-auto-images-updates \
           --base=main \
-          --title="chore(images): update container images" \
-          --body="Flux detected container image updates. Review and merge this PR to deploy them." \
+          --title="$title" \
+          --body-file="$RUNNER_TEMP/image-update-pr-body.md" \
           --reviewer=fonzdm
