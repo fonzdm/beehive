@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:name"}
-              tag: 2025.11.1 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
+              tag: rolling # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
             env:
               TZ: Europe/Rome
             resources:
