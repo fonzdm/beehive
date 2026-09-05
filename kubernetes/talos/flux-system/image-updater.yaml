@@ -17,7 +17,7 @@ spec:
         email: alfixdemasi@gmail.com
         name: fonzdm
       messageTemplate: |
-        Automated image update
+        chore(images): update container images
 
         Automation name: {{ .AutomationObject }}
 
@@ -175,8 +175,7 @@ spec:
   imageRepositoryRef:
     name: homeassistant-imagerepo
   filterTags:
-    pattern: '^rolling$'
+    pattern: '^[0-9]{4}\.[0-9]+\.[0-9]+$'
   policy:
-    alphabetical: {}
-  digestReflectionPolicy: Always
-  interval: 10m
+    semver:
+      range: '>=2025.11.1'

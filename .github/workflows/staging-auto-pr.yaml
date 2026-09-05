@@ -1,13 +1,16 @@
 name: Staging Auto-PR
 on:
-  create:
+  push:
+    branches:
+      - flux-auto-images-updates
+
+concurrency:
+  group: flux-image-update-pr
+  cancel-in-progress: false
 
 jobs:
   pull-request:
     runs-on: ubuntu-latest
-    if: |
-      github.event.ref_type == 'branch' &&
-      github.event.ref == 'flux-auto-images-updates'      
     permissions:
       pull-requests: write
     steps:
@@ -19,12 +22,17 @@ jobs:
       env:
         GH_TOKEN: ${{ secrets.PR_PAT }} # used implicitly by the gh CLI to authenticate with GitHub
         GITHUB_REPO: ${{ github.repository }}
-        GITHUB_REF: ${{ github.ref }}
       run: |
+        existing_pr=$(gh pr list --repo="$GITHUB_REPO" \
+          --head=flux-auto-images-updates --base=main --state=open \
+          --json number --jq 'length')
+        if [ "$existing_pr" -gt 0 ]; then
+          exit 0
+        fi
         gh pr create \
-          --repo=${GITHUB_REPO} \
+          --repo="$GITHUB_REPO" \
           --head=flux-auto-images-updates \
           --base=main \
-          --title="Pulling ${GITHUB_REF} into main" \
-          --body=":crown: *An automated PR*" \
+          --title="chore(images): update container images" \
+          --body="Flux detected container image updates. Review and merge this PR to deploy them." \
           --reviewer=fonzdm
