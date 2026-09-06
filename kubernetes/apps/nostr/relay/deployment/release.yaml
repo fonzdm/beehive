@@ -1,0 +1,142 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-5.1.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nostr-relay
+  namespace: nostr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: bjw-s
+        namespace: nostr
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      relay:
+        type: deployment
+        replicas: 1
+        strategy: Recreate
+        pod:
+          nodeSelector:
+            kubernetes.io/arch: amd64
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: rnostr/rnostr # {"$imagepolicy": "flux-system:nostr-relay-imagepolicy:name"}
+              tag: v0.4.9 # {"$imagepolicy": "flux-system:nostr-relay-imagepolicy:tag"}
+              digest: sha256:c022e4384f8fe1eb6023d497fe0c5cf9cd13d239f62160713546de4522f69214 # {"$imagepolicy": "flux-system:nostr-relay-imagepolicy:digest"}
+            args:
+              - relay
+              - -c
+              - /rnostr/config/rnostr.toml
+            resources:
+              requests:
+                cpu: 100m
+                memory: 128Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop:
+                  - ALL
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+              readiness:
+                enabled: true
+                type: TCP
+              startup:
+                enabled: true
+                type: TCP
+    configMaps:
+      config:
+        data:
+          rnostr.toml: |
+            [information]
+            name = "fonzdm private relay"
+            description = "Private Nostr relay. Owner authentication required to read and write."
+            pubkey = "56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"
+
+            [data]
+            path = "/rnostr/data"
+            db_query_timeout = "1s"
+
+            [network]
+            host = "0.0.0.0"
+            port = 8080
+            heartbeat_interval = "30s"
+            heartbeat_timeout = "2m"
+
+            [thread]
+            http = 2
+            reader = 2
+
+            [auth]
+            enabled = true
+
+            # Owner: npub126e0s98qpx0688yfy46qrg4c59zuyf6srjfxvr2mtt8vu8xmvsaqps4r8s
+            # Both permissions check the authenticated connection's public key.
+            [auth.req]
+            pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
+
+            [auth.event]
+            pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
+
+            [metrics]
+            enabled = false
+
+            [count]
+            enabled = false
+
+            [search]
+            enabled = false
+    service:
+      relay:
+        controller: relay
+        ports:
+          http:
+            port: 8080
+    persistence:
+      data:
+        existingClaim: nostr-relay-data
+        globalMounts:
+          - path: /rnostr/data
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /rnostr/config
+            readOnly: true
+    route:
+      relay:
+        kind: HTTPRoute
+        parentRefs:
+          - name: traefik-gateway
+            namespace: ingress
+            sectionName: websecure
+        hostnames:
+          - relay.nostr.fonzdm.xyz
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: relay
+                port: http

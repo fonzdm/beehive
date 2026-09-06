@@ -179,3 +179,30 @@ spec:
   policy:
     semver:
       range: '>=2025.11.1'
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: nostr-relay-imagerepo
+  namespace: flux-system
+spec:
+  image: rnostr/rnostr
+  interval: 30m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: nostr-relay-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: nostr-relay-imagerepo
+  filterTags:
+    pattern: '^v[0-9]+\.[0-9]+\.[0-9]+$'
+  policy:
+    semver:
+      range: '>=0.4.9 <0.5.0'
+  digestReflectionPolicy: Always
+  interval: 30m
