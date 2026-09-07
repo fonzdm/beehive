@@ -1,17 +1,31 @@
 # Nostr
 
-The private relay is configured at `wss://relay.nostr.fonzdm.xyz` in namespace
-`nostr`. Use a client that supports NIP-42 authentication and sign in with:
+The relay is configured at `wss://relay.nostr.fonzdm.xyz` in namespace
+`nostr`. Its owner is:
 
 ```text
 npub126e0s98qpx0688yfy46qrg4c59zuyf6srjfxvr2mtt8vu8xmvsaqps4r8s
 ```
 
-Both subscriptions and publishing require this authenticated identity. The owner
-can store events authored by other identities (for example, archived events).
-Anonymous clients and other authenticated identities cannot read or write events.
-The HTTP relay information document is public; metrics, COUNT and search are disabled.
-No private key is stored on the server or in this repository.
+**Temporary Amber test mode:** the owner-key restrictions on subscriptions and
+publishing are removed. Any client that can reach the relay can read stored events
+and publish valid events without authenticating. Access currently relies on the
+operator's LAN/VPN boundary, which is not enforced by these app manifests.
+NIP-42 remains available, but is optional. Metrics, COUNT and search remain disabled.
+No private key is stored on the server or in this repository. This temporary mode
+does not automatically expire; restore the restrictions below after testing.
+
+## Amber pairing test
+
+With both devices on the LAN/VPN, add `wss://relay.nostr.fonzdm.xyz` in Amber's
+Settings → Relays → Active relays. Amber's test uses a fresh transport key to
+publish and receive a kind-24133 event without owner authentication.
+
+Create a bunker connection in Amber using this relay, then use the generated
+`bunker://` link in a NIP-46-compatible client and approve pairing/signing in
+Amber. Keep the link's pairing secret private. Your nsec stays in Amber.
+For Amethyst on the same phone, login using Amber's Android signer integration
+(NIP-55); a remote-signing relay is not required for that local flow.
 
 ## Deployment
 
@@ -36,8 +50,8 @@ curl -H 'Accept: application/nostr+json' https://relay.nostr.fonzdm.xyz/
 ```
 
 Confirm that the HTTPRoute has `Accepted=True` and `ResolvedRefs=True`, then
-connect using your authenticated Nostr client. Merely establishing a WebSocket
-connection does not grant access to events.
+connect using your Nostr client. During the temporary Amber test, reading and
+publishing do not require NIP-42 authentication.
 
 ## Chart and updates
 
@@ -64,7 +78,18 @@ on the 10 GiB `localpv-raid` LMDB volume. The PVC is retained when Flux prunes t
 app. Back up the volume with the relay stopped before upgrading or restoring;
 the local volume and its retention annotation are not backups.
 
-To change access, edit **both** `auth.req.pubkey_whitelist` and
-`auth.event.pubkey_whitelist` in `relay/deployment/release.yaml`. They use
-64-character hexadecimal public keys. The chart's ConfigMap checksum rolls the
-pod when configuration changes, closing existing authenticated connections.
+To restore owner-only access, add both sections below to the `rnostr.toml`
+ConfigMap data in `relay/deployment/release.yaml`, leaving `auth.enabled = true`:
+
+```toml
+[auth.req]
+pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
+
+[auth.event]
+pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
+```
+
+Also restore the relay description to indicate owner authentication is required.
+The chart's ConfigMap checksum rolls the pod when configuration changes, closing
+existing connections. Restoring these restrictions also blocks Amber's anonymous
+transport test and unallowlisted remote-signing connection keys again.

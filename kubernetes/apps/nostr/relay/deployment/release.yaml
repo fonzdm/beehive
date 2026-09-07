@@ -70,7 +70,7 @@ spec:
           rnostr.toml: |
             [information]
             name = "fonzdm private relay"
-            description = "Private Nostr relay. Owner authentication required to read and write."
+            description = "Local/VPN Nostr relay. Temporarily unrestricted for Amber pairing tests."
             pubkey = "56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"
 
             [data]
@@ -88,15 +88,12 @@ spec:
             reader = 2
 
             [auth]
+            # Keep NIP-42 available, but do not require it for Amber's temporary
+            # transport keys. Access is temporarily controlled by the LAN/VPN.
             enabled = true
 
-            # Owner: npub126e0s98qpx0688yfy46qrg4c59zuyf6srjfxvr2mtt8vu8xmvsaqps4r8s
-            # Both permissions check the authenticated connection's public key.
-            [auth.req]
-            pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
-
-            [auth.event]
-            pubkey_whitelist = ["56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a"]
+            # TEMPORARY: restore both auth.req and auth.event pubkey_whitelist
+            # entries documented in kubernetes/apps/nostr/README.md after testing.
 
             [metrics]
             enabled = false
