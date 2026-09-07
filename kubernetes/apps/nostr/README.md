@@ -153,7 +153,7 @@ using this for irreplaceable files.
 Check `flux get helmreleases -n nostr`, the pod/PVC, and HTTPRoute conditions
 (`Accepted=True`, `ResolvedRefs=True`). A TLS request to the disabled root page
 should return HTTP 404, not a TLS or gateway error. Test an actual upload using
-your Blossom client and Amber.
+your Blossom client and Amber, if possible.
 
 Deployment validation used the pinned image with the pod's non-root/read-only
 security settings. Disposable identities exercised rejected anonymous/unlisted
