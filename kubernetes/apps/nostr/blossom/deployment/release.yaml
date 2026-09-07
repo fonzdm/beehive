@@ -17,11 +17,6 @@ spec:
   upgrade:
     remediation:
       retries: 3
-  valuesFrom:
-    - kind: ConfigMap
-      name: nostr-blossom-bootstrap
-      valuesKey: bootstrap.ts
-      targetPath: configMaps.bootstrap.data.bootstrap\.ts
   values:
     controllers:
       blossom:
@@ -65,8 +60,6 @@ spec:
                 enabled: true
                 type: TCP
     configMaps:
-      bootstrap:
-        data: {}
       config:
         data:
           config.yml: |
@@ -128,7 +121,7 @@ spec:
             readOnly: true
       bootstrap:
         type: configMap
-        identifier: bootstrap
+        name: nostr-blossom-bootstrap
         globalMounts:
           - path: /bootstrap
             readOnly: true
