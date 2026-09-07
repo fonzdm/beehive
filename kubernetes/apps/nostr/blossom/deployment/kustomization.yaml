@@ -1,0 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nostr
+resources:
+  - release.yaml
+  - repository.yaml
+  - pvc.yaml
+configMapGenerator:
+  - name: nostr-blossom-bootstrap
+    files:
+      - bootstrap.ts
+generatorOptions:
+  disableNameSuffixHash: true
+  labels:
+    reconcile.fluxcd.io/watch: Enabled

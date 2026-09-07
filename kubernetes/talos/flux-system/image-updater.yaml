@@ -206,3 +206,30 @@ spec:
       range: '>=0.4.9 <0.5.0'
   digestReflectionPolicy: Always
   interval: 30m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: nostr-blossom-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/hzrd149/blossom-server
+  interval: 30m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: nostr-blossom-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: nostr-blossom-imagerepo
+  filterTags:
+    pattern: '^[0-9]+\.[0-9]+\.[0-9]+$'
+  policy:
+    semver:
+      range: '>=6.2.0 <6.3.0'
+  digestReflectionPolicy: Always
+  interval: 30m

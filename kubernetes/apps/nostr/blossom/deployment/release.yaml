@@ -1,0 +1,155 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-5.1.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nostr-blossom
+  namespace: nostr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: blossom-bjw-s
+        namespace: nostr
+  upgrade:
+    remediation:
+      retries: 3
+  valuesFrom:
+    - kind: ConfigMap
+      name: nostr-blossom-bootstrap
+      valuesKey: bootstrap.ts
+      targetPath: configMaps.bootstrap.data.bootstrap\.ts
+  values:
+    controllers:
+      blossom:
+        type: deployment
+        replicas: 1
+        strategy: Recreate
+        pod:
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: ghcr.io/hzrd149/blossom-server # {"$imagepolicy": "flux-system:nostr-blossom-imagepolicy:name"}
+              tag: 6.2.0 # {"$imagepolicy": "flux-system:nostr-blossom-imagepolicy:tag"}
+              digest: sha256:fde4e01e96a0e02b23fa8f711e689aae10e4604569543280ca73aecd676a6e3f # {"$imagepolicy": "flux-system:nostr-blossom-imagepolicy:digest"}
+            command: [deno]
+            args: [run, --allow-all, --config=/app/deno.json, /bootstrap/bootstrap.ts]
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 1Gi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: [ALL]
+            probes:
+              liveness:
+                enabled: true
+                type: TCP
+              readiness:
+                enabled: true
+                type: TCP
+              startup:
+                enabled: true
+                type: TCP
+    configMaps:
+      bootstrap:
+        data: {}
+      config:
+        data:
+          config.yml: |
+            host: 0.0.0.0
+            port: 3000
+            publicDomain: blossom.nostr.fonzdm.xyz
+            database:
+              path: /app/data/sqlite.db
+            storage:
+              backend: local
+              local:
+                dir: /app/data/blobs
+              removeWhenNoOwners: false
+              rules:
+                - type: "*"
+                  # Required by upstream schema; unused: bootstrap never starts pruning.
+                  expiration: 100 years
+                  pubkeys:
+                    - 56b2f814e0099fa39c89257401a2b8a145c227501c92660d5b5acece1cdb643a
+            upload:
+              enabled: true
+              requireAuth: true
+              requirePubkeyInRule: true
+              maxSize: 104857600
+              workers: 1
+              maxJobsPerWorker: 2
+            delete:
+              requireAuth: true
+            list:
+              enabled: false
+              requireAuth: true
+              allowListOthers: false
+            mirror:
+              enabled: false
+            media:
+              enabled: false
+            report:
+              enabled: false
+            landing:
+              enabled: false
+            dashboard:
+              enabled: false
+    service:
+      blossom:
+        controller: blossom
+        ports:
+          http:
+            port: 3000
+    persistence:
+      data:
+        existingClaim: nostr-blossom-data
+        globalMounts:
+          - path: /app/data
+      config:
+        type: configMap
+        identifier: config
+        globalMounts:
+          - path: /config
+            readOnly: true
+      bootstrap:
+        type: configMap
+        identifier: bootstrap
+        globalMounts:
+          - path: /bootstrap
+            readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    route:
+      blossom:
+        kind: HTTPRoute
+        parentRefs:
+          - name: traefik-gateway
+            namespace: ingress
+            sectionName: websecure
+        hostnames:
+          - blossom.nostr.fonzdm.xyz
+        rules:
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - identifier: blossom
+                port: http

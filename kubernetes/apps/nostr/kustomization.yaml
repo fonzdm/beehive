@@ -4,3 +4,4 @@ namespace: nostr
 resources:
   - namespace.yaml
   - relay/ks.yaml
+  - blossom/ks.yaml
