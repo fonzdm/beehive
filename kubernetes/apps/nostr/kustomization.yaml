@@ -5,3 +5,5 @@ resources:
   - namespace.yaml
   - relay/ks.yaml
   - blossom/ks.yaml
+  - opensearch/ks.yaml
+  - ditto/ks.yaml

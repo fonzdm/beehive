@@ -1,0 +1,83 @@
+name: Ditto image
+
+on:
+  push:
+    branches: [main]
+    paths: ['containers/ditto/**', 'scripts/smoke-ditto.py', '.github/workflows/ditto-image.yaml']
+  workflow_dispatch:
+  schedule:
+    - cron: '23 4 * * 1'
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ditto-image
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Fetch pinned upstream
+        run: |
+          revision=$(cat containers/ditto/upstream-revision)
+          [[ "$revision" =~ ^[0-9a-f]{40}$ ]]
+          git init /tmp/ditto-upstream
+          git -C /tmp/ditto-upstream remote add origin https://gitlab.com/soapbox-pub/ditto-relay.git
+          git -C /tmp/ditto-upstream fetch --depth=1 origin "$revision"
+          git -C /tmp/ditto-upstream checkout --detach FETCH_HEAD
+          test "$(git -C /tmp/ditto-upstream rev-parse HEAD)" = "$revision"
+      - name: Build and test
+        run: |
+          docker build --pull -t beehive/ditto-relay:upstream /tmp/ditto-upstream
+          docker build -t beehive/ditto-relay:release containers/ditto
+          docker run -d --name ditto-tests --entrypoint sleep beehive/ditto-relay:release infinity
+          docker cp /tmp/ditto-upstream/src/. ditto-tests:/app/src/
+          docker exec ditto-tests bun test
+      - name: Test startup and relay authentication
+        run: |
+          python -m venv /tmp/ditto-test-venv
+          /tmp/ditto-test-venv/bin/pip install coincurve==21.0.0 websockets==15.0.1
+          docker network create ditto-test
+          # Disposable CI database: no published ports and no production secrets.
+          docker run -d --name ditto-db --network ditto-test \
+            -e discovery.type=single-node -e DISABLE_INSTALL_DEMO_CONFIG=true \
+            -e DISABLE_SECURITY_PLUGIN=true -e OPENSEARCH_JAVA_OPTS='-Xms512m -Xmx512m' \
+            opensearchproject/opensearch:2.19.6@sha256:8690b204fe914c60ca76d451ac73bc0481e034d32d3779944c8caca56a2b003f
+          docker run -d --name ditto-runtime --network ditto-test --read-only \
+            --tmpfs /state:uid=1000,gid=1000 --tmpfs /tmp:uid=1000,gid=1000 \
+            -p 127.0.0.1:13131:13131 -e OPENSEARCH_NODE=http://ditto-db:9200 \
+            -e RELAY_URL=ws://localhost:13131/ -e PUBLIC_URL=http://localhost:13131 \
+            -e PORT=13131 -e PROTOCOL_WORKERS=1 -e STATS_ENABLED=false \
+            -e HISTORY_ENABLED=false -e TRENDS_INTERVAL_MS=0 \
+            -e AUTH_KINDS=4,78,1059,30078 -e AUTH_AUTHOR_EXEMPT_KINDS=1059 \
+            beehive/ditto-relay:release
+          for attempt in $(seq 1 120); do
+            if curl --fail --silent -H 'Accept: application/nostr+json' http://localhost:13131/ >/dev/null; then break; fi
+            sleep 2
+          done
+          /tmp/ditto-test-venv/bin/python scripts/smoke-ditto.py ws://localhost:13131/
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY_USER: ${{ github.actor }}
+        run: |
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+          revision=$(cat containers/ditto/upstream-revision)
+          image="ghcr.io/fonzdm/ditto-relay:build-$(date -u +%Y%m%d%H%M%S)-${revision:0:8}"
+          docker tag beehive/ditto-relay:release "$image"
+          docker push "$image"
+          printf 'Published `%s`\n' "$image" >> "$GITHUB_STEP_SUMMARY"
+      - name: Cleanup
+        if: always()
+        run: |
+          docker logs ditto-runtime || true
+          docker rm -f ditto-tests ditto-runtime ditto-db || true
+          docker network rm ditto-test || true
+          docker logout ghcr.io || true

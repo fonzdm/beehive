@@ -1,0 +1,55 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: nostr-selfsigned
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nostr-opensearch-ca
+spec:
+  isCA: true
+  commonName: nostr-opensearch-ca
+  secretName: nostr-opensearch-ca
+  duration: 87600h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS8
+  issuerRef:
+    name: nostr-selfsigned
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: nostr-opensearch-ca
+spec:
+  ca:
+    secretName: nostr-opensearch-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nostr-opensearch-tls
+spec:
+  commonName: nostr-opensearch
+  secretName: nostr-opensearch-tls
+  duration: 2160h
+  renewBefore: 360h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+    encoding: PKCS8
+    rotationPolicy: Always
+  usages: [server auth, client auth]
+  dnsNames:
+    - nostr-opensearch
+    - nostr-opensearch.nostr
+    - nostr-opensearch.nostr.svc
+    - nostr-opensearch.nostr.svc.cluster.local
+    - nostr-opensearch-headless
+    - '*.nostr-opensearch-headless.nostr.svc.cluster.local'
+  issuerRef:
+    name: nostr-opensearch-ca

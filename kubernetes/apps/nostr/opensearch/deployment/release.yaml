@@ -1,0 +1,89 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nostr-opensearch
+  namespace: nostr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: opensearch
+      version: 2.38.0
+      sourceRef:
+        kind: HelmRepository
+        name: opensearch
+        namespace: nostr
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    fullnameOverride: nostr-opensearch
+    clusterName: nostr-opensearch
+    masterService: nostr-opensearch
+    nodeGroup: master
+    singleNode: true
+    majorVersion: "2"
+    replicas: 1
+    image:
+      repository: opensearchproject/opensearch
+      tag: 2.19.6@sha256:8690b204fe914c60ca76d451ac73bc0481e034d32d3779944c8caca56a2b003f
+    opensearchJavaOpts: -Xms512m -Xmx512m
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+      limits:
+        memory: 1536Mi
+    persistence:
+      enabled: true
+      enableInitChown: false
+      storageClass: localpv-raid
+      size: 10Gi
+    sysctlInit:
+      enabled: false
+    podSecurityContext:
+      fsGroup: 1000
+      runAsUser: 1000
+      runAsGroup: 1000
+    securityContext:
+      runAsNonRoot: true
+      runAsUser: 1000
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ALL]
+    extraEnvs:
+      - name: DISABLE_INSTALL_DEMO_CONFIG
+        value: 'true'
+    secretMounts:
+      - name: tls
+        secretName: nostr-opensearch-tls
+        path: /usr/share/opensearch/config/tls
+    securityConfig:
+      enabled: true
+      internalUsersSecret: nostr-ditto-db-auth
+    config:
+      opensearch.yml: |
+        cluster.name: nostr-opensearch
+        network.host: 0.0.0.0
+        node.store.allow_mmap: false
+        plugins.security.ssl.transport.pemcert_filepath: tls/tls.crt
+        plugins.security.ssl.transport.pemkey_filepath: tls/tls.key
+        plugins.security.ssl.transport.pemtrustedcas_filepath: tls/ca.crt
+        plugins.security.ssl.transport.enforce_hostname_verification: false
+        plugins.security.ssl.http.enabled: true
+        plugins.security.ssl.http.pemcert_filepath: tls/tls.crt
+        plugins.security.ssl.http.pemkey_filepath: tls/tls.key
+        plugins.security.ssl.http.pemtrustedcas_filepath: tls/ca.crt
+        plugins.security.nodes_dn:
+          - CN=nostr-opensearch
+        plugins.security.allow_default_init_securityindex: true
+        plugins.security.allow_unsafe_democertificates: false
+        plugins.security.restapi.roles_enabled: [all_access]
+        plugins.security.ssl_cert_reload_enabled: true
+    service:
+      type: ClusterIP
+    ingress:
+      enabled: false

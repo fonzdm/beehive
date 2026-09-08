@@ -160,3 +160,73 @@ security settings. Disposable identities exercised rejected anonymous/unlisted
 uploads, an allowed upload, the size limit, disabled endpoints, byte retrieval,
 owner-only deletion, and retention without the pruning loop. Production owner
 signatures are deliberately left to the client; no private key was requested.
+
+## Ditto communications relay
+
+Use `wss://chat.nostr.fonzdm.xyz/` for Ditto-compatible DMs, Concord communities
+and Amber NIP-46 transport. Configure Armada to use this relay; community creation
+and Amber approval still happen in the client. This does not add NIP-29 support.
+Rnostr and Blossom remain separate and retain their current access settings.
+
+Ditto runs in its own Deployment and ClusterIP Service (`nostr-ditto`). Its
+OpenSearch database runs in a separate StatefulSet and ClusterIP Service
+(`nostr-opensearch`), using the official OpenSearch chart 2.38.0 and image 2.19.6.
+The database is not routed through Traefik. HTTPS with a cert-manager private CA
+and a generated password protects the connection; this cluster's Flannel CNI does
+not enforce NetworkPolicy. Ditto mounts only the CA certificate, not the database
+TLS private key. The dedicated database account has administrative permissions
+inside this dedicated OpenSearch instance so upstream can manage its indices.
+
+Ditto uses app-template 5.1.0 with a locally published image built from the exact
+upstream revision in `containers/ditto/upstream-revision`. The wrapper generates
+and persists a separate server signing identity, waits for database readiness,
+then starts upstream unchanged. It never uses the owner's nsec. The GitHub
+`Ditto image` workflow tests the pinned source and publishes timestamped GHCR
+images on changes, manual runs and weekly base-image rebuilds. Flux proposes
+image tag/digest updates through the existing image-update PR branch. Updating
+upstream itself requires changing the source revision and reviewing compatibility.
+The GHCR package must be public for Kubernetes and Flux to pull without registry
+credentials; repository visibility does not automatically make a new package public.
+
+NIP-42 protects kinds 4, 78, 1059 and 30078 using upstream's author/recipient
+rules. Kind 1059 has Ditto's author-filter exemption for encrypted Concord
+streams. Kind 24133 remains available without NIP-42 for Amber remote-signing
+transport keys. This endpoint is not an owner-only vault: reachable clients can
+publish events and query public kinds. Keep the LAN/VPN boundary during testing.
+Concord and modern DMs require client-side encryption; NIP-42 alone does not
+encrypt stored content. Statistics, trends and edit history are disabled, and
+only the relay's root endpoint is exposed through the gateway.
+
+### Bootstrap, capacity and recovery
+
+Before the first install into a fresh namespace, run from the repository root:
+
+```sh
+# Use a shell with Docker and kubectl configured for the cluster.
+bash scripts/bootstrap-ditto-secret.sh
+```
+
+The script creates `nostr/nostr-ditto-db-auth` without writing credentials to the
+repository or printing them. It leaves an existing Secret unchanged. The current
+cluster is already bootstrapped. Back up this Secret securely. OpenSearch loads
+its initial user configuration into its security index: replacing the Secret
+alone does not rotate an initialized database's password. Use OpenSearch's
+security API for rotation and update Ditto's Secret together.
+
+The new services request 350m CPU and 1.25 GiB memory combined, with memory limits
+of 768 MiB for Ditto and 1.5 GiB for OpenSearch. OpenSearch uses a 512 MiB JVM heap.
+These are starting values for a small community; monitor memory and event growth.
+The 1 GiB `nostr-ditto-data` PVC stores the relay identity; OpenSearch's separate
+10 GiB StatefulSet PVC stores events and its security index. Both use local
+storage. Preserve the identity, database, authentication Secret and CA when
+recovering; use consistent OpenSearch snapshots for database backups. No scheduled
+backup is configured. The existing Blossom server can be shared by clients, but
+its owner-only upload policy still applies to community members.
+
+Validation: all 936 upstream tests and 49 Flux/Helm checks passed. The published
+image was also tested with a read-only root filesystem against the separate TLS
+database: anonymous recipient reads were rejected, authenticated recipients and
+Concord author subscriptions received live events, Concord history was retrievable,
+and anonymous NIP-46 transport worked. Re-run `scripts/smoke-ditto.py` against the
+deployed endpoint after upgrades (requires Python, coincurve and websockets).
+Actual encrypted conversations and Armada/Amber pairing need a client-side test.

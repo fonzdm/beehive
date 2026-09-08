@@ -1,0 +1,134 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/bjw-s-labs/helm-charts/app-template-5.1.0/charts/other/app-template/schemas/helmrelease-helm-v2.schema.json
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nostr-ditto
+  namespace: nostr
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: app-template
+      version: 5.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: ditto-bjw-s
+        namespace: nostr
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    controllers:
+      relay:
+        replicas: 1
+        strategy: Recreate
+        pod:
+          nodeSelector:
+            kubernetes.io/arch: amd64
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+            fsGroup: 1000
+            fsGroupChangePolicy: OnRootMismatch
+        containers:
+          app:
+            image:
+              repository: ghcr.io/fonzdm/ditto-relay # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:name"}
+              tag: build-20260908144500-6b3aa833 # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:tag"}
+              digest: sha256:9c457c0587a2cd061f6d705423eb9c677efc28a2c477d97f9fa06636befbb57e # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:digest"}
+            env:
+              RELAY_URL: wss://chat.nostr.fonzdm.xyz/
+              PUBLIC_URL: https://chat.nostr.fonzdm.xyz
+              PORT: '13131'
+              OPENSEARCH_NODE: https://nostr-opensearch.nostr.svc:9200
+              OPENSEARCH_INDEX: nostr-events
+              OPENSEARCH_USERNAME: ditto
+              OPENSEARCH_PASSWORD:
+                valueFrom:
+                  secretKeyRef:
+                    name: nostr-ditto-db-auth
+                    key: password
+              NODE_EXTRA_CA_CERTS: /certs/ca.crt
+              PROTOCOL_WORKERS: '1'
+              STATS_ENABLED: 'false'
+              TRENDS_INTERVAL_MS: '0'
+              HISTORY_ENABLED: 'false'
+              AUTH_KINDS: '4,78,1059,30078'
+              AUTH_AUTHOR_EXEMPT_KINDS: '1059'
+              MASTER_PUBKEYS: ''
+              SPAM_THRESHOLD: '0'
+              RELAY_MAX_MESSAGE_LENGTH: '262144'
+              RELAY_MAX_FILTER_VALUES: '500'
+              RELAY_MAX_INFLIGHT_PER_CONN: '8'
+              RELAY_NEGENTROPY_MAX_RECORDS: '10000'
+              BULK_MAX_QUEUE: '1000'
+            resources:
+              requests:
+                cpu: 100m
+                memory: 256Mi
+              limits:
+                memory: 768Mi
+            securityContext:
+              allowPrivilegeEscalation: false
+              readOnlyRootFilesystem: true
+              capabilities:
+                drop: [ALL]
+            probes:
+              startup:
+                enabled: true
+                type: TCP
+                spec:
+                  failureThreshold: 60
+                  periodSeconds: 5
+              readiness:
+                enabled: true
+                type: TCP
+              liveness:
+                enabled: true
+                type: TCP
+    service:
+      relay:
+        controller: relay
+        ports:
+          http:
+            port: 13131
+    persistence:
+      state:
+        existingClaim: nostr-ditto-data
+        globalMounts:
+          - path: /state
+      ca:
+        type: secret
+        name: nostr-opensearch-tls
+        items:
+          - key: ca.crt
+            path: ca.crt
+        globalMounts:
+          - path: /certs
+            readOnly: true
+      tmp:
+        type: emptyDir
+        globalMounts:
+          - path: /tmp
+    route:
+      relay:
+        kind: HTTPRoute
+        parentRefs:
+          - name: traefik-gateway
+            namespace: ingress
+            sectionName: websecure
+        hostnames:
+          - chat.nostr.fonzdm.xyz
+        rules:
+          # WebSocket/NIP-11 and landing page only; do not route /metrics.
+          - matches:
+              - path:
+                  type: Exact
+                  value: /
+            backendRefs:
+              - identifier: relay
+                port: http

@@ -1,0 +1,8 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: HelmRepository
+metadata:
+  name: opensearch
+  namespace: nostr
+spec:
+  interval: 1h
+  url: https://opensearch-project.github.io/helm-charts/

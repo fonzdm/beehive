@@ -233,3 +233,31 @@ spec:
       range: '>=6.2.0 <6.3.0'
   digestReflectionPolicy: Always
   interval: 30m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImageRepository
+metadata:
+  name: nostr-ditto-imagerepo
+  namespace: flux-system
+spec:
+  image: ghcr.io/fonzdm/ditto-relay
+  interval: 30m
+
+---
+apiVersion: image.toolkit.fluxcd.io/v1
+kind: ImagePolicy
+metadata:
+  name: nostr-ditto-imagepolicy
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: nostr-ditto-imagerepo
+  filterTags:
+    pattern: '^build-(?P<timestamp>[0-9]{14})-[0-9a-f]{8}$'
+    extract: '$timestamp'
+  policy:
+    numerical:
+      order: asc
+  digestReflectionPolicy: Always
+  interval: 30m
