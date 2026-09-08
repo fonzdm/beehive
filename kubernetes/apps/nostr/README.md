@@ -187,6 +187,9 @@ image tag/digest updates through the existing image-update PR branch. Updating
 upstream itself requires changing the source revision and reviewing compatibility.
 The GHCR package must be public for Kubernetes and Flux to pull without registry
 credentials; repository visibility does not automatically make a new package public.
+In the package settings, also add `fonzdm/beehive` under **Manage Actions access**
+with the **Write** role (or enable inheritance from the linked repository).
+Linking an already-created package does not automatically grant workflow access.
 
 NIP-42 protects kinds 4, 78, 1059 and 30078 using upstream's author/recipient
 rules. Kind 1059 has Ditto's author-filter exemption for encrypted Concord
