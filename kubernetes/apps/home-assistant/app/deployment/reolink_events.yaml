@@ -3,16 +3,6 @@ shell_command:
     find /config/media/reolink-events -type f -name '*.mp4'
     -mmin +{{ retention_minutes | int(43200) }} -delete
 
-input_number:
-  reolink_event_retention_days:
-    name: Reolink event retention
-    icon: mdi:calendar-clock
-    min: 1
-    max: 365
-    step: 1
-    mode: box
-    unit_of_measurement: days
-
 command_line:
   - sensor:
       name: Reolink event clip count
