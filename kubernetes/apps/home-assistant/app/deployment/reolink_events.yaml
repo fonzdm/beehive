@@ -1,3 +1,7 @@
+shell_command:
+  cleanup_reolink_event_clips: >-
+    find /config/media/reolink-events -type f -name '*.mp4' -mmin +43200 -delete
+
 automation:
   - id: reolink_ai_event_notification
     alias: Reolink - AI event notification with clip
@@ -38,7 +42,9 @@ automation:
       camera_entity: "{{ cameras[trigger.entity_id] }}"
       camera_name: "{{ state_attr(camera_entity, 'friendly_name') | replace(' Scorrevole', '') }}"
       event_name: "{{ 'Persona' if trigger.entity_id.endswith('_persona') else 'Animale' }}"
-      clip_name: "{{ trigger.entity_id | replace('binary_sensor.', '') }}.mp4"
+      clip_name: >-
+        {{ now().strftime('%Y-%m-%d_%H-%M-%S') }}_{{
+          trigger.entity_id | replace('binary_sensor.', '') }}.mp4
       notification_tag: "reolink-{{ trigger.entity_id | replace('binary_sensor.', '') }}"
     actions:
       - action: notify.mobile_app_fonzdm_s25u
@@ -49,6 +55,7 @@ automation:
             image: "/api/camera_proxy/{{ camera_entity }}"
             tag: "{{ notification_tag }}"
             group: reolink-events
+      - action: shell_command.cleanup_reolink_event_clips
       - action: camera.record
         target:
           entity_id: "{{ camera_entity }}"
