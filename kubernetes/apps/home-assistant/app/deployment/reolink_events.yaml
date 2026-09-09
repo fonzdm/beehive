@@ -1,9 +1,3 @@
-input_boolean:
-  reolink_event_notifications:
-    name: Reolink event notifications
-    icon: mdi:cctv
-    initial: true
-
 automation:
   - id: reolink_ai_event_notification
     alias: Reolink - AI event notification with clip
@@ -27,7 +21,7 @@ automation:
         to: "on"
     conditions:
       - condition: state
-        entity_id: input_boolean.reolink_event_notifications
+        entity_id: input_boolean.reolink_alarms
         state: "on"
     variables:
       cameras:
