@@ -3,3 +3,4 @@
 #meaningless test commit
 kubernetes/infrastructure/kube-prometheus-stack/.influx
 kubernetes/talos/talosconfig/*
+kubernetes/apps/home-assistant/.env

@@ -1,0 +1,72 @@
+input_boolean:
+  reolink_event_notifications:
+    name: Reolink event notifications
+    icon: mdi:cctv
+    initial: true
+
+automation:
+  - id: reolink_ai_event_notification
+    alias: Reolink - AI event notification with clip
+    description: Notify the primary phone and attach a short clip for Reolink AI events.
+    mode: parallel
+    max: 10
+    triggers:
+      - trigger: state
+        entity_id:
+          - binary_sensor.balcone_cucina_animale
+          - binary_sensor.balcone_cucina_persona
+          - binary_sensor.balcone_vialetto_animale
+          - binary_sensor.balcone_vialetto_persona
+          - binary_sensor.garage_esterno_animale
+          - binary_sensor.garage_esterno_persona
+          - binary_sensor.giardino_posteriore_animale
+          - binary_sensor.giardino_posteriore_persona
+          - binary_sensor.panoramica_giardino_animale
+          - binary_sensor.panoramica_giardino_persona
+        from: "off"
+        to: "on"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.reolink_event_notifications
+        state: "on"
+    variables:
+      cameras:
+        binary_sensor.balcone_cucina_animale: camera.balcone_cucina_scorrevole
+        binary_sensor.balcone_cucina_persona: camera.balcone_cucina_scorrevole
+        binary_sensor.balcone_vialetto_animale: camera.balcone_vialetto_scorrevole
+        binary_sensor.balcone_vialetto_persona: camera.balcone_vialetto_scorrevole
+        binary_sensor.garage_esterno_animale: camera.garage_esterno_scorrevole
+        binary_sensor.garage_esterno_persona: camera.garage_esterno_scorrevole
+        binary_sensor.giardino_posteriore_animale: camera.giardino_posteriore_scorrevole
+        binary_sensor.giardino_posteriore_persona: camera.giardino_posteriore_scorrevole
+        binary_sensor.panoramica_giardino_animale: camera.panoramica_giardino_scorrevole
+        binary_sensor.panoramica_giardino_persona: camera.panoramica_giardino_scorrevole
+      camera_entity: "{{ cameras[trigger.entity_id] }}"
+      camera_name: "{{ state_attr(camera_entity, 'friendly_name') | replace(' Scorrevole', '') }}"
+      event_name: "{{ 'Persona' if trigger.entity_id.endswith('_persona') else 'Animale' }}"
+      clip_name: "{{ trigger.entity_id | replace('binary_sensor.', '') }}.mp4"
+      notification_tag: "reolink-{{ trigger.entity_id | replace('binary_sensor.', '') }}"
+    actions:
+      - action: notify.mobile_app_fonzdm_s25u
+        data:
+          title: "{{ event_name }} rilevata"
+          message: "{{ camera_name }}"
+          data:
+            image: "/api/camera_proxy/{{ camera_entity }}"
+            tag: "{{ notification_tag }}"
+            group: reolink-events
+      - action: camera.record
+        target:
+          entity_id: "{{ camera_entity }}"
+        data:
+          filename: "/config/media/reolink-events/{{ clip_name }}"
+          duration: 15
+          lookback: 5
+      - action: notify.mobile_app_fonzdm_s25u
+        data:
+          title: "{{ event_name }} rilevata"
+          message: "{{ camera_name }} - clip disponibile"
+          data:
+            video: "/media/camera_events/reolink-events/{{ clip_name }}"
+            tag: "{{ notification_tag }}"
+            group: reolink-events

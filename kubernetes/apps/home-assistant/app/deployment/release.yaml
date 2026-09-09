@@ -46,7 +46,7 @@ spec:
             lifecycle:
               postStart:
                 exec:
-                  command: ["bash", "-c", "sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
+                  command: ["bash", "-c", "mkdir -p /config/media/reolink-events && sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
@@ -96,6 +96,9 @@ spec:
         globalMounts:
         - path: /config/configuration.yaml
           subPath: configuration.yaml
+          readOnly: true
+        - path: /config/packages/reolink_events.yaml
+          subPath: reolink_events.yaml
           readOnly: true
       # Rebuild integration dependencies on each rollout so cached packages cannot
       # override incompatible versions bundled with a new Home Assistant image.
