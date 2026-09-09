@@ -23,10 +23,6 @@ automation:
           - binary_sensor.panoramica_giardino_persona
         from: "off"
         to: "on"
-    conditions:
-      - condition: state
-        entity_id: input_boolean.reolink_alarms
-        state: "on"
     variables:
       cameras:
         binary_sensor.balcone_cucina_animale: camera.balcone_cucina_scorrevole
@@ -55,12 +51,17 @@ automation:
           filename: "/config/media/reolink-events/{{ clip_name }}"
           duration: 15
           lookback: 5
-      - action: notify.mobile_app_fonzdm_s25u
-        data:
-          title: "{{ event_name }} rilevata"
-          message: "{{ camera_name }} - clip disponibile"
-          data:
-            video: "/media/camera_events/reolink-events/{{ clip_name }}"
-            tag: "{{ notification_tag }}"
-            group: reolink-events
-            alert_once: true
+      - if:
+          - condition: state
+            entity_id: input_boolean.reolink_alarms
+            state: "on"
+        then:
+          - action: notify.mobile_app_fonzdm_s25u
+            data:
+              title: "{{ event_name }} rilevata"
+              message: "{{ camera_name }} - clip disponibile"
+              data:
+                video: "/media/camera_events/reolink-events/{{ clip_name }}"
+                tag: "{{ notification_tag }}"
+                group: reolink-events
+                alert_once: true
