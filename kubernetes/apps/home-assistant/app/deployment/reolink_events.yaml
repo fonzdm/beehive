@@ -45,16 +45,8 @@ automation:
       clip_name: >-
         {{ now().strftime('%Y-%m-%d_%H-%M-%S') }}_{{
           trigger.entity_id | replace('binary_sensor.', '') }}.mp4
-      notification_tag: "reolink-{{ trigger.entity_id | replace('binary_sensor.', '') }}"
+      notification_tag: "reolink-{{ camera_entity | replace('camera.', '') }}"
     actions:
-      - action: notify.mobile_app_fonzdm_s25u
-        data:
-          title: "{{ event_name }} rilevata"
-          message: "{{ camera_name }}"
-          data:
-            image: "/api/camera_proxy/{{ camera_entity }}"
-            tag: "{{ notification_tag }}"
-            group: reolink-events
       - action: shell_command.cleanup_reolink_event_clips
       - action: camera.record
         target:
@@ -71,3 +63,4 @@ automation:
             video: "/media/camera_events/reolink-events/{{ clip_name }}"
             tag: "{{ notification_tag }}"
             group: reolink-events
+            alert_once: true
