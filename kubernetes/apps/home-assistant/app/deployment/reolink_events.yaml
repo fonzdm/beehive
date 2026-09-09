@@ -22,9 +22,9 @@ command_line:
   - sensor:
       name: Home Assistant storage free
       unique_id: home_assistant_storage_free
-      command: "df -Pm /config/media | awk 'NR == 2 { print $4 }'"
+      command: "df -Pk /config/media | awk 'NR == 2 { printf \"%.2f\", $4 / 1024 / 1024 / 1024 }'"
       scan_interval: 300
-      unit_of_measurement: MB
+      unit_of_measurement: TB
       device_class: data_size
       state_class: measurement
       icon: mdi:database-arrow-down
