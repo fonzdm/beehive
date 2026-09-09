@@ -1,6 +1,43 @@
 shell_command:
   cleanup_reolink_event_clips: >-
-    find /config/media/reolink-events -type f -name '*.mp4' -mmin +43200 -delete
+    find /config/media/reolink-events -type f -name '*.mp4'
+    -mmin +{{ retention_minutes | int(43200) }} -delete
+
+input_number:
+  reolink_event_retention_days:
+    name: Reolink event retention
+    icon: mdi:calendar-clock
+    min: 1
+    max: 365
+    step: 1
+    mode: box
+    unit_of_measurement: days
+
+command_line:
+  - sensor:
+      name: Reolink event clip count
+      unique_id: reolink_event_clip_count
+      command: "find /config/media/reolink-events -type f -name '*.mp4' | wc -l"
+      scan_interval: 300
+      icon: mdi:video-box
+  - sensor:
+      name: Reolink event clip storage
+      unique_id: reolink_event_clip_storage
+      command: "du -sm /config/media/reolink-events | cut -f1"
+      scan_interval: 300
+      unit_of_measurement: MB
+      device_class: data_size
+      state_class: measurement
+      icon: mdi:harddisk
+  - sensor:
+      name: Home Assistant storage free
+      unique_id: home_assistant_storage_free
+      command: "df -Pm /config/media | awk 'NR == 2 { print $4 }'"
+      scan_interval: 300
+      unit_of_measurement: MB
+      device_class: data_size
+      state_class: measurement
+      icon: mdi:database-arrow-down
 
 automation:
   - id: reolink_ai_event_notification
@@ -44,6 +81,10 @@ automation:
       notification_tag: "reolink-{{ camera_entity | replace('camera.', '') }}"
     actions:
       - action: shell_command.cleanup_reolink_event_clips
+        data:
+          retention_minutes: >-
+            {{ (states('input_number.reolink_event_retention_days') |
+              int(30)) * 1440 }}
       - action: camera.record
         target:
           entity_id: "{{ camera_entity }}"
