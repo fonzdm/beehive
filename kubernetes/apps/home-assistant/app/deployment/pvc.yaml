@@ -8,6 +8,19 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
+      # Retained as a rollback copy after migrating to home-assistant-data.
+      storage: 5Gi
+  storageClassName: localpv-raid
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: home-assistant-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
       storage: 100Gi
   storageClassName: localpv-raid
 ---

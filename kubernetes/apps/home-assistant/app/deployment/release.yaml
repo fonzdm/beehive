@@ -87,7 +87,7 @@ spec:
         primary: true
     persistence:
       config:
-        existingClaim: "{{ .Release.Name }}"
+        existingClaim: home-assistant-data
         globalMounts:
         - path: /config
       configuration:
