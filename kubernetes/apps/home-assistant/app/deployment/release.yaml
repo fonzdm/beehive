@@ -46,7 +46,16 @@ spec:
             lifecycle:
               postStart:
                 exec:
-                  command: ["bash", "-c", "mkdir -p /config/media/reolink-events && sleep 30 ; cd /config && wget -O - https://get.hacs.xyz | bash -"]
+                  command:
+                    - bash
+                    - -c
+                    - >-
+                      mkdir -p /config/media/reolink-events && sleep 30;
+                      cd /config && wget -O - https://get.hacs.xyz | bash -;
+                      gallery_card=/config/www/community/camera-gallery-card/camera-gallery-card.js;
+                      if [ -f "$gallery_card" ]; then
+                        sed -i 's/Y=p&&navigator.maxTouchPoints>0/Y=!0/' "$gallery_card";
+                      fi
             securityContext:
               allowPrivilegeEscalation: false
               readOnlyRootFilesystem: true
