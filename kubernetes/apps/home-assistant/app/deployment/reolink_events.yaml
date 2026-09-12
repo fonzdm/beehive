@@ -50,6 +50,10 @@ automation:
           - binary_sensor.panoramica_giardino_persona
         from: "off"
         to: "on"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.reolink_clip_recording
+        state: "on"
     variables:
       cameras:
         binary_sensor.balcone_cucina_animale: camera.balcone_cucina_scorrevole
@@ -96,3 +100,23 @@ automation:
                 tag: "{{ notification_tag }}"
                 group: reolink-events
                 alert_once: true
+
+  - id: reolink_disable_notifications_without_recording
+    alias: Reolink - Disable notifications when recording is off
+    description: Prevent notifications from being enabled when clips are not recorded.
+    mode: restart
+    triggers:
+      - trigger: state
+        entity_id: input_boolean.reolink_clip_recording
+        to: "off"
+      - trigger: state
+        entity_id: input_boolean.reolink_alarms
+        to: "on"
+    conditions:
+      - condition: state
+        entity_id: input_boolean.reolink_clip_recording
+        state: "off"
+    actions:
+      - action: input_boolean.turn_off
+        target:
+          entity_id: input_boolean.reolink_alarms
