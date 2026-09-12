@@ -4,3 +4,4 @@
 kubernetes/infrastructure/kube-prometheus-stack/.influx
 kubernetes/talos/talosconfig/*
 kubernetes/apps/home-assistant/.env
+docs/home-assistant-cloudflare-access.md
