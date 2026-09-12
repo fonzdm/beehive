@@ -11,6 +11,18 @@ spec:
     labels:
       app.kubernetes.io/name: *app
   healthChecks:
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: home-assistant-device-root-ca
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: home-assistant-device-fonzdm
+      namespace: *namespace
+    - apiVersion: cert-manager.io/v1
+      kind: Certificate
+      name: home-assistant-device-fraciervo
+      namespace: *namespace
     - apiVersion: helm.toolkit.fluxcd.io/v2
       kind: HelmRelease
       name: *app

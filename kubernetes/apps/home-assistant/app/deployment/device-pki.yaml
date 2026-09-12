@@ -1,0 +1,118 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: home-assistant-device-root-selfsigned
+  namespace: home-assistant
+spec:
+  selfSigned: {}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: home-assistant-device-root-ca
+  namespace: home-assistant
+spec:
+  secretName: home-assistant-device-root-ca
+  commonName: Beehive Home Assistant Device Root CA
+  subject:
+    organizations:
+      - Beehive
+    organizationalUnits:
+      - Home Assistant Device Identity
+  isCA: true
+  duration: 87600h # 10 years
+  renewBefore: 720h # 30 days
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 4096
+    rotationPolicy: Always
+  usages:
+    - cert sign
+    - crl sign
+    - digital signature
+  issuerRef:
+    name: home-assistant-device-root-selfsigned
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: home-assistant-device-ca
+  namespace: home-assistant
+spec:
+  ca:
+    secretName: home-assistant-device-root-ca
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: home-assistant-device-fonzdm
+  namespace: home-assistant
+spec:
+  secretName: home-assistant-device-fonzdm
+  commonName: fonzdm
+  subject:
+    organizations:
+      - Beehive
+    organizationalUnits:
+      - Home Assistant Device Identity
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 2048
+    rotationPolicy: Always
+  usages:
+    - client auth
+    - digital signature
+    - key encipherment
+  keystores:
+    pkcs12:
+      create: true
+      profile: Modern2023
+      passwordSecretRef:
+        name: home-assistant-device-keystore-passwords
+        key: fonzdm
+  issuerRef:
+    name: home-assistant-device-ca
+    kind: Issuer
+    group: cert-manager.io
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: home-assistant-device-fraciervo
+  namespace: home-assistant
+spec:
+  secretName: home-assistant-device-fraciervo
+  commonName: fraciervo
+  subject:
+    organizations:
+      - Beehive
+    organizationalUnits:
+      - Home Assistant Device Identity
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS8
+    size: 2048
+    rotationPolicy: Always
+  usages:
+    - client auth
+    - digital signature
+    - key encipherment
+  keystores:
+    pkcs12:
+      create: true
+      profile: Modern2023
+      passwordSecretRef:
+        name: home-assistant-device-keystore-passwords
+        key: fraciervo
+  issuerRef:
+    name: home-assistant-device-ca
+    kind: Issuer
+    group: cert-manager.io

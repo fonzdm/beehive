@@ -3,6 +3,8 @@ kind: Kustomization
 namespace: home-assistant
 resources:
   - cloudflared.yaml
+  - device-keystore-passwords.yaml
+  - device-pki.yaml
   - secret.yaml
   - repository.yaml
   - pvc.yaml
