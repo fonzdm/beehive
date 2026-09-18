@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:name"}
-              tag: 2026.9.1 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
+              tag: 2026.9.2 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
             env:
               TZ: Europe/Rome
             resources:
@@ -50,10 +50,8 @@ spec:
                     - bash
                     - -c
                     - >-
-                      mkdir -p /config/media/reolink-events && sleep 30;
-                      cd /config && wget -O - https://get.hacs.xyz | bash -;
-                      gallery_card=/config/www/community/camera-gallery-card/camera-gallery-card.js;
-                      if [ -f "$gallery_card" ]; then
+                      mkdir -p /config/media/reolink-events && sleep 30; cd /config && wget -O - https://get.hacs.xyz | bash -; gallery_card=/config/www/community/camera-gallery-card/camera-gallery-card.js; if [ -f "$gallery_card" ]; then
+
                         sed -i 's/Y=p&&navigator.maxTouchPoints>0/Y=!0/' "$gallery_card";
                         gzip -kf "$gallery_card";
                       fi
@@ -62,7 +60,7 @@ spec:
               readOnlyRootFilesystem: true
               capabilities:
                 drop:
-                - ALL
+                  - ALL
     rawResources:
       iot-network:
         enabled: true
@@ -99,23 +97,23 @@ spec:
       config:
         existingClaim: home-assistant-data
         globalMounts:
-        - path: /config
+          - path: /config
       configuration:
         type: configMap
         name: home-assistant-configuration
         globalMounts:
-        - path: /config/configuration.yaml
-          subPath: configuration.yaml
-          readOnly: true
-        - path: /config/packages/reolink_events.yaml
-          subPath: reolink_events.yaml
-          readOnly: true
+          - path: /config/configuration.yaml
+            subPath: configuration.yaml
+            readOnly: true
+          - path: /config/packages/reolink_events.yaml
+            subPath: reolink_events.yaml
+            readOnly: true
       # Rebuild integration dependencies on each rollout so cached packages cannot
       # override incompatible versions bundled with a new Home Assistant image.
       config-cache:
         type: emptyDir
         globalMounts:
-        - path: /config/.venv
+          - path: /config/.venv
       tmp:
         type: emptyDir
     ingress:
@@ -126,16 +124,16 @@ spec:
         enabled: true
         kind: HTTPRoute
         parentRefs:
-        - name: traefik-gateway
-          namespace: ingress
-          sectionName: websecure
+          - name: traefik-gateway
+            namespace: ingress
+            sectionName: websecure
         hostnames:
-        - "ha.cloud.fonzdm.xyz"
+          - "ha.cloud.fonzdm.xyz"
         rules:
-        - matches:
-          - path:
-              type: PathPrefix
-              value: /
-          backendRefs:
-          - name: home-assistant
-            port: 8123
+          - matches:
+              - path:
+                  type: PathPrefix
+                  value: /
+            backendRefs:
+              - name: home-assistant
+                port: 8123
