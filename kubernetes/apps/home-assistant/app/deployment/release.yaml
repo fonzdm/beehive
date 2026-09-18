@@ -35,7 +35,7 @@ spec:
           app:
             image:
               repository: ghcr.io/home-operations/home-assistant # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:name"}
-              tag: 2026.9.2 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
+              tag: 2026.9.3 # {"$imagepolicy": "flux-system:homeassistant-imagepolicy:tag"}
             env:
               TZ: Europe/Rome
             resources:
@@ -51,6 +51,7 @@ spec:
                     - -c
                     - >-
                       mkdir -p /config/media/reolink-events && sleep 30; cd /config && wget -O - https://get.hacs.xyz | bash -; gallery_card=/config/www/community/camera-gallery-card/camera-gallery-card.js; if [ -f "$gallery_card" ]; then
+
 
                         sed -i 's/Y=p&&navigator.maxTouchPoints>0/Y=!0/' "$gallery_card";
                         gzip -kf "$gallery_card";
