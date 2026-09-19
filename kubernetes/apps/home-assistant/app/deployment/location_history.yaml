@@ -1,0 +1,84 @@
+# Generic helpers used by the admin-only location-history dashboard.
+#
+# Deliberately excluded from Git:
+# - device trackers and sensor entity IDs
+# - device/person names
+# - the Lovelace dashboard, which contains those references
+#
+# Frontend dependencies installed through HACS:
+# - nathan-gs/ha-map-card (v1.16.0)
+# - KipK/a-better-history-card (0.3.1)
+# - diestrohs/datetime-spinner-card (v0.2.2)
+# - iantrich/config-template-card (1.3.6)
+
+input_datetime:
+  location_history_start:
+    name: Location history start
+    icon: mdi:clock-start
+    has_date: true
+    has_time: true
+  location_history_end:
+    name: Location history end
+    icon: mdi:clock-end
+    has_date: true
+    has_time: true
+
+input_select:
+  location_history_quick_range:
+    name: Location history quick range
+    icon: mdi:history
+    options:
+      - Choose range…
+      - Last 5 minutes
+      - Last 15 minutes
+      - Last 30 minutes
+      - Last 1 hour
+      - Last 6 hours
+      - Last 12 hours
+      - Last 24 hours
+    initial: Choose range…
+
+automation:
+  - id: location_history_apply_quick_range
+    alias: "Location history: apply quick range"
+    description: >-
+      Applies a selected location-history preset to both route and sensor-history
+      views, then resets the selector.
+    triggers:
+      - trigger: state
+        entity_id: input_select.location_history_quick_range
+    conditions:
+      - condition: template
+        value_template: >-
+          {{ trigger.to_state.state != 'Choose range…' }}
+    actions:
+      - variables:
+          range_minutes: >-
+            {{ {
+              'Last 5 minutes': 5,
+              'Last 15 minutes': 15,
+              'Last 30 minutes': 30,
+              'Last 1 hour': 60,
+              'Last 6 hours': 360,
+              'Last 12 hours': 720,
+              'Last 24 hours': 1440
+            }[trigger.to_state.state] }}
+      # Update the end first so reactive history cards never briefly receive an
+      # invalid interval while both helpers are changing.
+      - action: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.location_history_end
+        data:
+          datetime: "{{ now().strftime('%Y-%m-%d %H:%M:%S') }}"
+      - action: input_datetime.set_datetime
+        target:
+          entity_id: input_datetime.location_history_start
+        data:
+          datetime: >-
+            {{ (now() - timedelta(minutes=range_minutes | int)).strftime('%Y-%m-%d %H:%M:%S') }}
+      - action: input_select.select_option
+        target:
+          entity_id: input_select.location_history_quick_range
+        data:
+          option: Choose range…
+    mode: restart

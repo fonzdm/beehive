@@ -14,6 +14,7 @@ configMapGenerator:
   - name: home-assistant-configuration
     files:
       - configuration.yaml
+      - location_history.yaml
       - reolink_events.yaml
 generatorOptions:
   disableNameSuffixHash: true

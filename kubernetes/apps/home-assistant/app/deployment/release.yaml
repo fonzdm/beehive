@@ -108,6 +108,9 @@ spec:
           - path: /config/packages/reolink_events.yaml
             subPath: reolink_events.yaml
             readOnly: true
+          - path: /config/packages/location_history.yaml
+            subPath: location_history.yaml
+            readOnly: true
       # Rebuild integration dependencies on each rollout so cached packages cannot
       # override incompatible versions bundled with a new Home Assistant image.
       config-cache:
