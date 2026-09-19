@@ -67,8 +67,7 @@ for archive in "${archives[@]}"; do
             .type == "file"
             and .name.ok == true
             and .name.value == $name
-            and .activeRevision.ok == true
-            and .activeRevision.value.claimedSize == $size
+            and .activeRevision.claimedSize == $size
         )' \
         "$work_dir/remote-files-before.json" >/dev/null; then
         continue
@@ -114,8 +113,7 @@ for archive in "${archives[@]}"; do
             .type == "file"
             and .name.ok == true
             and .name.value == $name
-            and .activeRevision.ok == true
-            and .activeRevision.value.claimedSize == $size
+            and .activeRevision.claimedSize == $size
         )' \
         "$work_dir/remote-files.json" >/dev/null; then
         printf 'Remote verification failed for %s (%s bytes)\n' "$name" "$size" >&2

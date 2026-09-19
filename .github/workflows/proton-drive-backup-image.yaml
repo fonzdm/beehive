@@ -28,11 +28,11 @@ jobs:
       - name: Build and test
         run: |
           docker build -f containers/proton-drive-backup/Dockerfile \
-            -t beehive/proton-drive-backup:0.8.0-2 .
+            -t beehive/proton-drive-backup:0.8.0-3 .
           docker run --rm --entrypoint proton-drive \
-            beehive/proton-drive-backup:0.8.0-2 version
+            beehive/proton-drive-backup:0.8.0-3 version
           docker run --rm --entrypoint bash \
-            beehive/proton-drive-backup:0.8.0-2 \
+            beehive/proton-drive-backup:0.8.0-3 \
             -n /usr/local/bin/export-home-assistant-backups-proton
       - name: Publish
         env:
@@ -40,8 +40,8 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
         run: |
           printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
-          image=ghcr.io/fonzdm/proton-drive-backup:0.8.0-2
-          docker tag beehive/proton-drive-backup:0.8.0-2 "$image"
+          image=ghcr.io/fonzdm/proton-drive-backup:0.8.0-3
+          docker tag beehive/proton-drive-backup:0.8.0-3 "$image"
           docker push "$image"
           printf "Published \`%s\`\n" "$image" >> "$GITHUB_STEP_SUMMARY"
       - name: Cleanup
