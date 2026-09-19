@@ -75,3 +75,30 @@ The intended export flow is:
 Do not use the CLI's `unsafe_file` credential store and do not commit an authenticated
 CLI cache or session. Until the Proton account is authenticated and an exporter is
 enabled, the backups remain local-only.
+
+The repository includes
+[`export-home-assistant-backups-proton.sh`](../../../scripts/export-home-assistant-backups-proton.sh)
+for the scheduled export step. It refuses to upload archives newer than five
+minutes, skips names already present in Proton Drive, and verifies every local
+filename and original size against the remote directory after uploading.
+
+The runner needs the official `proton-drive` binary, `jq`, read-only access to the
+Home Assistant backup directory, and access to the same OS secret store used during
+interactive login. Configure it with:
+
+```bash
+export HOME_ASSISTANT_BACKUP_DIR=/config/backups
+export PROTON_DRIVE_DESTINATION='/my-files/Home Assistant Backups'
+export PROTON_DRIVE_CREDENTIALS_STORE=keychain
+scripts/export-home-assistant-backups-proton.sh
+```
+
+Create the remote folder once before scheduling the script:
+
+```bash
+proton-drive filesystem create-folder /my-files 'Home Assistant Backups'
+```
+
+The destination name above is only an example and is not coupled to the Home
+Assistant installation. A scheduler should run the exporter after the daily Home
+Assistant backup window and alert on any non-zero exit status.
