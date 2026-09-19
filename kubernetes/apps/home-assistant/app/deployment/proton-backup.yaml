@@ -33,7 +33,7 @@ spec:
     - name: proton-drive
       image: ghcr.io/fonzdm/proton-drive-backup:0.8.0-1@sha256:327054e03fd7b18377bf623b758412f47d01e1d029d8dfc49c59495d5cdc379a
       imagePullPolicy: IfNotPresent
-      command:
+      args:
         - tail
         - -f
         - /dev/null
