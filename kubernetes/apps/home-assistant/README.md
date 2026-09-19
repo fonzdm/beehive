@@ -111,18 +111,21 @@ the backup path and uses a separate persistent Proton CLI state directory. This
 keeps export failures visible to Kubernetes and allows exports to continue whenever
 Home Assistant's UI or automation engine is unhealthy.
 
-## Proton Drive activation
+## Proton Drive authentication and recovery
 
-The CronJob is committed suspended until the account completes browser
-authentication. Its session is encrypted with `pass`; the GPG private key is kept
-in a cluster-only Kubernetes Secret and is never committed to Git. The separate
-state PVC contains only the encrypted session and disposable CLI caches.
+The enabled CronJob runs at minute 17 every six hours in the `Europe/Rome` time
+zone. Its session is encrypted with `pass`; the GPG private key is kept in a
+cluster-only Kubernetes Secret and is never committed to Git. The separate state
+PVC contains only the encrypted session and disposable CLI caches.
 
-From a trusted workstation with the repository checked out, `gpg`, and `kubectl`
-configured for this cluster:
+Authentication is normally required only after first deployment or loss of the
+state PVC. From a trusted workstation with the repository checked out, `gpg`, and
+`kubectl` configured for this cluster, start the temporary bootstrap Pod between
+scheduled export times:
 
 ```bash
 scripts/bootstrap-proton-backup-secret.sh
+kubectl apply -f kubernetes/apps/home-assistant/proton-backup-bootstrap-pod.yaml
 kubectl -n home-assistant wait --for=condition=Ready \
   pod/proton-drive-bootstrap --timeout=5m
 kubectl -n home-assistant exec -it proton-drive-bootstrap -- \
@@ -141,6 +144,8 @@ kubectl -n home-assistant exec proton-drive-bootstrap -- \
 ```
 
 If the folder already exists, the create command can fail harmlessly; the list must
-succeed. After this one-time procedure, remove the bootstrap Pod manifest and set
-`spec.suspend: false` on `home-assistant-proton-backup`. Run an immediate test Job
-before relying on the six-hour schedule.
+succeed. Delete the temporary Pod after login and run an immediate test Job before
+relying on the six-hour schedule.
+
+The exporter never deletes remote backups. Any future retention policy must be
+implemented and tested separately, with deletion disabled by default.

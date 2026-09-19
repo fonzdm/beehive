@@ -10,85 +10,15 @@ spec:
       storage: 1Gi
   storageClassName: localpv-raid
 ---
-apiVersion: v1
-kind: Pod
-metadata:
-  name: proton-drive-bootstrap
-  labels:
-    app.kubernetes.io/component: proton-drive-bootstrap
-spec:
-  nodeSelector:
-    kubernetes.io/arch: amd64
-  restartPolicy: Always
-  securityContext:
-    # Match Home Assistant so the RWO config volume can be mounted by both pods.
-    fsGroup: 65533
-    fsGroupChangePolicy: OnRootMismatch
-    runAsGroup: 65532
-    runAsNonRoot: true
-    runAsUser: 65532
-    seccompProfile:
-      type: RuntimeDefault
-  containers:
-    - name: proton-drive
-      image: ghcr.io/fonzdm/proton-drive-backup:0.8.0-2@sha256:5dbf65abd2b19a917a05fa4f2a4d433e51ef4b99c92ef020ad620187c3be06e3
-      imagePullPolicy: IfNotPresent
-      args:
-        - tail
-        - -f
-        - /dev/null
-      env:
-        - name: PROTON_DRIVE_DESTINATION
-          value: /my-files/Home Assistant Backups
-      resources:
-        requests:
-          cpu: 10m
-          memory: 64Mi
-        limits:
-          memory: 256Mi
-      securityContext:
-        allowPrivilegeEscalation: false
-        capabilities:
-          drop:
-            - ALL
-        readOnlyRootFilesystem: true
-      volumeMounts:
-        - name: backups
-          mountPath: /config/backups
-          subPath: backups
-          readOnly: true
-        - name: state
-          mountPath: /state
-        - name: gpg-key
-          mountPath: /run/secrets/proton-drive-gpg
-          readOnly: true
-        - name: tmp
-          mountPath: /tmp
-  volumes:
-    # This otherwise-unused mount constrains the local state PVC to the same
-    # node as Home Assistant's local backup volume.
-    - name: backups
-      persistentVolumeClaim:
-        claimName: home-assistant-data
-    - name: state
-      persistentVolumeClaim:
-        claimName: proton-drive-backup-state
-    - name: gpg-key
-      secret:
-        secretName: proton-drive-backup-gpg
-        defaultMode: 0440
-    - name: tmp
-      emptyDir: {}
----
 apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: home-assistant-proton-backup
 spec:
-  # Enabled only after the one-time Proton browser login is complete.
-  suspend: true
+  suspend: false
   schedule: "17 */6 * * *"
   timeZone: Europe/Rome
+  startingDeadlineSeconds: 900
   concurrencyPolicy: Forbid
   failedJobsHistoryLimit: 3
   successfulJobsHistoryLimit: 2

@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: proton-drive-bootstrap
+  namespace: home-assistant
+  labels:
+    app.kubernetes.io/name: home-assistant
+    app.kubernetes.io/component: proton-drive-bootstrap
+spec:
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  restartPolicy: Always
+  securityContext:
+    # Match Home Assistant so the RWO config volume can be mounted by both pods.
+    fsGroup: 65533
+    fsGroupChangePolicy: OnRootMismatch
+    runAsGroup: 65532
+    runAsNonRoot: true
+    runAsUser: 65532
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+    - name: proton-drive
+      image: ghcr.io/fonzdm/proton-drive-backup:0.8.0-3@sha256:560bc13f0b11dde1aed23c735c887c5c82137cd209f11ea63e93f67739901c88
+      imagePullPolicy: IfNotPresent
+      args:
+        - tail
+        - -f
+        - /dev/null
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+        limits:
+          memory: 256Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+      volumeMounts:
+        - name: backups
+          mountPath: /config/backups
+          subPath: backups
+          readOnly: true
+        - name: state
+          mountPath: /state
+        - name: gpg-key
+          mountPath: /run/secrets/proton-drive-gpg
+          readOnly: true
+        - name: tmp
+          mountPath: /tmp
+  volumes:
+    # This otherwise-unused mount constrains the local state PVC to the same
+    # node as Home Assistant's local backup volume.
+    - name: backups
+      persistentVolumeClaim:
+        claimName: home-assistant-data
+    - name: state
+      persistentVolumeClaim:
+        claimName: proton-drive-backup-state
+    - name: gpg-key
+      secret:
+        secretName: proton-drive-backup-gpg
+        defaultMode: 0440
+    - name: tmp
+      emptyDir: {}
