@@ -20,6 +20,10 @@ if [[ -z "$fingerprint" ]]; then
     exit 2
 fi
 
+# The private key is supplied by our cluster Secret, so explicitly trust it for
+# unattended encryption after importing it into each pod's ephemeral keyring.
+printf '%s:6:\n' "$fingerprint" | gpg --batch --import-ownertrust >/dev/null
+
 if [[ ! -f "$PASSWORD_STORE_DIR/.gpg-id" ]]; then
     pass init "$fingerprint" >/dev/null
 fi
