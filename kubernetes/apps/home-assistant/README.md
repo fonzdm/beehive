@@ -59,8 +59,9 @@ domain as Home Assistant and must be exported off-cluster.
 
 Use Proton's official Drive CLI rather than the deprecated rclone Proton backend.
 The CLI supports Linux, scripted uploads, and end-to-end encryption, but requires a
-one-time browser login and stores a renewable session in an OS secret store. The CLI
-is currently included with Proton for Business plans.
+one-time browser login and stores a renewable session in an OS secret store. Proton's
+public CLI documentation does not state that a Business subscription is required;
+authenticate the intended Proton Unlimited account once before enabling automation.
 
 The intended export flow is:
 
@@ -102,3 +103,10 @@ proton-drive filesystem create-folder /my-files 'Home Assistant Backups'
 The destination name above is only an example and is not coupled to the Home
 Assistant installation. A scheduler should run the exporter after the daily Home
 Assistant backup window and alert on any non-zero exit status.
+
+Run that scheduler as a Kubernetes `CronJob`, not as a Home Assistant automation.
+Home Assistant remains responsible only for creating and retaining its encrypted
+local backups. The independent `CronJob` mounts `home-assistant-data` read-only at
+the backup path and uses a separate persistent Proton CLI state directory. This
+keeps export failures visible to Kubernetes and allows exports to continue whenever
+Home Assistant's UI or automation engine is unhealthy.
