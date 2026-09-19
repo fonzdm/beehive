@@ -8,6 +8,7 @@ resources:
   - secret.yaml
   - repository.yaml
   - pvc.yaml
+  - proton-backup.yaml
   - release.yaml
   - matter-server.yaml
 configMapGenerator:

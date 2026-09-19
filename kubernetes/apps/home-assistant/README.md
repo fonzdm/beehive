@@ -110,3 +110,37 @@ local backups. The independent `CronJob` mounts `home-assistant-data` read-only 
 the backup path and uses a separate persistent Proton CLI state directory. This
 keeps export failures visible to Kubernetes and allows exports to continue whenever
 Home Assistant's UI or automation engine is unhealthy.
+
+## Proton Drive activation
+
+The CronJob is committed suspended until the account completes browser
+authentication. Its session is encrypted with `pass`; the GPG private key is kept
+in a cluster-only Kubernetes Secret and is never committed to Git. The separate
+state PVC contains only the encrypted session and disposable CLI caches.
+
+From a trusted workstation with the repository checked out, `gpg`, and `kubectl`
+configured for this cluster:
+
+```bash
+scripts/bootstrap-proton-backup-secret.sh
+kubectl -n home-assistant wait --for=condition=Ready \
+  pod/proton-drive-bootstrap --timeout=5m
+kubectl -n home-assistant exec -it proton-drive-bootstrap -- \
+  proton-drive auth login
+```
+
+Open the URL printed by the final command, sign in to the Proton Unlimited account,
+and leave the terminal open until it reports success. Then create and verify the
+dedicated destination:
+
+```bash
+kubectl -n home-assistant exec -it proton-drive-bootstrap -- \
+  proton-drive filesystem create-folder /my-files 'Home Assistant Backups'
+kubectl -n home-assistant exec proton-drive-bootstrap -- \
+  proton-drive filesystem list '/my-files/Home Assistant Backups'
+```
+
+If the folder already exists, the create command can fail harmlessly; the list must
+succeed. After this one-time procedure, remove the bootstrap Pod manifest and set
+`spec.suspend: false` on `home-assistant-proton-backup`. Run an immediate test Job
+before relying on the six-hour schedule.

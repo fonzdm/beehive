@@ -51,19 +51,54 @@ fi
 work_dir="$(mktemp -d)"
 trap 'rm -rf -- "$work_dir"' EXIT
 
-# Listing first validates both the stored login session and the destination.
-"$proton_drive_bin" filesystem list --json "$destination" >/dev/null
+# Listing first validates both the stored login session and the destination. It
+# also avoids asking Proton to resolve the same filename conflicts every run.
+"$proton_drive_bin" filesystem list --json "$destination" >"$work_dir/remote-files-before.json"
 
-"$proton_drive_bin" filesystem upload \
-    --json \
-    --file-conflict-strategy skip \
-    --skip-thumbnails \
-    "${archives[@]}" \
-    "$destination" | tee "$work_dir/upload-summary.json"
+declare -a pending_archives=()
+for archive in "${archives[@]}"; do
+    name="${archive##*/}"
+    size="$(stat -c %s "$archive")"
 
-if ! jq -e '.failedItems == 0' "$work_dir/upload-summary.json" >/dev/null; then
-    printf 'Proton Drive reported one or more failed uploads\n' >&2
-    exit 1
+    if jq -e \
+        --arg name "$name" \
+        --argjson size "$size" \
+        'any(.[];
+            .type == "file"
+            and .name.ok == true
+            and .name.value == $name
+            and .activeRevision.ok == true
+            and .activeRevision.value.claimedSize == $size
+        )' \
+        "$work_dir/remote-files-before.json" >/dev/null; then
+        continue
+    fi
+
+    if jq -e \
+        --arg name "$name" \
+        'any(.[]; .type == "file" and .name.ok == true and .name.value == $name)' \
+        "$work_dir/remote-files-before.json" >/dev/null; then
+        printf 'Remote file %s exists with a different size; refusing to overwrite it\n' "$name" >&2
+        exit 1
+    fi
+
+    pending_archives+=("$archive")
+done
+
+if (( ${#pending_archives[@]} > 0 )); then
+    "$proton_drive_bin" filesystem upload \
+        --json \
+        --file-conflict-strategy skip \
+        --skip-thumbnails \
+        "${pending_archives[@]}" \
+        "$destination" | tee "$work_dir/upload-summary.json"
+
+    if ! jq -e '.failedItems == 0' "$work_dir/upload-summary.json" >/dev/null; then
+        printf 'Proton Drive reported one or more failed uploads\n' >&2
+        exit 1
+    fi
+else
+    printf 'All completed archives are already present in Proton Drive\n'
 fi
 
 "$proton_drive_bin" filesystem list --json "$destination" >"$work_dir/remote-files.json"

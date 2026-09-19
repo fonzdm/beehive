@@ -1,0 +1,49 @@
+name: Proton Drive backup image
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'containers/proton-drive-backup/**'
+      - 'scripts/export-home-assistant-backups-proton.sh'
+      - '.github/workflows/proton-drive-backup-image.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: proton-drive-backup-image
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
+        with:
+          persist-credentials: false
+      - name: Build and test
+        run: |
+          docker build -f containers/proton-drive-backup/Dockerfile \
+            -t beehive/proton-drive-backup:0.8.0-1 .
+          docker run --rm --entrypoint proton-drive \
+            beehive/proton-drive-backup:0.8.0-1 version
+          docker run --rm --entrypoint bash \
+            beehive/proton-drive-backup:0.8.0-1 \
+            -n /usr/local/bin/export-home-assistant-backups-proton
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REGISTRY_USER: ${{ github.actor }}
+        run: |
+          printf '%s' "$GH_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+          image=ghcr.io/fonzdm/proton-drive-backup:0.8.0-1
+          docker tag beehive/proton-drive-backup:0.8.0-1 "$image"
+          docker push "$image"
+          printf "Published \`%s\`\n" "$image" >> "$GITHUB_STEP_SUMMARY"
+      - name: Cleanup
+        if: always()
+        run: docker logout ghcr.io || true
