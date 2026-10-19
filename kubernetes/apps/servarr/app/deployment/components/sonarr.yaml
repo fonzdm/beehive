@@ -29,7 +29,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/sonarr # {"$imagepolicy": "flux-system:sonarr-imagepolicy:name"}
               tag: rolling # {"$imagepolicy": "flux-system:sonarr-imagepolicy:tag"}
-              digest: sha256:64fc190929b50091a8d6c3d6b5f4a3df7d3b8f98d076735f5cb223f7d77b0cc3 # {"$imagepolicy": "flux-system:sonarr-imagepolicy:digest"}
+              digest: sha256:2b7958c60a6423bc7be65edf0943a53a8d3da2e71d3b2cb8a503e5cacd693a23 # {"$imagepolicy": "flux-system:sonarr-imagepolicy:digest"}
             env:
               SONARR__APP__INSTANCENAME: Sonarr
               SONARR__AUTH__APIKEY: ENC[AES256_GCM,data:ttgBt3mPSdGZUxOkbz1Crtr+V1JkbzZzdv5t2j6Hkvp8,iv:H8sBU8+PuAmIVtTEe2AXK8cV372Vo5VuRj2WqmnH2L4=,tag:T5X0EsFnoitP+ubsd4OEPQ==,type:str]
