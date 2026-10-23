@@ -34,6 +34,35 @@ The HACS downloads and Lovelace resource registry live on the Home Assistant dat
 PVC. Reinstall the versions above after a blank-volume recovery, then restore the
 encrypted backup.
 
+## Shared shopping dashboard
+
+The shopping dashboard uses the HACS frontend package
+[`Nisbo/ha-shopping-list-improved`](https://github.com/Nisbo/ha-shopping-list-improved),
+installed at **v3.1.0**. Its JavaScript resource, HACS state, and dashboard
+configuration live on the Home Assistant data PVC and are restored from the
+encrypted backup, following the same recovery model as the other dashboards.
+
+The sidebar entry **Spesa** (`/shopping-list`) is available to non-admin users.
+Both **Da comprare** and **Tutti** use the existing shopping-list entity so that
+household users and voice commands continue to use the same list. The first view
+hides completed items; the second puts them at the end. Text filtering,
+autocomplete, quantity controls, and eight Italian product categories are enabled.
+Category definitions and quick-add suggestions are saved in the shared dashboard;
+browser-local suggestions are disabled. The card's built-in labels fall back to
+English for Italian Home Assistant profiles.
+
+Categories and quantities are encoded in item names by the card. Other clients
+can display that encoding, and edits outside this card can affect categorization.
+Avoid renaming/removing categories without checking their existing items.
+Shopping data is stored locally. Barcode lookups, external notifications, and
+token-based offline export are not enabled. Away from home, use the existing
+remote Home Assistant access.
+
+For blank-volume recovery, install the pinned HACS package, verify its module
+resource is registered, and restore the encrypted backup containing the dashboard
+and shopping list. No Flux rollout or Home Assistant restart is needed to change
+this storage-mode dashboard.
+
 ## Configuration intentionally excluded from Git
 
 The following data contains private identifiers or credentials and must only be

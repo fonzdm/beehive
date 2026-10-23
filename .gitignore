@@ -4,4 +4,7 @@
 kubernetes/infrastructure/kube-prometheus-stack/.influx
 kubernetes/talos/talosconfig/*
 kubernetes/apps/home-assistant/.env
+docs/code-server-github-login.md
 docs/home-assistant-cloudflare-access.md
+kubernetes/apps/home-assistant/.cert
+kubernetes/apps/home-assistant/.cert.p12
