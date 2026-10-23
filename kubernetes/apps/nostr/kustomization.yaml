@@ -7,3 +7,4 @@ resources:
   - blossom/ks.yaml
   - opensearch/ks.yaml
   - ditto/ks.yaml
+  - cordn/ks.yaml

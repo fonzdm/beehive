@@ -233,3 +233,49 @@ Concord author subscriptions received live events, Concord history was retrievab
 and anonymous NIP-46 transport worked. Re-run `scripts/smoke-ditto.py` against the
 deployed endpoint after upgrades (requires Python, coincurve and websockets).
 Actual encrypted conversations and Armada/Amber pairing need a client-side test.
+
+## Cordn private-chat coordinator
+
+Cordn provides MLS-based private group chats. It is reachable through the existing
+general relay at `wss://relay.nostr.fonzdm.xyz`; the coordinator is announced there
+under the name `cordn.nostr.fonzdm.xyz`. Clients connect using the announced
+coordinator public key plus that relay URL, rather than a direct HTTP or WebSocket
+connection to the coordinator.
+
+`cordn.nostr.fonzdm.xyz` is the coordinator's assigned FQDN and metadata name. Do
+not add an HTTPRoute or point a DNS record at Traefik for it: the upstream Cordn
+container has no listening HTTP port. If a browsable landing page is wanted later,
+deploy it separately behind that hostname; it is not part of the chat transport.
+
+Before Flux installs the release for the first time, create and securely back up its
+stable Nostr signing key:
+
+```sh
+bash scripts/bootstrap-cordn-secret.sh
+```
+
+The script creates `nostr/nostr-cordn-auth` only if absent and never writes or prints
+the private key. Losing this Secret changes the coordinator public key and makes
+existing group references unusable. The retained 5 GiB `nostr-cordn-data` PVC holds
+the SQLite message/key-package state; it is not a backup. Keep the Secret and a
+consistent copy of this PVC together for recovery.
+
+MLS protects message contents with forward secrecy and post-compromise security,
+but ContextVM transport encryption is selected by each client: the coordinator
+cannot enforce it. Enable required transport encryption in clients that expose the
+option to keep coordinator request metadata from the relay. The coordinator still
+stores encrypted group state and delivery metadata; a compromised coordinator,
+relay availability, or backups therefore still matter. The default rate limit and
+per-identity key-package quotas remain enabled. Welcome and join request records
+expire after 30 days; group messages remain until explicitly deleted by the
+protocol/storage lifecycle.
+
+After reconciliation, obtain the coordinator public key from the pod startup log
+and use it with `wss://relay.nostr.fonzdm.xyz` in a Cordn-compatible client:
+
+```sh
+flux get kustomizations -n nostr
+flux get helmreleases -n nostr
+kubectl -n nostr get pods,pvc
+kubectl -n nostr logs deploy/nostr-cordn --tail=100
+```
