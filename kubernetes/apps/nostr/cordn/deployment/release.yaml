@@ -32,6 +32,7 @@ spec:
           securityContext:
             # Keep the upstream non-root user; fsGroup grants it access to the PVC.
             runAsNonRoot: true
+            runAsUser: 999
             fsGroup: 1000
             fsGroupChangePolicy: OnRootMismatch
         containers:
