@@ -29,7 +29,7 @@ spec:
             image:
               repository: ghcr.io/home-operations/prowlarr # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:name"}
               tag: rolling # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:tag"}
-              digest: sha256:0e2e6e9a2a16683a160ff1c6830d8192231a0502ab0d605b416023b2ca225ff9 # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:digest"}
+              digest: sha256:8ead2b6f1b5d744fc52849d455896809b2d290f2b78b05f1b3fb21f410866b58 # {"$imagepolicy": "flux-system:prowlarr-imagepolicy:digest"}
             env:
               PROWLARR__APP__INSTANCENAME: Prowlarr
               PROWLARR__AUTH__METHOD: External
