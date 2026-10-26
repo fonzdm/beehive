@@ -38,8 +38,8 @@ spec:
           app:
             image:
               repository: ghcr.io/fonzdm/ditto-relay # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:name"}
-              tag: build-20261019100544-6b3aa833 # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:tag"}
-              digest: sha256:89a12a7b2c7630efe9236d8e6f7070b15986c01573992161c508f10233c2eec6 # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:digest"}
+              tag: build-20261026102028-6b3aa833 # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:tag"}
+              digest: sha256:894a479a1ed28fb5e10c8353eedd926efad0924b63484e059b01cd22ad52c8d5 # {"$imagepolicy": "flux-system:nostr-ditto-imagepolicy:digest"}
             env:
               RELAY_URL: wss://chat.nostr.fonzdm.xyz/
               PUBLIC_URL: https://chat.nostr.fonzdm.xyz
