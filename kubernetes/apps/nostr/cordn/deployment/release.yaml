@@ -47,7 +47,7 @@ spec:
                   secretKeyRef:
                     name: nostr-cordn-auth
                     key: CORDN_SERVER_PRIVATE_KEY
-              CORDN_RELAY_URLS: wss://relay.nostr.fonzdm.xyz
+              CORDN_RELAY_URLS: "wss://relay.nostr.fonzdm.xyz,wss://relay.contextvm.org"
               CORDN_SERVER_NAME: cordn.nostr.fonzdm.xyz
               CORDN_SERVER_ABOUT: Private MLS chat coordinator operated by fonzdm.
               CORDN_ANNOUNCED: 'true'
