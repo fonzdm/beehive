@@ -3,6 +3,8 @@ kind: Kustomization
 namespace: crd-ns
 resources:
   - namespace.yaml
+  - gateway/source.yaml
+  - gateway/ks.yaml
   # - psql-operator/repository.yaml
   # - psql-operator/release.yaml
   # - github-action-operator/ks-base.yaml
