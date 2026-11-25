@@ -12,8 +12,11 @@ spec:
                 kind: HelmRepository
                 name: traefik-repo
     upgrade:
+        crds: CreateReplace
         remediation:
             retries: 5
+    install:
+        crds: CreateReplace
     values:
         deployment:
             replicas: 2
